@@ -1,0 +1,130 @@
+---
+title: "tensr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tensr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tensr)
+
+a <- array(1:(2^2*3), dim = c(2,2,3))
+
+```
+
+## Creating a tensor
+
+$$
+a_{ij}^{\;\;k}
+$$
+The central object is a tensor object that can be created using the `%_%` operator from an array. The order of indices is used to match indices to array dimensions. Using a dedicated tensor class has the advantages that it allows to overload standard mathematical operators, and control about allowed operations.
+
+```{r}
+# two lower indices, one upper index
+a %_% c("i", "j", "^k")
+```
+
+Implicit contraction:
+
+$$
+b_j=a_{i\;k}^{\;i}
+$$
+
+```{r}
+a %_% c("i", "^i", "k")
+```
+
+Automatic contraction or Einstein summation is only performed over paired lower-upper indices. Having identical indices on the same position results in a generalization of "taking the diagonal":
+
+$$
+c_{ik}=a_{iik}
+$$
+
+```{r}
+a %_% c("i", "i", "k")
+```
+
+## Multiplication or addition
+
+Multiplication and addition work with the standard operators, Einstein summation is performed automatically for upper-lower paired indices, but not for equal-positioned equal-named indices (this would simply result in "taking the diagonal part" again).
+
+### Multiplication
+
+$$
+d_{ijklmn}=a_{ijk}a_{lmn}
+$$
+
+```{r}
+a %_% c("i", "j", "k") * a %_% c("l", "m", "n")
+```
+
+$$
+e=a_{ijk}a^{ijk}
+$$
+
+```{r}
+a %_% c("i", "j", "k") * a %_% c("^i", "^j", "^k")
+```
+
+### Addition
+
+Addition is performed only for tensors that have the same index structure.
+
+$$
+f_{ijk} = a_{ijk} + a_{ijk}
+$$
+
+```{r}
+a %_% c("i", "j", "k") + a %_% c("j", "i", "k")
+```
+
+Adding tensors of different index structures is not allowed:
+
+```{r}
+# a %_% c("i", "j", "k") + a %_% c("i", "^i", "k")
+```
+
+## Comparison of tensors
+
+We can compare tensors by matching index names:
+
+$$
+a_{ijk} = a_{ijk}
+$$
+
+```{r}
+a %_% c("i", "j", "k") == a %_% c("i", "j", "k")
+```
+
+while
+
+```{r}
+a %_% c("i", "j", "k") == a %_% c("j", "i", "k")
+```
+
+$$
+a_{ijk} \neq a_{jik}
+$$
+
+
+## Order of dimensions
+
+Once a tensor object has been created (by associating an index name to a particular dimension) the tensor object operations keep track of the association, but the internal dimension ordering can change depending on the operations. To retrieve a well-defined array (i.e. an object with well defined dimension ordering) one simply uses `as.array()` including an index ordering.
+
+```{r}
+# the internal dimension ordering is an implementation detail and
+# can change
+b <- a %_% c("i", "j", "k") * a %_% c("j", "i", "^k")
+
+# but we can impose an order when extracting the array:
+as.array(b, c("i", "j"))
+```
