@@ -179,7 +179,7 @@ adiag <- function(x, dims_diag) {
 # "+", "-", "*", "/", "^", "%%", "%/%"
 # "&", "|", "!"
 # "==", "!=", "<", "<=", ">=", ">"
-#' @exportS3Method base::Ops
+#' @export
 Ops.tensr <- function(e1, e2) {
   switch(.Generic,
     "+" = tensr_add(e1, e2),
@@ -190,7 +190,7 @@ Ops.tensr <- function(e1, e2) {
   )
 }
 
-#' @exportS3Method base::print
+#' @export
 print.tensr <- function(x, ...) {
   if (!is_scalar(x)) {
     cat(paste0(
