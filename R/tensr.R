@@ -192,13 +192,14 @@ print.tensr <- function(x, ...) {
   if (!is_scalar(x)) {
     cat(paste0(
       "<Indexed Tensor> ",
-      "(", paste0(dim(x), collapse = ","), ")",
+      "[", paste0(dim(x), collapse = "x"),
+      "] <-> .(",
       paste0(
-        ifelse(tensr_index_positions(x), "^", "_"),
+        ifelse(tensr_index_positions(x), "+", "-"),
         tensr_index_names(x),
-        collapse = ""
+        collapse = ", "
       ),
-      " #", length(x), "\n"
+      ")\n"
     ))
   } else {
     cat("<Scalar>\n")
