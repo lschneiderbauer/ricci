@@ -101,7 +101,7 @@ tensr_reduce <- function(x) {
   new_tensr(
     x,
     calculus::index(x) %||% character(),
-    p[i == calculus::index(x)],
+    p[match(calculus::index(x), i)],
     reduced = TRUE
   )
 }

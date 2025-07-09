@@ -1,3 +1,13 @@
+test_that("tensr contraction works for rank four", {
+  arr <- array(1:(2^2 * 3^2), c(3, 2, 3, 2))
+  arr_contr <- as.array(arr %_% .(j, i, k, +i))
+
+  expect_equal(
+    arr_contr,
+    arr[, 1, , 1] + arr[, 2, , 2]
+  )
+})
+
 test_that("tensr diagonalization works for matrix", {
   # basically matrix diagonal
   expect_tensr_equal(
