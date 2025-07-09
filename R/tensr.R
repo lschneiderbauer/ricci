@@ -234,7 +234,7 @@ as.array.tensr <- function(x, dim_order = NULL, ...) {
 tensr_eq <- function(x, y) {
   stopifnot("tensrs not compatible" = tensr_alignable(x, y))
 
-  all(unclass(x) == unclass(tensr_align(y, x)))
+  all(as.array(x) == as.array(tensr_align(y, x)))
 }
 
 tensr_add <- function(x, y) {
@@ -451,6 +451,8 @@ expect_tensr_equal <- function(object, expected) {
   if (!requireNamespace("waldo", quietly = TRUE)) {
     stop("Package waldo required.")
   }
+
+  stopifnot(inherits(object, "tensr"))
 
   # 1. Capture object and label
   act <- testthat::quasi_label(rlang::enquo(object), arg = "object")
