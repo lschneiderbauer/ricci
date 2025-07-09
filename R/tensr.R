@@ -42,23 +42,25 @@ tensr_is_reduced <- function(x) {
 }
 
 #' @export
-tensr <- function(x, i) {
+tensr <- function(x, index_names, index_positions) {
   x <- as.array(x)
+  stopifnot(is.character(index_names))
+  stopifnot(is.character(index_positions))
+  stopifnot(length(index_names) == length(index_positions))
 
   # check if we have a scalar
   # in this case just return a number
-  if (length(dim(x)) == 1 && length(x) == 1 && is.null(i)) {
+  if (length(dim(x)) == 1 && length(x) == 1 && is.null(index_names)) {
     return(new_tensr(x, character(), character()))
   }
 
-  stopifnot("The number of indices does not match the number of array dimensions." = length(i) == length(dim(x)))
-
-  # extract position
-  index_names <- gsub("[\\^_]", "", i)
-  index_positions <- grepl("^\\^", i)
+  stopifnot(
+    "The number of indices does not match the number of array dimensions." =
+      length(index_names) == length(dim(x))
+  )
 
   tensr_reduce(
-    new_tensr(x, index_names, index_positions)
+    new_tensr(x, index_names, index_positions == "+")
   )
 }
 
@@ -102,11 +104,6 @@ tensr_reduce <- function(x) {
     p[i == calculus::index(x)],
     reduced = TRUE
   )
-}
-
-#' @export
-`%_%` <- function(x, i) {
-  tensr(x, i)
 }
 
 is_tensr <- function(x) {
@@ -158,7 +155,7 @@ adiag <- function(x, dims_diag) {
   d <- dim(x_reord)[[1]]
   i <- 1:d
   vec_ind_keep <- rep(FALSE, d^length(dims_diag))
-  vec_ind_keep[1 + (i-1) * sum(d^(seq_along(dims_diag) - 1))] <- TRUE
+  vec_ind_keep[1 + (i - 1) * sum(d^(seq_along(dims_diag) - 1))] <- TRUE
   vec_ind_keep <-
     rep(
       vec_ind_keep,
@@ -194,7 +191,7 @@ Ops.tensr <- function(e1, e2) {
 print.tensr <- function(x, ...) {
   if (!is_scalar(x)) {
     cat(paste0(
-      "tensr ",
+      "<Indexed Tensor> ",
       "(", paste0(dim(x), collapse = ","), ")",
       paste0(
         ifelse(tensr_index_positions(x), "^", "_"),
@@ -204,7 +201,7 @@ print.tensr <- function(x, ...) {
       " #", length(x), "\n"
     ))
   } else {
-    cat("Scalar\n")
+    cat("<Scalar>\n")
   }
 
   if (length(dim(x)) <= 2) {

@@ -1,14 +1,14 @@
 test_that("tensr diagonalization works for matrix", {
   # basically matrix diagonal
   expect_tensr_equal(
-    matrix(1:4, 2, 2) %_% c("i", "i"),
-    array(c(1, 4), 2) %_% "i"
+    matrix(1:4, 2, 2) %_% .(i, i),
+    array(c(1, 4), 2) %_% .(i)
   )
 })
 
 test_that("tensr diagonalization works with in-between dimensions", {
   arr <- array(1:(2^2 * 3), c(2, 3, 2))
-  arr_diag <- as.array(arr %_% c("i", "j", "i"))
+  arr_diag <- as.array(arr %_% .(i, j, i))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -22,7 +22,7 @@ test_that("tensr diagonalization works with in-between dimensions", {
 
 test_that("tensr diagonalization works with last two dimensions", {
   arr <- array(1:(2^2 * 3), c(3, 2, 2))
-  arr_diag <- as.array(arr %_% c("j", "i", "i"))
+  arr_diag <- as.array(arr %_% .(j, i, i))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -36,7 +36,7 @@ test_that("tensr diagonalization works with last two dimensions", {
 
 test_that("tensr diagonalization works with rank four", {
   arr <- array(1:(2^2 * 3^2), c(3, 3, 2, 2))
-  arr_diag <- as.array(arr %_% c("j", "k", "i", "i"))
+  arr_diag <- as.array(arr %_% .(j, k, i, i))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -52,7 +52,7 @@ test_that("tensr diagonalization works with rank four", {
 
 test_that("tensr diagonalization works with rank four in-between", {
   arr <- array(1:(2^2 * 3^2), c(3, 2, 3, 2))
-  arr_diag <- as.array(arr %_% c("j", "i", "k", "i"))
+  arr_diag <- as.array(arr %_% .(j, i, k, i))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -68,7 +68,7 @@ test_that("tensr diagonalization works with rank four in-between", {
 
 test_that("tensr diagonalization works with first two dimensions", {
   arr <- array(1:(2^2 * 3), c(2, 2, 3))
-  arr_diag <- as.array(arr %_% c("i", "i", "j"))
+  arr_diag <- as.array(arr %_% .(i, i, j))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -82,7 +82,7 @@ test_that("tensr diagonalization works with first two dimensions", {
 
 test_that("tensr diagonalization works for two diags at once", {
   arr <- array(1:(2^2 * 3^2), c(2, 3, 2, 3))
-  arr_diag <- as.array(arr %_% c("i", "j", "i", "j"))
+  arr_diag <- as.array(arr %_% .(i, j, i, j))
 
   for (i in 1:2) {
     for (j in 1:3) {
@@ -96,7 +96,7 @@ test_that("tensr diagonalization works for two diags at once", {
 
 test_that("tensr diagonalization works for three identical indices", {
   arr <- array(1:(3^3), c(3, 3, 3))
-  arr_diag <- as.array(arr %_% c("i", "i", "i"))
+  arr_diag <- as.array(arr %_% .(i, i, i))
 
   for (i in 1:3) {
     expect_equal(
@@ -108,7 +108,7 @@ test_that("tensr diagonalization works for three identical indices", {
 
 test_that("tensr multiplication that yields a scalar works", {
   arr <- array(1:2, 2)
-  arr_mul <- arr %_% c("i") * arr %_% c("^i")
+  arr_mul <- arr %_% .(i) * arr %_% .(+i)
 
   expect_true(
     is_scalar(arr_mul)
@@ -120,7 +120,7 @@ test_that("tensr multiplication that yields a scalar works", {
 
 test_that("tensr multiplication that yields a diagonal works", {
   arr <- array(1:2, 2)
-  arr_mul <- arr %_% c("i") * arr %_% c("i")
+  arr_mul <- arr %_% .(i) * arr %_% .(i)
 
   expect_equal(
     dim(arr_mul),
@@ -134,17 +134,17 @@ test_that("tensr multiplication that yields a diagonal works", {
 
 
 test_that("tensr multiplication that yields a diagonal works with singletons", {
-  arr_mul <- 1 %_% "i" * 1 %_% "i"
+  arr_mul <- 1 %_% .(i) * 1 %_% .(i)
 
   expect_tensr_equal(
     arr_mul,
-    1 %_% "i"
+    1 %_% .(i)
   )
 })
 
 test_that("tensr multiplication without summation works", {
   arr <- array(1:(2 * 3), c(2, 3))
-  arr_mul <- arr %_% c("i", "j") * arr %_% c("^k", "^l")
+  arr_mul <- arr %_% .(i, j) * arr %_% .(+k, +l)
 
   expect_equal(
     dim(arr_mul),
@@ -164,31 +164,31 @@ test_that("tensr multiplication without summation works", {
 
 test_that("tensr multiplication with scalar works", {
   arr <- array(1:(2 * 3), c(2, 3))
-  arr_mul <- arr %_% c("i", "j") * 3
+  arr_mul <- arr %_% .(i, j) * 3
 
   expect_tensr_equal(
     arr_mul,
-    (array(1:(2 * 3), c(2, 3)) * 3) %_% c("i", "j")
+    (array(1:(2 * 3), c(2, 3)) * 3) %_% .(i, j)
   )
 })
 
 test_that("tensr addition works", {
   arr <- array(1:(2 * 3), c(2, 3))
-  arr_add <- arr %_% c("i", "j") + arr %_% c("i", "j")
+  arr_add <- arr %_% .(i, j) + arr %_% .(i, j)
 
   expect_tensr_equal(
     arr_add,
-    array(1:(2 * 3) * 2, c(2, 3)) %_% c("i", "j")
+    array(1:(2 * 3) * 2, c(2, 3)) %_% .(i, j)
   )
 })
 
 test_that("tensr addition with reordering works", {
   arr <- array(1:(2^2), c(2, 2))
-  arr_add <- arr %_% c("i", "j") + arr %_% c("j", "i")
+  arr_add <- arr %_% .(i, j) + arr %_% .(j, i)
 
   expect_tensr_equal(
     arr_add,
-    array(1:4 + c(1, 3, 2, 4), c(2, 2)) %_% c("i", "j")
+    array(1:4 + c(1L, 3L, 2L, 4L), c(2, 2)) %_% .(i, j)
   )
 })
 
@@ -196,13 +196,13 @@ test_that("tensr kronecker product works", {
   arr <- array(1:(2^2), c(2, 2))
 
   expect_tensr_equal(
-    tensr_kron(arr %_% c("i", "j"), c("i", "j"), "k"),
-    1:4 %_% "k"
+    tensr_kron(arr %_% .(i, j), c("i", "j"), "k"),
+    1:4 %_% .(k)
   )
 
   arr <- array(1:(2^3), c(2, 2, 2))
   expect_tensr_equal(
-    tensr_kron(arr %_% c("i", "j", "k"), c("i", "j"), "l"),
-    array(1:(2^3), c(4,2)) %_% c("l", "k")
+    tensr_kron(arr %_% .(i, j, k), c("i", "j"), "l"),
+    array(1:(2^3), c(4, 2)) %_% .(l, k)
   )
 })
