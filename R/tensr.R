@@ -215,11 +215,12 @@ print.tensr <- function(x, ...) {
 
 #' @export
 # dim order: allows to specify a dimension order by index names
-as.array.tensr <- function(x, dim_order = NULL, ...) {
-  if (!is.null(dim_order)) {
-    stopifnot(setequal(dim_order, tensr_index_names(x)))
+as.array.tensr <- function(x, index_order = NULL, ...) {
+  if (!is.null(index_order)) {
+    stopifnot(setequal(index_order$i, tensr_index_names(x)))
 
-    x <- tensr_reorder(x, dim_order)
+    # TODO: we need to lower/raise indices if necessary
+    x <- tensr_reorder(x, index_order$i)
   }
 
   x <- unclass(x)
