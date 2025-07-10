@@ -11,9 +11,9 @@ coverage](https://codecov.io/gh/lschneiderbauer/tensr/graph/badge.svg)](https://
 
 <!-- badges: end -->
 
-The goal of tensr is to provide a *compact* interface for performing
+The goal of tensr is to provide a *compact* R interface for performing
 [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus).
-This is achieved by adding (upper and lower) index slot labeling to R’s
+This is achieved by labeling (upper and lower) index slots of R’s
 `array` and making use of Ricci calculus conventions to implicitly
 trigger contractions and diagonal subsetting. Explicit tensor
 operations, such as addition, multiplication of tensors, raising and
@@ -22,7 +22,8 @@ tensors like the Kronecker delta, Levi Civita epsilon, and common metric
 tensors are provided.
 
 Under the hood calculations are performed using the
-[calculus](https://calculus.eguidotti.com/)[^1] package.
+[calculus](https://calculus.eguidotti.com/)[^1] package. This package
+provides an alternative interface to some of its functionality.
 
 ## Installation
 
@@ -37,9 +38,9 @@ pak::pak("lschneiderbauer/tensr")
 ## Example
 
 The central object is R’s `array`. Adding index slot labels allows us to
-do common tensor operations implicitly.
+perform common tensor operations implicitly.
 
-Let’s use random data, an array of rank 3.
+For demonstration purposes we use an arbitrary array of rank 3.
 
 ``` r
 library(tensr)
@@ -76,20 +77,20 @@ a %_% .(i, j, +k)
 
 ### Performing calculations
 
-Simply creating labels is not very interesting. The act of labeling a
-tensor becomes useful when the labels are such that they trigger and
-implicit calculation, or they are combined with other tensors via
-multiplication or addition.
+Simply creating labels is not very interesting. The act of labeling
+tensor index slots becomes useful when the labels are such that they
+trigger implicit calculations, or they are combined with other tensors
+via multiplication or addition.
 
 #### Contraction
+
+Repeated index labels with opposite position are implicitly contracted.
 
 $$
 b_j=a_{i\;k}^{\;i}
 $$
 
 ``` r
-# repeated labels with opposite position are implicitly
-# contracted
 a %_% .(i, +i, k)
 #> <Labeled Tensor> [3] <-> .(-k)
 #> [1]  5 13 21
