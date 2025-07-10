@@ -69,6 +69,7 @@ tensr <- function(x, index_names, index_positions) {
 # after a tensr reduction every index name is unique
 tensr_reduce <- function(x) {
   if (is_scalar(x) || tensr_is_reduced(x)) {
+    attr(x, "reduced") <- TRUE
     return(x)
   }
 
