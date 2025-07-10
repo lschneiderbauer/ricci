@@ -202,17 +202,4 @@ test_that("tensr addition with reordering works", {
   )
 })
 
-test_that("tensr kronecker product works", {
-  arr <- array(1:(2^2), c(2, 2))
 
-  expect_tensr_equal(
-    tensr_kron(arr %_% .(i, j), c("i", "j"), "k"),
-    1:4 %_% .(k)
-  )
-
-  arr <- array(1:(2^3), c(2, 2, 2))
-  expect_tensr_equal(
-    tensr_kron(arr %_% .(i, j, k), c("i", "j"), "l"),
-    array(1:(2^3), c(4, 2)) %_% .(l, k)
-  )
-})

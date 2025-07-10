@@ -7,7 +7,7 @@
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 
-  parsed <- unlist(lapply(exprs, ast_symbols))
+  parsed <- unlist(lapply(exprs, ast_extr_ind))
 
   indices <- unname(parsed)
   positions <- names(parsed)
@@ -23,7 +23,7 @@
   )
 }
 
-ast_symbols <- function(x) {
+ast_extr_ind <- function(x) {
   switch_expr(x,
     # Base cases
     symbol = as.character(x),
@@ -32,9 +32,9 @@ ast_symbols <- function(x) {
     # Recursive cases
     call =
       if (rlang::is_call(x, "+")) {
-        return(c("+" = ast_symbols(x[[2]])))
+        return(c("+" = ast_extr_ind(x[[2]])))
       } else if (rlang::is_call(x, "-")) {
-        return(c("-" = ast_symbols(x[[2]])))
+        return(c("-" = ast_extr_ind(x[[2]])))
       } else {
         stop_invalid_expr()
       },

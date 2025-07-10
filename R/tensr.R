@@ -375,57 +375,6 @@ tensr_mul <- function(x, y) {
   }
 }
 
-# generalized kronecker product: combines two (or more) indices i,j to a
-# single index k where dim(k) = dim(i)*dim(j)
-tensr_kron <- function(x, ind_comb, ind_new) {
-  stopifnot(inherits(x, "tensr"))
-  stopifnot(ind_comb %in% tensr_index_names(x))
-  # we require the combining indices to have the same position
-  ind_new_pos <- unique(tensr_index_positions(x)[ind_comb])
-  stopifnot(length(ind_new_pos) == 1)
-
-  if (!tensr_is_reduced(x)) {
-    x <- tensr_reduce(x)
-  }
-
-  # R has column major ordering
-  # for instance tensr or rank 3 with dim = c(d1, d2, d3)
-  # vec_addr = i + (j - 1) * d1 + (k - 1) * d2 * d1.
-  #   i \in {1 .. d1}
-  #   j \in {1 .. d2}
-  #   k \in {1 .. d3}
-  #
-  # we can use this property to naturally produce a Kronecker product,
-  # i.e. in this example,
-  # set dim = c(d4, d3) with d4 = d1*d2, then
-  # vec_addr = l + (k - 1) * d4
-  #   l \in {1 .. d4 = d1 * d2}
-  #   k \in {1 .. d3}
-  #
-  # so i + (j-1) d1 + (k-1) d2 d1 = l + (k-1) d1 d2
-  #   => i + (j-1) d1 = l
-  #
-  # and we are mapping l to (i,j) without disturbing the other indices
-
-  ind_invariant <- setdiff(tensr_index_names(x), ind_comb)
-
-  # move combining indices to the beginning
-  x <- tensr_reorder(x, c(ind_comb, ind_invariant))
-
-  # reduce dimensions
-  dim(x) <-
-    c(
-      prod(dim(x)[seq_along(ind_comb)]),
-      dim(x)[-seq_along(ind_comb)]
-    )
-
-  new_tensr(
-    x,
-    index_names = c(ind_new, ind_invariant),
-    index_positions = c(ind_new_pos, tensr_index_positions(x)[ind_invariant])
-  ) |>
-    tensr_reduce()
-}
 
 tensr_alignable <- function(x, y) {
   dx <- setNames(dim(x), tensr_index_names(x))
