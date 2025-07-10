@@ -31,13 +31,13 @@ g_mink <- function(n) {
     i <- .(...)
 
     if (setequal(i$p, "+") || setequal(i$p, "-")) {
-      # in this case the inverse is equal to g
+      # in this case the inverse is equal to g,
+      # so we don't need to calculate it
       g <- diag(c(-1, rep(1, n - 1)), n, n)
+      tensr(g, i$i, i$p)
     } else {
-      g <- d(n)(...)
+      d(n)(...)
     }
-
-    tensr(g, i$i, i$p)
   }
 }
 
