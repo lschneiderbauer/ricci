@@ -188,22 +188,31 @@ Ops.tensr <- function(e1, e2) {
 }
 
 #' @export
-print.tensr <- function(x, ...) {
-  if (!is_scalar(x)) {
-    cat(paste0(
-      "<Indexed Tensor> ",
-      "[", paste0(dim(x), collapse = "x"),
-      "] <-> .(",
+format.tensr <- function(x, ...) {
+  header <-
+    if (!is_scalar(x)) {
       paste0(
-        ifelse(tensr_index_positions(x), "+", "-"),
-        tensr_index_names(x),
-        collapse = ", "
-      ),
-      ")\n"
-    ))
-  } else {
-    cat("<Scalar>\n")
-  }
+        "<Indexed Tensor> ",
+        "[", paste0(dim(x), collapse = "x"),
+        "] <-> .(",
+        paste0(
+          ifelse(tensr_index_positions(x), "+", "-"),
+          tensr_index_names(x),
+          collapse = ", "
+        ),
+        ")\n"
+      )
+    } else {
+      "<Scalar>\n"
+    }
+
+  header
+}
+
+#' @export
+print.tensr <- function(x, ...) {
+  cat(format(x))
+
 
   if (length(dim(x)) <= 2) {
     print(as.array(x))

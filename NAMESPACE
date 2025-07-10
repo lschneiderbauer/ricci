@@ -2,6 +2,7 @@
 
 S3method(Ops,tensr)
 S3method(as.array,tensr)
+S3method(format,tensr)
 S3method(print,tensr)
 export("%_%")
 export(expect_tensr_equal)
