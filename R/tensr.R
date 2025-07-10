@@ -193,7 +193,7 @@ format.tensr <- function(x, ...) {
   header <-
     if (!is_scalar(x)) {
       paste0(
-        "<Indexed Tensor> ",
+        "<Labeled Tensor> ",
         "[", paste0(dim(x), collapse = "x"),
         "] <-> .(",
         paste0(
