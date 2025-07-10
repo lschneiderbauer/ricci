@@ -4,6 +4,7 @@
   tensr(x, i$i, i$p)
 }
 
+#' @export
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 
