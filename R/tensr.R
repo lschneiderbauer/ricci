@@ -41,26 +41,39 @@ tensr_is_reduced <- function(x) {
   attr(x, "reduced")
 }
 
+
+#' @param index_names
+#'  A character vector of index names / labels.
+#' @param index_positions
+#'  A character vector of index positions with two allowed
+#'  values "+" and "-", for "upper" and "lower" position respectively.
+#'  The length of `index_positions` needs to agree with the length of
+#'  `index_names`.
 #' @export
-tensr <- function(x, index_names, index_positions) {
-  x <- as.array(x)
+#' @rdname create-tensor
+tensr <- function(a, index_names, index_positions) {
+  a <- as.array(a)
   stopifnot(is.character(index_names))
   stopifnot(is.character(index_positions))
   stopifnot(length(index_names) == length(index_positions))
 
   # check if we have a scalar
   # in this case just return a number
-  if (length(dim(x)) == 1 && length(x) == 1 && is.null(index_names)) {
-    return(new_tensr(x, character(), character()))
+  if (length(dim(a)) == 1 && length(a) == 1 && is.null(index_names)) {
+    return(new_tensr(a, character(), character()))
   }
 
-  stopifnot(
-    "The number of indices does not match the number of array dimensions." =
-      length(index_names) == length(dim(x))
-  )
+  if (length(index_names) != length(dim(a))) {
+    stop(paste0(
+      "The number of indices (", length(index_names),
+      ") does not match the number of array dimensions (",
+      length(dim(a)),
+      ")."
+    ))
+  }
 
   tensr_reduce(
-    new_tensr(x, index_names, index_positions == "+")
+    new_tensr(a, index_names, index_positions == "+")
   )
 }
 
@@ -412,32 +425,4 @@ tensr_reorder <- function(x, new_index_names) {
     index_positions = tensr_index_positions(x)[new_index_names],
     reduced = tensr_is_reduced(x)
   )
-}
-
-#' @export
-expect_tensr_equal <- function(object, expected) {
-  if (!requireNamespace("testthat", quietly = TRUE)) {
-    stop("Package testthat required.")
-  }
-  if (!requireNamespace("waldo", quietly = TRUE)) {
-    stop("Package waldo required.")
-  }
-
-  stopifnot(inherits(object, "tensr"))
-
-  # 1. Capture object and label
-  act <- testthat::quasi_label(rlang::enquo(object), arg = "object")
-  exp <- testthat::quasi_label(rlang::enquo(expected), arg = "expected")
-
-  # 2. Call expect()
-  act$n <- length(act$val)
-  testthat::expect(
-    object == expected,
-    waldo::compare(object, tensr_align(expected, object),
-      x_arg = act$lab, y_arg = exp$lab
-    )
-  )
-
-  # 3. Invisibly return the value
-  invisible(act$val)
 }

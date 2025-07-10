@@ -1,3 +1,15 @@
+#' Kronecker delta
+#'
+#' Provides a labeled generalized Kronecker delta.
+#'
+#' @param n The dimension.
+#' @return A function that expects index labels. See [.()].
+#'
+#' @seealso [calculus::delta()]
+#' @examples
+#' d(3)(i, j)
+#'
+#' d(3)(i, j, k, l)
 #' @export
 d <- function(n) {
   function(...) {
@@ -14,6 +26,17 @@ d <- function(n) {
   }
 }
 
+#' Levi Civita epsilon
+#'
+#' Provides a labeled Levi Civita epsilon tensor.
+#'
+#' @inheritParams .
+#'
+#' @seealso [calculus::epsilon()]
+#' @examples
+#' e(i, j)
+#'
+#' e(i, j, k)
 #' @export
 e <- function(...) {
   i <- .(...)
@@ -25,6 +48,17 @@ e <- function(...) {
   )
 }
 
+#' Minkowski metric tensor
+#'
+#' Provides a labeled Minkowski metric tensor in `n` dimensions.
+#'
+#' @param n The dimension.
+#' @return A function that expects index labels. See [.()].
+#'
+#' @examples
+#' g_mink(4)(i, j)
+#'
+#' g_mink(4)(+i, +j)
 #' @export
 g_mink <- function(n) {
   function(...) {
@@ -41,8 +75,19 @@ g_mink <- function(n) {
   }
 }
 
+#' Euclidean metric tensor
+#'
+#' Provides a labeled Euclidean metric tensor in `n` dimensions.
+#'
+#' @param n The dimension.
+#' @return A function that expects index labels. See [.()].
+#'
+#' @examples
+#' g_eucl(4)(i, j)
+#'
+#' g_eucl(4)(+i, +j)
 #' @export
-g_eukl <- function(n) {
+g_eucl <- function(n) {
   function(...) {
     i <- .(...)
 
