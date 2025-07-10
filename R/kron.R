@@ -1,4 +1,10 @@
-# ... specifies index mappings
+#' Kronecker product
+#'
+#' @param x A labeled tensor object.
+#' @inheritParams .
+#' @return
+#'  A labeled tensor object of class `"tensr"` which is an `array`
+#'  whose dimensions have attached labels.
 #' @export
 kr <- function(x, ...) {
   stopifnot(inherits(x, "tensr"))
