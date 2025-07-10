@@ -22,7 +22,7 @@ tensors like the Kronecker delta, Levi Civita epsilon, and common metric
 tensors are provided.
 
 Under the hood calculations are performed using the
-[calculus](https://calculus.eguidotti.com/)(Guidotti 2022) package.
+[calculus](https://calculus.eguidotti.com/)[^1] package.
 
 ## Installation
 
@@ -36,61 +36,129 @@ pak::pak("lschneiderbauer/tensr")
 
 ## Example
 
+The central object is R’s `array`. Adding index slot labels allows us to
+do common tensor operations implicitly.
+
+Let’s use random data, an array of rank 3.
+
 ``` r
 library(tensr)
-## basic example code
-```
 
-The central object is R’s `array`. Adding index slot labels allows us to
-do common tensor operations implicitly:
-
-``` r
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
+```
 
-# creating a index-slot-labeled tensor
-# with "lower index" labels i, j, and k
+### Creating a labeled tensor
+
+We can use `a` to create a labeled tensor with lower index labels i, j,
+and k:
+
+$$
+a_{ijk}
+$$
+
+``` r
 a %_% .(i, j, k)
 #> <Labeled Tensor> [2x2x3] <-> .(-i, -j, -k)
+```
 
-# upper indices can be declared by using a "+" sign,
-# e.g. this tensor has "lower index" labels i, j
-# and "upper index" k.
+By default, indices are assumed to be lower indices. We can use a “+”
+prefix to create an upper index label.
+
+$$
+a_{ij}^{\;\;k}
+$$
+
+``` r
 a %_% .(i, j, +k)
 #> <Labeled Tensor> [2x2x3] <-> .(-i, -j, +k)
+```
 
+### Performing calculations
+
+Simply creating labels is not very interesting. The act of labeling a
+tensor becomes useful when the labels are such that they trigger and
+implicit calculation, or they are combined with other tensors via
+multiplication or addition.
+
+#### Contraction
+
+$$
+b_j=a_{i\;k}^{\;i}
+$$
+
+``` r
 # repeated labels with opposite position are implicitly
 # contracted
 a %_% .(i, +i, k)
 #> <Labeled Tensor> [3] <-> .(-k)
 #> [1]  5 13 21
+```
 
-# same label with same position are implicitly
-# (diagonally) subset
+#### Diagonal subsetting
+
+Repeated labels on the same position (upper or lower) will trigger
+diagonal subsetting.
+
+$$
+c_{ik}=a_{iik}
+$$
+
+``` r
 a %_% .(i, i, k)
 #> <Labeled Tensor> [2x3] <-> .(-i, -k)
 #>      [,1] [,2] [,3]
 #> [1,]    1    5    9
 #> [2,]    4    8   12
+```
 
+#### Outer tensor product
 
-# the same conventions apply for arbitrary
-# tensor multiplications
+The same conventions apply for arbitrary tensor multiplication.
+
+$$
+d_{ijklmn}=a_{ijk}a_{lmn}
+$$
+
+``` r
 a %_% .(i, j, k) * a %_% .(l, m, n)
 #> <Labeled Tensor> [2x2x3x2x2x3] <-> .(-i, -j, -k, -l, -m, -n)
+```
 
+#### Tensor multiplication w/ contractions
+
+$$
+e=a_{ijk}a^{ijk}
+$$
+
+``` r
 a %_% .(i, j, k) * a %_% .(+i, +j, +k)
 #> <Scalar>
 #> [1] 650
+```
 
+#### Tensor multiplication w/ contractions and subsetting
+
+$$
+f_j=a_{ijk}a^{i\;k}_{\;j}
+$$
+
+``` r
 a %_% .(i, j, k) * a %_% .(+i, j, +k)
 #> <Labeled Tensor> [2] <-> .(-j)
 #> [1] 247 403
+```
 
+#### Tensor addition
 
-# tensor addition is taking care of correct
-# index slot matching (by label), so the position of the index
-# does not matter
+Tensor addition is taking care of correct index slot matching (by index
+labels), so the position of the index does not matter.
+
+$$
+g_{ijk} = a_{ijk} + a_{jik}
+$$
+
+``` r
 a %_% .(i, j, k) + a %_% .(j, i, k)
 #> <Labeled Tensor> [2x2x3] <-> .(-i, -j, -k)
 #> [1] "(not reduced)"
@@ -108,3 +176,5 @@ Symbolic Calculus in *R*.” *Journal of Statistical Software* 104 (5).
 </div>
 
 </div>
+
+[^1]: (Guidotti 2022)
