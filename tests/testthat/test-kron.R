@@ -13,7 +13,7 @@ test_that("tensr kronecker product works", {
   )
 })
 
-test_that("kronecker leaves contraction invariant", {
+test_that("kronecker commutes with ontraction", {
   arr <- array(runif(4^4), dim = c(4, 4, 4, 4))
 
   expect_tensr_equal(
