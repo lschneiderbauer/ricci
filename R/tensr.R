@@ -457,9 +457,6 @@ expect_tensr_equal <- function(object, expected) {
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop("Package testthat required.")
   }
-  if (!requireNamespace("rlang", quietly = TRUE)) {
-    stop("Package rlang required.")
-  }
   if (!requireNamespace("waldo", quietly = TRUE)) {
     stop("Package waldo required.")
   }

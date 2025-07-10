@@ -10,13 +10,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
-    rlang,
     rmarkdown,
     testthat (>= 3.0.0),
     waldo
 Config/testthat/edition: 3
 Imports: 
-    calculus
+    calculus,
+    rlang
 VignetteBuilder: knitr
 URL: https://github.com/lschneiderbauer/tensr
 BugReports: https://github.com/lschneiderbauer/tensr/issues
