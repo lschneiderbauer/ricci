@@ -243,6 +243,19 @@ as.array.tensr <- function(x, index_order = NULL, ...) {
   x
 }
 
+#' @export
+all.equal.tensr <- function(target, current, ...) {
+  if (!tensr_alignable(target, current)) {
+    all.equal(as.array(target), as.array(current), ...)
+  } else {
+    all.equal(
+      as.array(target),
+      as.array(tensr_align(current, target)),
+      ...
+    )
+  }
+}
+
 tensr_eq <- function(x, y) {
   stopifnot("tensrs not compatible" = tensr_alignable(x, y))
 
