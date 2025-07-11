@@ -22,8 +22,8 @@ tensors like the Kronecker delta, Levi Civita epsilon, and common metric
 tensors are provided.
 
 Under the hood calculations are performed using the
-[calculus](https://calculus.eguidotti.com/)[^1] package. This package
-provides an alternative interface to some of its functionality.
+[calculus](https://calculus.eguidotti.com/) package (Guidotti 2022).
+tensr provides an alternative interface to some of its functionality.
 
 ## Installation
 
@@ -177,5 +177,3 @@ Symbolic Calculus in *R*.” *Journal of Statistical Software* 104 (5).
 </div>
 
 </div>
-
-[^1]: (Guidotti 2022)
