@@ -1,6 +1,7 @@
 #' Kronecker delta
 #'
-#' Provides a labeled generalized Kronecker delta.
+#' Provides a labeled generalized Kronecker delta. In the special
+#' case of two labels this represents simply the identity matrix.
 #'
 #' @param n The dimension.
 #' @return A function that expects index labels. See [.()].
