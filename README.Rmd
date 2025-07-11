@@ -14,25 +14,25 @@ knitr::opts_chunk$set(
 )
 ```
 
-# tensr
+# ricci
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/tensr/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/tensr)
-[![CRAN status](https://www.r-pkg.org/badges/version/tensr)](https://CRAN.R-project.org/package=tensr)
+[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci)
+[![CRAN status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
 <!-- badges: end -->
 
-The goal of tensr is to provide a *compact* R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by labeling (upper and lower) index slots of R's `array` and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available. Common tensors like the Kronecker delta, Levi Civita epsilon, and common metric tensors are provided.
+The goal of ricci is to provide a *compact* R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by labeling (upper and lower) index slots of R's `array` and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available. Common tensors like the Kronecker delta, Levi Civita epsilon, and common metric tensors are provided.
 
-Under the hood calculations are performed using the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022]. tensr provides an alternative interface to some of its functionality.
+Under the hood calculations are performed using the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022]. ricci provides an alternative interface to some of its functionality.
 
 ## Installation
 
-You can install the development version of tensr from [GitHub](https://github.com/) with:
+You can install the development version of ricci from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
-pak::pak("lschneiderbauer/tensr")
+pak::pak("lschneiderbauer/ricci")
 ```
 
 ## Example
@@ -42,7 +42,7 @@ The central object is R's `array`. Adding index slot labels allows us to perform
 For demonstration purposes we use an arbitrary array of rank 3.
 
 ```{r example}
-library(tensr)
+library(ricci)
 
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))

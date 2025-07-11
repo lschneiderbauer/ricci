@@ -1,18 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tensr
+# ricci
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/lschneiderbauer/tensr/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/tensr)
+coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/tensr)](https://CRAN.R-project.org/package=tensr)
+status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
 <!-- badges: end -->
 
-The goal of tensr is to provide a *compact* R interface for performing
+The goal of ricci is to provide a *compact* R interface for performing
 [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus).
 This is achieved by labeling (upper and lower) index slots of R’s
 `array` and making use of Ricci calculus conventions to implicitly
@@ -24,16 +24,16 @@ tensors are provided.
 
 Under the hood calculations are performed using the
 [calculus](https://calculus.eguidotti.com/) package (Guidotti 2022).
-tensr provides an alternative interface to some of its functionality.
+ricci provides an alternative interface to some of its functionality.
 
 ## Installation
 
-You can install the development version of tensr from
+You can install the development version of ricci from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
-pak::pak("lschneiderbauer/tensr")
+pak::pak("lschneiderbauer/ricci")
 ```
 
 ## Example
@@ -44,7 +44,7 @@ perform common tensor operations implicitly.
 For demonstration purposes we use an arbitrary array of rank 3.
 
 ``` r
-library(tensr)
+library(ricci)
 
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
