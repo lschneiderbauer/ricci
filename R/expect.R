@@ -15,10 +15,10 @@
 #' @export
 expect_tensr_equal <- function(object, expected, ...) {
   if (!requireNamespace("testthat", quietly = TRUE)) {
-    stop("Package testthat required.")
+    stop("Package testthat required.") # nocov
   }
   if (!requireNamespace("waldo", quietly = TRUE)) {
-    stop("Package waldo required.")
+    stop("Package waldo required.") # nocov
   }
 
   stopifnot(inherits(object, "tensr"))
