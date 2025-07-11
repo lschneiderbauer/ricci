@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(tensr)
+library(ricci)
 
-test_check("tensr")
+test_check("ricci")
