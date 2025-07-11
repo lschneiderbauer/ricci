@@ -50,8 +50,8 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of ricci is to provide a <em>compact</em> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available. Common tensors like the Kronecker delta, Levi Civita epsilon, and common metric tensors are provided.</p>
-<p>Under the hood calculations are performed using the <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022). ricci provides an alternative interface to some of its functionality.</p>
+<p>The goal of {ricci} is to provide a <em>compact</em> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available via the standard operators (<code>*</code>, <code>+</code>, <code>-</code>). Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.</p>
+<p>The idea to use tensor labels to specify calculations in R is not new and is already used by the <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022). {ricci} uses that package behind the scenes to perform calculations. {ricci} simply provides an alternative interface to a subset of its functionality.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
