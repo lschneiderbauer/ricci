@@ -51,6 +51,7 @@ tensr_is_reduced <- function(x) {
 #'  `index_names`.
 #' @export
 #' @rdname create-tensor
+#' @concept create_tensor
 tensr <- function(a, index_names, index_positions) {
   a <- as.array(a)
   stopifnot(is.character(index_names))

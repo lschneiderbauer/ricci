@@ -20,3 +20,4 @@ g_mink(4)(i, j)
 
 g_mink(4)(+i, +j)
 }
+\concept{tensor_instance}

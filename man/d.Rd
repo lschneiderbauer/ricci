@@ -23,3 +23,4 @@ d(3)(i, j, k, l)
 \seealso{
 \code{\link[calculus:delta]{calculus::delta()}}
 }
+\concept{tensor_instance}

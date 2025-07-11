@@ -11,6 +11,7 @@
 #'
 #' d(3)(i, j, k, l)
 #' @export
+#' @concept tensor_instance
 d <- function(n) {
   function(...) {
     i <- .(...)
@@ -38,6 +39,7 @@ d <- function(n) {
 #'
 #' e(i, j, k)
 #' @export
+#' @concept tensor_instance
 e <- function(...) {
   i <- .(...)
 
@@ -60,6 +62,7 @@ e <- function(...) {
 #'
 #' g_mink(4)(+i, +j)
 #' @export
+#' @concept tensor_instance
 g_mink <- function(n) {
   function(...) {
     i <- .(...)
@@ -87,6 +90,7 @@ g_mink <- function(n) {
 #'
 #' g_eucl(4)(+i, +j)
 #' @export
+#' @concept tensor_instance
 g_eucl <- function(n) {
   function(...) {
     i <- .(...)

@@ -24,3 +24,4 @@ e(i, j, k)
 \seealso{
 \code{\link[calculus:epsilon]{calculus::epsilon()}}
 }
+\concept{tensor_instance}

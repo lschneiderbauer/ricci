@@ -2,3 +2,16 @@ url: https://lschneiderbauer.github.io/tensr/
 template:
   bootstrap: 5
 
+reference:
+- title: "Creating labeled tensors"
+  contents:
+  - has_concept("create_tensor")
+- title: "Predefined tensors"
+  contents:
+  - has_concept("tensor_instance")
+- title: "Testthat expectation"
+  contents:
+  - expect_tensr_equal
+- title: "todo"
+  contents:
+  - kr
