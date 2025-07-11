@@ -175,9 +175,15 @@ test_that("tensr multiplication without summation works", {
 test_that("tensr multiplication with scalar works", {
   arr <- array(1:(2 * 3), c(2, 3))
   arr_mul <- arr %_% .(i, j) * 3
+  arr_mul2 <- 3 * arr %_% .(i, j)
 
   expect_tensr_equal(
     arr_mul,
+    (array(1:(2 * 3), c(2, 3)) * 3) %_% .(i, j)
+  )
+
+  expect_tensr_equal(
+    arr_mul2,
     (array(1:(2 * 3), c(2, 3)) * 3) %_% .(i, j)
   )
 })
@@ -191,6 +197,17 @@ test_that("tensr addition works", {
     array(1:(2 * 3) * 2, c(2, 3)) %_% .(i, j)
   )
 })
+
+test_that("tensr subtraction works", {
+  arr <- array(1:(2 * 3), c(2, 3))
+  arr_add <- arr %_% .(i, j) - arr %_% .(i, j)
+
+  expect_tensr_equal(
+    arr_add,
+    array(0, c(2, 3)) %_% .(i, j)
+  )
+})
+
 
 test_that("tensr addition with reordering works", {
   arr <- array(1:(2^2), c(2, 2))
