@@ -8,7 +8,8 @@
 [![R-CMD-check](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/lschneiderbauer/tensr/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/tensr)
-
+[![CRAN
+status](https://www.r-pkg.org/badges/version/tensr)](https://CRAN.R-project.org/package=tensr)
 <!-- badges: end -->
 
 The goal of tensr is to provide a *compact* R interface for performing

@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/tensr/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/tensr/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/tensr)
-
+[![CRAN status](https://www.r-pkg.org/badges/version/tensr)](https://CRAN.R-project.org/package=tensr)
 <!-- badges: end -->
 
 The goal of tensr is to provide a *compact* R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by labeling (upper and lower) index slots of R's `array` and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available. Common tensors like the Kronecker delta, Levi Civita epsilon, and common metric tensors are provided.
