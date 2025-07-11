@@ -12,19 +12,21 @@ coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://
 status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
 <!-- badges: end -->
 
-The goal of ricci is to provide a *compact* R interface for performing
+The goal of {ricci} is to provide a *compact* R interface for performing
 [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus).
 This is achieved by labeling (upper and lower) index slots of R’s
 `array` and making use of Ricci calculus conventions to implicitly
 trigger contractions and diagonal subsetting. Explicit tensor
 operations, such as addition, multiplication of tensors, raising and
-lowering indices, or the Kronecker product are also available. Common
-tensors like the Kronecker delta, Levi Civita epsilon, and common metric
-tensors are provided.
+lowering indices, or the Kronecker product are also available via the
+standard operators (`*`, `+`, `-`). Common tensors like the Kronecker
+delta, Levi Civita epsilon, and certain metric tensors are provided.
 
-Under the hood calculations are performed using the
-[calculus](https://calculus.eguidotti.com/) package (Guidotti 2022).
-ricci provides an alternative interface to some of its functionality.
+The idea to use tensor labels to specify calculations in R is not new
+and is already used by the [calculus](https://calculus.eguidotti.com/)
+package (Guidotti 2022). {ricci} uses that package behind the scenes to
+perform calculations. {ricci} simply provides an alternative interface
+to a subset of its functionality.
 
 ## Installation
 

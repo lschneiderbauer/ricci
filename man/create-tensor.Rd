@@ -23,8 +23,11 @@ The length of \code{index_positions} needs to agree with the length of
 \code{index_names}.}
 }
 \value{
-A labeled tensor object of class \code{"tensor"} which is an \code{array}
-whose dimensions have attached labels.
+A labeled tensor object of class \code{"tensor"}, an \code{array}
+with attached dimension labels. Note that the index structure
+of the resulting tensor does not necessarily have to match \code{i}. In case
+implicit calculations are already triggered (e.g. contractions)
+the index structure reflects the resulting tensor.
 }
 \description{
 Creates a labeled tensor from an array. \verb{\%_\%} and \code{tensor()} serve

@@ -14,8 +14,11 @@
 #'  An index slot label specification created with [.()].
 #'
 #' @return
-#'  A labeled tensor object of class `"tensor"` which is an `array`
-#'  whose dimensions have attached labels.
+#'  A labeled tensor object of class `"tensor"`, an `array`
+#'  with attached dimension labels. Note that the index structure
+#'  of the resulting tensor does not necessarily have to match `i`. In case
+#'  implicit calculations are already triggered (e.g. contractions)
+#'  the index structure reflects the resulting tensor.
 #'
 #' @examples
 #' a <- array(1:4, dim = c(2, 2))
