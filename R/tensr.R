@@ -1,4 +1,4 @@
-new_tensr <- function(x, index_names, index_positions, reduced = FALSE) {
+new_tensor <- function(x, index_names, index_positions, reduced = FALSE) {
   stopifnot(is.array(x))
   stopifnot(is.character(index_names))
   stopifnot(is.logical(index_positions))
@@ -15,19 +15,19 @@ new_tensr <- function(x, index_names, index_positions, reduced = FALSE) {
     # TRUE = "up", FALSE = "down
     index_positions = index_positions,
     reduced = reduced,
-    class = "tensr"
+    class = "tensor"
   )
 }
 
-tensr_index_names <- function(x) {
-  stopifnot(inherits(x, "tensr"))
+tensor_index_names <- function(x) {
+  stopifnot(inherits(x, "tensor"))
 
   attr(x, "index_names")
 }
 
 #' @importFrom stats setNames
-tensr_index_positions <- function(x) {
-  stopifnot(inherits(x, "tensr"))
+tensor_index_positions <- function(x) {
+  stopifnot(inherits(x, "tensor"))
 
   setNames(
     attr(x, "index_positions"),
@@ -35,8 +35,8 @@ tensr_index_positions <- function(x) {
   )
 }
 
-tensr_is_reduced <- function(x) {
-  stopifnot(inherits(x, "tensr"))
+tensor_is_reduced <- function(x) {
+  stopifnot(inherits(x, "tensor"))
 
   attr(x, "reduced")
 }
@@ -52,7 +52,7 @@ tensr_is_reduced <- function(x) {
 #' @export
 #' @rdname create-tensor
 #' @concept create_tensor
-tensr <- function(a, index_names, index_positions) {
+tensor <- function(a, index_names, index_positions) {
   a <- as.array(a)
   stopifnot(is.character(index_names))
   stopifnot(is.character(index_positions))
@@ -61,7 +61,7 @@ tensr <- function(a, index_names, index_positions) {
   # check if we have a scalar
   # in this case just return a number
   if (length(dim(a)) == 1 && length(a) == 1 && is.null(index_names)) {
-    return(new_tensr(a, character(), character()))
+    return(new_tensor(a, character(), character()))
   }
 
   if (length(index_names) != length(dim(a))) {
@@ -73,22 +73,22 @@ tensr <- function(a, index_names, index_positions) {
     ))
   }
 
-  tensr_reduce(
-    new_tensr(a, index_names, index_positions == "+")
+  tensor_reduce(
+    new_tensor(a, index_names, index_positions == "+")
   )
 }
 
-# reduces a tensr by performing contractions
+# reduces a tensor by performing contractions
 # and diagonal selections
-# after a tensr reduction every index name is unique
-tensr_reduce <- function(x) {
-  if (is_scalar(x) || tensr_is_reduced(x)) {
+# after a tensor reduction every index name is unique
+tensor_reduce <- function(x) {
+  if (is_scalar(x) || tensor_is_reduced(x)) {
     attr(x, "reduced") <- TRUE
     return(x)
   }
 
-  i <- tensr_index_names(x)
-  p <- tensr_index_positions(x)
+  i <- tensor_index_names(x)
+  p <- tensor_index_positions(x)
 
   # in case we have several indices with equal names
   # and equal position
@@ -113,7 +113,7 @@ tensr_reduce <- function(x) {
   calculus::index(x) <- i
   x <- as.array(calculus::contraction(x))
 
-  new_tensr(
+  new_tensor(
     x,
     calculus::index(x) %||% character(),
     p[match(calculus::index(x), i)],
@@ -121,12 +121,12 @@ tensr_reduce <- function(x) {
   )
 }
 
-is_tensr <- function(x) {
-  inherits(x, "tensr")
+is_tensor <- function(x) {
+  inherits(x, "tensor")
 }
 
 is_scalar <- function(x) {
-  if (inherits(x, "tensr")) {
+  if (inherits(x, "tensor")) {
     return(length(attr(x, "index_names")) == 0)
   } else {
     length(x) == 1
@@ -192,18 +192,18 @@ adiag <- function(x, dims_diag) {
 # "&", "|", "!"
 # "==", "!=", "<", "<=", ">=", ">"
 #' @export
-Ops.tensr <- function(e1, e2) {
+Ops.tensor <- function(e1, e2) {
   switch(.Generic,
-    "+" = tensr_add(e1, e2),
-    "-" = tensr_diff(e1, e2),
-    "*" = tensr_mul(e1, e2),
-    "==" = tensr_eq(e1, e2),
+    "+" = tensor_add(e1, e2),
+    "-" = tensor_diff(e1, e2),
+    "*" = tensor_mul(e1, e2),
+    "==" = tensor_eq(e1, e2),
     NextMethod()
   )
 }
 
 #' @export
-format.tensr <- function(x, ...) {
+format.tensor <- function(x, ...) {
   header <-
     if (!is_scalar(x)) {
       paste0(
@@ -211,8 +211,8 @@ format.tensr <- function(x, ...) {
         "[", paste0(dim(x), collapse = "x"),
         "] <-> .(",
         paste0(
-          ifelse(tensr_index_positions(x), "+", "-"),
-          tensr_index_names(x),
+          ifelse(tensor_index_positions(x), "+", "-"),
+          tensor_index_names(x),
           collapse = ", "
         ),
         ")\n"
@@ -225,7 +225,7 @@ format.tensr <- function(x, ...) {
 }
 
 #' @export
-print.tensr <- function(x, ...) {
+print.tensor <- function(x, ...) {
   cat(format(x))
 
 
@@ -233,19 +233,19 @@ print.tensr <- function(x, ...) {
     print(as.array(x))
   }
 
-  if (!tensr_is_reduced(x)) {
+  if (!tensor_is_reduced(x)) {
     print("(not reduced)")
   }
 }
 
 #' @export
 # dim order: allows to specify a dimension order by index names
-as.array.tensr <- function(x, index_order = NULL, ...) {
+as.array.tensor <- function(x, index_order = NULL, ...) {
   if (!is.null(index_order)) {
-    stopifnot(setequal(index_order$i, tensr_index_names(x)))
+    stopifnot(setequal(index_order$i, tensor_index_names(x)))
 
     # TODO: we need to lower/raise indices if necessary
-    x <- tensr_reorder(x, index_order$i)
+    x <- tensor_reorder(x, index_order$i)
   }
 
   x <- unclass(x)
@@ -258,99 +258,99 @@ as.array.tensr <- function(x, index_order = NULL, ...) {
 }
 
 #' @export
-all.equal.tensr <- function(target, current, ...) {
-  if (!tensr_alignable(target, current)) {
+all.equal.tensor <- function(target, current, ...) {
+  if (!tensor_alignable(target, current)) {
     all.equal(as.array(target), as.array(current), ...)
   } else {
     all.equal(
       as.array(target),
-      as.array(tensr_align(current, target)),
+      as.array(tensor_align(current, target)),
       ...
     )
   }
 }
 
-tensr_eq <- function(x, y) {
-  stopifnot("tensrs not compatible" = tensr_alignable(x, y))
+tensor_eq <- function(x, y) {
+  stopifnot("tensors not compatible" = tensor_alignable(x, y))
 
-  all(as.array(x) == as.array(tensr_align(y, x)))
+  all(as.array(x) == as.array(tensor_align(y, x)))
 }
 
-tensr_add <- function(x, y) {
-  stopifnot("tensrs not compatible" = tensr_alignable(x, y))
+tensor_add <- function(x, y) {
+  stopifnot("tensors not compatible" = tensor_alignable(x, y))
 
-  new_tensr(
-    calculus::`%sum%`(as.array(x), as.array(tensr_align(y, x))),
-    index_names = tensr_index_names(x),
-    index_positions = tensr_index_positions(y)
+  new_tensor(
+    calculus::`%sum%`(as.array(x), as.array(tensor_align(y, x))),
+    index_names = tensor_index_names(x),
+    index_positions = tensor_index_positions(y)
   )
 }
 
-tensr_diff <- function(x, y) {
-  stopifnot("tensrs not compatible" = tensr_alignable(x, y))
+tensor_diff <- function(x, y) {
+  stopifnot("tensors not compatible" = tensor_alignable(x, y))
 
-  new_tensr(
-    calculus::`%diff%`(as.array(x), as.array(tensr_align(y, x))),
-    index_names = tensr_index_names(x),
-    index_positions = tensr_index_positions(y)
+  new_tensor(
+    calculus::`%diff%`(as.array(x), as.array(tensor_align(y, x))),
+    index_names = tensor_index_names(x),
+    index_positions = tensor_index_positions(y)
   )
 }
 
 #' @importFrom stats setNames
-tensr_mul <- function(x, y) {
+tensor_mul <- function(x, y) {
   # perform Einstein summation if applicable
 
   if (is_scalar(x)) {
-    new_tensr(
+    new_tensor(
       as.vector(x) * as.array(y),
-      index_names = tensr_index_names(y),
-      index_positions = tensr_index_positions(y),
-      reduced = tensr_is_reduced(y)
+      index_names = tensor_index_names(y),
+      index_positions = tensor_index_positions(y),
+      reduced = tensor_is_reduced(y)
     )
   } else if (is_scalar(y)) {
-    new_tensr(
+    new_tensor(
       as.vector(y) * as.array(x),
-      index_names = tensr_index_names(x),
-      index_positions = tensr_index_positions(x),
-      reduced = tensr_is_reduced(x)
+      index_names = tensor_index_names(x),
+      index_positions = tensor_index_positions(x),
+      reduced = tensor_is_reduced(x)
     )
   } else {
-    stopifnot(inherits(x, "tensr"))
-    stopifnot(inherits(y, "tensr"))
+    stopifnot(inherits(x, "tensor"))
+    stopifnot(inherits(y, "tensor"))
 
-    if (!tensr_is_reduced(x)) {
-      x <- tensr_reduce(x)
+    if (!tensor_is_reduced(x)) {
+      x <- tensor_reduce(x)
     }
 
-    if (!tensr_is_reduced(y)) {
-      y <- tensr_reduce(y)
+    if (!tensor_is_reduced(y)) {
+      y <- tensor_reduce(y)
     }
 
     # only sum over lower and upper indices
-    common_indices <- intersect(tensr_index_names(x), tensr_index_names(y))
+    common_indices <- intersect(tensor_index_names(x), tensor_index_names(y))
 
     einsteinable <-
       vapply(
         common_indices,
         function(ind) {
-          x_pos <- tensr_index_positions(x)[which(ind == tensr_index_names(x))]
-          y_pos <- tensr_index_positions(y)[which(ind == tensr_index_names(y))]
+          x_pos <- tensor_index_positions(x)[which(ind == tensor_index_names(x))]
+          y_pos <- tensor_index_positions(y)[which(ind == tensor_index_names(y))]
           xor(x_pos, y_pos)
         },
         FUN.VALUE = FALSE
       )
 
-    x_ind <- setNames(nm = tensr_index_names(x))
-    y_ind <- setNames(nm = tensr_index_names(y))
-    x_pos <- tensr_index_positions(x)
-    y_pos <- tensr_index_positions(y)
+    x_ind <- setNames(nm = tensor_index_names(x))
+    y_ind <- setNames(nm = tensor_index_names(y))
+    x_pos <- tensor_index_positions(x)
+    y_pos <- tensor_index_positions(y)
 
     res0 <-
       if (length(common_indices[einsteinable]) == 0) {
         calculus::index(x) <- x_ind
         calculus::index(y) <- y_ind
 
-        new_tensr(
+        new_tensor(
           calculus::`%outer%`(as.array(x), as.array(y)),
           index_names = c(x_ind, y_ind),
           index_positions = c(x_pos, y_pos)
@@ -368,7 +368,7 @@ tensr_mul <- function(x, y) {
         calculus::index(x) <- x_ind_einst
         calculus::index(y) <- y_ind_einst
 
-        new_tensr(
+        new_tensor(
           as.array(calculus::einstein(as.array(x), as.array(y))),
           index_names =
             c(
@@ -385,27 +385,27 @@ tensr_mul <- function(x, y) {
 
     # if we have common indices with same position
     # we need to reduce that
-    tensr_reduce(res0)
+    tensor_reduce(res0)
   }
 }
 
 
-tensr_alignable <- function(x, y) {
-  dx <- setNames(dim(x), tensr_index_names(x))
-  dy <- setNames(dim(y), tensr_index_names(x))
+tensor_alignable <- function(x, y) {
+  dx <- setNames(dim(x), tensor_index_names(x))
+  dy <- setNames(dim(y), tensor_index_names(x))
 
-  setequal(tensr_index_names(x), tensr_index_names(y)) &&
-    all(tensr_index_positions(x)[tensr_index_names(y)] == tensr_index_positions(y)) &&
-    all(dx[tensr_index_names(y)] == dy)
+  setequal(tensor_index_names(x), tensor_index_names(y)) &&
+    all(tensor_index_positions(x)[tensor_index_names(y)] == tensor_index_positions(y)) &&
+    all(dx[tensor_index_names(y)] == dy)
 }
 
 # aligns y dimensions to x
-tensr_align <- function(y, x) {
-  if (!setequal(tensr_index_names(x), tensr_index_names(y))) {
+tensor_align <- function(y, x) {
+  if (!setequal(tensor_index_names(x), tensor_index_names(y))) {
     stop("non-conformable arrays")
   }
 
-  z <- tensr_reorder(y, tensr_index_names(x))
+  z <- tensor_reorder(y, tensor_index_names(x))
 
   if (any(dim(x) != dim(z))) {
     stop("non-conformable arrays")
@@ -414,16 +414,16 @@ tensr_align <- function(y, x) {
   z
 }
 
-tensr_reorder <- function(x, new_index_names) {
-  stopifnot(inherits(x, "tensr"))
-  stopifnot(setequal(tensr_index_names(x), new_index_names))
+tensor_reorder <- function(x, new_index_names) {
+  stopifnot(inherits(x, "tensor"))
+  stopifnot(setequal(tensor_index_names(x), new_index_names))
 
   x_arr <- as.array(x)
 
-  new_tensr(
-    aperm(x_arr, perm = match(new_index_names, tensr_index_names(x))),
+  new_tensor(
+    aperm(x_arr, perm = match(new_index_names, tensor_index_names(x))),
     index_names = new_index_names,
-    index_positions = tensr_index_positions(x)[new_index_names],
-    reduced = tensr_is_reduced(x)
+    index_positions = tensor_index_positions(x)[new_index_names],
+    reduced = tensor_is_reduced(x)
   )
 }

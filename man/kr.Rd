@@ -16,7 +16,7 @@ This argument uses non-standard evaluation, so any R symbol can
 be passed.}
 }
 \value{
-A labeled tensor object of class \code{"tensr"} which is an \code{array}
+A labeled tensor object of class \code{"tensor"} which is an \code{array}
 whose dimensions have attached labels.
 }
 \description{

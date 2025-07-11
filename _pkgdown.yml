@@ -11,7 +11,7 @@ reference:
   - has_concept("tensor_instance")
 - title: "Testthat expectation"
   contents:
-  - expect_tensr_equal
+  - expect_tensor_equal
 - title: "todo"
   contents:
   - kr

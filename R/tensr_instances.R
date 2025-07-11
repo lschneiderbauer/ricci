@@ -20,7 +20,7 @@ d <- function(n) {
 
     stopifnot(order %% 2 == 0)
 
-    tensr(
+    tensor(
       calculus::delta(n = n, p = order %/% 2),
       i$i,
       i$p
@@ -44,7 +44,7 @@ d <- function(n) {
 e <- function(...) {
   i <- .(...)
 
-  tensr(
+  tensor(
     calculus::epsilon(length(i$i)),
     i$i,
     i$p
@@ -72,7 +72,7 @@ g_mink <- function(n) {
       # in this case the inverse is equal to g,
       # so we don't need to calculate it
       g <- diag(c(-1, rep(1, n - 1)), n, n)
-      tensr(g, i$i, i$p)
+      tensor(g, i$i, i$p)
     } else {
       d(n)(...)
     }
@@ -96,6 +96,6 @@ g_eucl <- function(n) {
   function(...) {
     i <- .(...)
 
-    tensr(diag(1, n, n), i$i, i$p)
+    tensor(diag(1, n, n), i$i, i$p)
   }
 }

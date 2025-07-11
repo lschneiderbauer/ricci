@@ -1,9 +1,9 @@
 #' Create a labeled tensor
 #'
-#' Creates a labeled tensor from an array. `%_%` and `tensr()` serve
+#' Creates a labeled tensor from an array. `%_%` and `tensor()` serve
 #' the same purpose, but typically usage of `%_%` is preferred due to
 #' brevity.
-#' `tensr()` is exported to provide a standard-evaluation interface
+#' `tensor()` is exported to provide a standard-evaluation interface
 #' as well which might be useful under some circumstances.
 #'
 #' @param a
@@ -14,7 +14,7 @@
 #'  An index slot label specification created with [.()].
 #'
 #' @return
-#'  A labeled tensor object of class `"tensr"` which is an `array`
+#'  A labeled tensor object of class `"tensor"` which is an `array`
 #'  whose dimensions have attached labels.
 #'
 #' @examples
@@ -24,8 +24,8 @@
 #' @rdname create-tensor
 #' @concept create_tensor
 `%_%` <- function(a, i) {
-  stopifnot(inherits(i, "tensr_indices"))
-  tensr(a, i$i, i$p)
+  stopifnot(inherits(i, "tensor_indices"))
+  tensor(a, i$i, i$p)
 }
 
 #' Index slot label specification
@@ -68,7 +68,7 @@
       i = indices,
       p = positions
     ),
-    class = "tensr_indices"
+    class = "tensor_indices"
   )
 }
 

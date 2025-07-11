@@ -2,12 +2,12 @@
 % Please edit documentation in R/index.R, R/tensr.R
 \name{\%_\%}
 \alias{\%_\%}
-\alias{tensr}
+\alias{tensor}
 \title{Create a labeled tensor}
 \usage{
 a \%_\% i
 
-tensr(a, index_names, index_positions)
+tensor(a, index_names, index_positions)
 }
 \arguments{
 \item{a}{An array or any object that can be coerced to an array via
@@ -23,14 +23,14 @@ The length of \code{index_positions} needs to agree with the length of
 \code{index_names}.}
 }
 \value{
-A labeled tensor object of class \code{"tensr"} which is an \code{array}
+A labeled tensor object of class \code{"tensor"} which is an \code{array}
 whose dimensions have attached labels.
 }
 \description{
-Creates a labeled tensor from an array. \verb{\%_\%} and \code{tensr()} serve
+Creates a labeled tensor from an array. \verb{\%_\%} and \code{tensor()} serve
 the same purpose, but typically usage of \verb{\%_\%} is preferred due to
 brevity.
-\code{tensr()} is exported to provide a standard-evaluation interface
+\code{tensor()} is exported to provide a standard-evaluation interface
 as well which might be useful under some circumstances.
 }
 \examples{

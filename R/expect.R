@@ -13,7 +13,7 @@
 #' @return The actual value invisibly.
 #'
 #' @export
-expect_tensr_equal <- function(object, expected, ...) {
+expect_tensor_equal <- function(object, expected, ...) {
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop("Package testthat required.") # nocov
   }
@@ -21,7 +21,7 @@ expect_tensr_equal <- function(object, expected, ...) {
     stop("Package waldo required.") # nocov
   }
 
-  stopifnot(inherits(object, "tensr"))
+  stopifnot(inherits(object, "tensor"))
 
   # 1. Capture object and label
   act <- testthat::quasi_label(rlang::enquo(object), arg = "object")
@@ -32,7 +32,7 @@ expect_tensr_equal <- function(object, expected, ...) {
   testthat::expect(
     object == expected,
     waldo::compare(
-      object, tensr_align(expected, object),
+      object, tensor_align(expected, object),
       x_arg = act$lab, y_arg = exp$lab,
       ...
     )
