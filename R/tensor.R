@@ -133,6 +133,10 @@ is_scalar <- function(x) {
   }
 }
 
+tensor_dim <- function(x, index_name) {
+  dim(x)[tensor_index_names(x) == index_name]
+}
+
 # picks out "diagonal" indices of an array
 # and creates a new array, whose elements
 # are a subset of the original array

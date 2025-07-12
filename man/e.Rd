@@ -10,8 +10,8 @@ e(...)
 \item{...}{Index labels separated by commas optionally prefixed by "+" and "-"
 to indicate the index position (upper and lower respectively).
 If no prefix is provided, a lower index ("-") is assumed.
-This argument uses non-standard evaluation, so any R symbol can
-be passed.}
+This argument uses non-standard evaluation: any R symbol
+that is not a reserved keyword can be used.}
 }
 \description{
 Provides a labeled Levi Civita epsilon tensor.

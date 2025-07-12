@@ -4,14 +4,15 @@
 \alias{.t}
 \title{Index transformation}
 \usage{
-.t(tensor, ..., g = getOption("ricci.g"))
+.t(x, ..., g = getOption("ricci.g"))
 }
 \arguments{
-\item{tensor}{A tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
+\item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
 
 \item{...}{Any number of transformation specifications separated by a comma.}
 
-\item{g}{An (unlabeled) metric tensor as array used for raising and lowering indices.}
+\item{g}{An (unlabeled) covariant metric tensor as array used for raising and
+lowering indices.}
 }
 \value{
 A modified tensor object.
@@ -30,7 +31,7 @@ are separated by a comma ",".
 \item Lowering index:
 \verb{+<label1> -> -<label2>}
 \item Kronecker product:
-\verb{(<label1>, <label2>, ..., <labeln-1>) -> <labeln+1>}
+\verb{.(<label1>, <label2>, ..., <labeln-1>) -> <labeln+1>}
 }
 }
 \examples{
