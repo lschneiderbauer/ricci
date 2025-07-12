@@ -10,14 +10,22 @@ g_eucl(n)
 \item{n}{The dimension.}
 }
 \value{
-A function that expects index labels. See \code{\link[=.]{.()}}.
+A function that expects index labels (see \code{\link[=.]{.()}}) and returns a
+labeled tensor.
 }
 \description{
 Provides a labeled Euclidean metric tensor in \code{n} dimensions.
+Note that the numeric result will be different depending on the
+chosen index positions.
 }
 \examples{
 g_eucl(4)(i, j)
 
 g_eucl(4)(+i, +j)
 }
+\seealso{
+Other metric tensors: 
+\code{\link{g_mink}()}
+}
+\concept{metric tensors}
 \concept{tensor_instance}

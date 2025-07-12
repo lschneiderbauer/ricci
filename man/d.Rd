@@ -10,7 +10,9 @@ d(n)
 \item{n}{The dimension.}
 }
 \value{
-A function that expects index labels. See \code{\link[=.]{.()}}.
+A function that expects index labels (see \code{\link[=.]{.()}}) and returns a
+labeled tensor. The underlying data will differs depending on
+the number of labels provided.
 }
 \description{
 Provides a labeled generalized Kronecker delta. In the special
@@ -22,6 +24,10 @@ d(3)(i, j)
 d(3)(i, j, k, l)
 }
 \seealso{
-\code{\link[calculus:delta]{calculus::delta()}}
+Underlying implementation: \code{\link[calculus:delta]{calculus::delta()}}
+
+Other tensor symbols: 
+\code{\link{e}()}
 }
+\concept{tensor symbols}
 \concept{tensor_instance}

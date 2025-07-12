@@ -13,6 +13,11 @@ If no prefix is provided, a lower index ("-") is assumed.
 This argument uses non-standard evaluation: any R symbol
 that is not a reserved keyword can be used.}
 }
+\value{
+A labeled tensor object.
+The underlying data will differs depending on
+the number of labels provided.
+}
 \description{
 Provides a labeled Levi Civita epsilon tensor.
 }
@@ -22,6 +27,10 @@ e(i, j)
 e(i, j, k)
 }
 \seealso{
-\code{\link[calculus:epsilon]{calculus::epsilon()}}
+Underlying implementation: \code{\link[calculus:epsilon]{calculus::epsilon()}}
+
+Other tensor symbols: 
+\code{\link{d}()}
 }
+\concept{tensor symbols}
 \concept{tensor_instance}
