@@ -50,8 +50,9 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of {ricci} is to provide a <em>compact</em> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to <em>implicitly</em> trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available via the standard operators (<code>*</code>, <code>+</code>, <code>-</code>). Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.</p>
-<p>{ricci} uses <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022) behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.</p>
+<!-- badges: end -->
+<p>The goal of {ricci} is to provide a <em>compact</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.&lt;/p&gt;"><sup>1</sup></a> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to <em>implicitly</em> trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available via the standard operators (<code>*</code>, <code>+</code>, <code>-</code>). Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.</p>
+<p>{ricci} uses the <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022) behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -61,9 +62,9 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"lschneiderbauer/ricci"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
-<p>The central object is R’s <code>array</code>. Adding index slot labels allows us to perform common tensor operations implicitly.</p>
+<p>The central object is R’s <code>array</code>. Adding index slot labels allows us to perform common tensor operations implicitly. After the desired calculations have been carried out we remove the labels to obtain an <code>array</code> again.</p>
 <p>For demonstration purposes we use an arbitrary array of rank 3.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lschneiderbauer/ricci" class="external-link">ricci</a></span><span class="op">)</span></span>
@@ -73,7 +74,7 @@
 <div class="section level3">
 <h3 id="creating-a-labeled-tensor">Creating a labeled tensor<a class="anchor" aria-label="anchor" href="#creating-a-labeled-tensor"></a>
 </h3>
-<p>We can use <code>a</code> to create a labeled tensor with lower index labels i, j, and k:</p>
+<p>We can use the array <code>a</code> to create a labeled tensor with lower index labels i, j, and k:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">
 a_{ijk}
 </annotation></semantics></math></p>
@@ -91,7 +92,7 @@ a_{ij}^{\;\;k}
 <div class="section level3">
 <h3 id="performing-calculations">Performing calculations<a class="anchor" aria-label="anchor" href="#performing-calculations"></a>
 </h3>
-<p>Simply creating labels is not very interesting. The act of labeling tensor index slots becomes useful when the labels are such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.</p>
+<p>Creating labels on its own is not very interesting nor helpful. The act of labeling tensor index slots becomes useful when the labels are set such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.</p>
 <div class="section level4">
 <h4 id="contraction">Contraction<a class="anchor" aria-label="anchor" href="#contraction"></a>
 </h4>
@@ -100,8 +101,13 @@ a_{ij}^{\;\;k}
 b_j=a_{i\;k}^{\;i}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">b</span></span>
 <span><span class="co">#&gt; &lt;Labeled Tensor&gt; [3] &lt;-&gt; .(-k)</span></span>
+<span><span class="co">#&gt; [1]  5 13 21</span></span>
+<span></span>
+<span><span class="co"># retrieve array</span></span>
+<span><span class="va">b</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/dot-a.html">.a</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]  5 13 21</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -112,8 +118,15 @@ b_j=a_{i\;k}^{\;i}
 c_{ik}=a_{iik}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">c</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">c</span></span>
 <span><span class="co">#&gt; &lt;Labeled Tensor&gt; [2x3] &lt;-&gt; .(-i, -k)</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
+<span><span class="co">#&gt; [1,]    1    5    9</span></span>
+<span><span class="co">#&gt; [2,]    4    8   12</span></span>
+<span></span>
+<span><span class="co"># retrieve array</span></span>
+<span><span class="va">c</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/dot-a.html">.a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
 <span><span class="co">#&gt; [1,]    1    5    9</span></span>
 <span><span class="co">#&gt; [2,]    4    8   12</span></span></code></pre></div>
@@ -126,8 +139,226 @@ c_{ik}=a_{iik}
 d_{ijklmn}=a_{ijk}a_{lmn}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;Labeled Tensor&gt; [2x2x3x2x2x3] &lt;-&gt; .(-i, -j, -k, -l, -m, -n)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># retrieve array</span></span>
+<span><span class="co"># we can use any index order we like</span></span>
+<span><span class="va">d</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/dot-a.html">.a</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">i</span>, <span class="va">n</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="co">#&gt; , , 1, 1, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    1    3</span></span>
+<span><span class="co">#&gt; [2,]    2    4</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    2    6</span></span>
+<span><span class="co">#&gt; [2,]    4    8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    5    7</span></span>
+<span><span class="co">#&gt; [2,]    6    8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   10   14</span></span>
+<span><span class="co">#&gt; [2,]   12   16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    9   11</span></span>
+<span><span class="co">#&gt; [2,]   10   12</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 1, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   18   22</span></span>
+<span><span class="co">#&gt; [2,]   20   24</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 1, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    3    9</span></span>
+<span><span class="co">#&gt; [2,]    6   12</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    4   12</span></span>
+<span><span class="co">#&gt; [2,]    8   16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   15   21</span></span>
+<span><span class="co">#&gt; [2,]   18   24</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   20   28</span></span>
+<span><span class="co">#&gt; [2,]   24   32</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   27   33</span></span>
+<span><span class="co">#&gt; [2,]   30   36</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 2, 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   36   44</span></span>
+<span><span class="co">#&gt; [2,]   40   48</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 1, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    5   15</span></span>
+<span><span class="co">#&gt; [2,]   10   20</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    6   18</span></span>
+<span><span class="co">#&gt; [2,]   12   24</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   25   35</span></span>
+<span><span class="co">#&gt; [2,]   30   40</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   30   42</span></span>
+<span><span class="co">#&gt; [2,]   36   48</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   45   55</span></span>
+<span><span class="co">#&gt; [2,]   50   60</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 1, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   54   66</span></span>
+<span><span class="co">#&gt; [2,]   60   72</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 1, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    7   21</span></span>
+<span><span class="co">#&gt; [2,]   14   28</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    8   24</span></span>
+<span><span class="co">#&gt; [2,]   16   32</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   35   49</span></span>
+<span><span class="co">#&gt; [2,]   42   56</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   40   56</span></span>
+<span><span class="co">#&gt; [2,]   48   64</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   63   77</span></span>
+<span><span class="co">#&gt; [2,]   70   84</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 2, 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   72   88</span></span>
+<span><span class="co">#&gt; [2,]   80   96</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 1, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    9   27</span></span>
+<span><span class="co">#&gt; [2,]   18   36</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   10   30</span></span>
+<span><span class="co">#&gt; [2,]   20   40</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   45   63</span></span>
+<span><span class="co">#&gt; [2,]   54   72</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   50   70</span></span>
+<span><span class="co">#&gt; [2,]   60   80</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   81   99</span></span>
+<span><span class="co">#&gt; [2,]   90  108</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 1, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   90  110</span></span>
+<span><span class="co">#&gt; [2,]  100  120</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 1, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   11   33</span></span>
+<span><span class="co">#&gt; [2,]   22   44</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 1, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   12   36</span></span>
+<span><span class="co">#&gt; [2,]   24   48</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 2, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   55   77</span></span>
+<span><span class="co">#&gt; [2,]   66   88</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 2, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   60   84</span></span>
+<span><span class="co">#&gt; [2,]   72   96</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 1, 3, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   99  121</span></span>
+<span><span class="co">#&gt; [2,]  110  132</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2, 3, 2, 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]  108  132</span></span>
+<span><span class="co">#&gt; [2,]  120  144</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="tensor-multiplication-w-contractions">Tensor multiplication w/ contractions<a class="anchor" aria-label="anchor" href="#tensor-multiplication-w-contractions"></a>
@@ -136,8 +367,13 @@ d_{ijklmn}=a_{ijk}a_{lmn}
 e=a_{ijk}a^{ijk}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">e</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
+<span><span class="co">#&gt; [1] 650</span></span>
+<span></span>
+<span><span class="co"># convert to number</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 650</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -147,8 +383,13 @@ e=a_{ijk}a^{ijk}
 f_j=a_{ijk}a^{i\;k}_{\;j}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">f</span></span>
 <span><span class="co">#&gt; &lt;Labeled Tensor&gt; [2] &lt;-&gt; .(-j)</span></span>
+<span><span class="co">#&gt; [1] 247 403</span></span>
+<span></span>
+<span><span class="co"># retrieve array</span></span>
+<span><span class="va">f</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/dot-a.html">.a</a></span><span class="op">(</span><span class="va">j</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 247 403</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -159,9 +400,29 @@ f_j=a_{ijk}a^{i\;k}_{\;j}
 g_{ijk} = a_{ijk} + a_{jik}
 </annotation></semantics></math></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">+</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">+</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">g</span></span>
 <span><span class="co">#&gt; &lt;Labeled Tensor&gt; [2x2x3] &lt;-&gt; .(-i, -j, -k)</span></span>
-<span><span class="co">#&gt; [1] "(not reduced)"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "(not reduced)"</span></span>
+<span></span>
+<span><span class="va">g</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/dot-a.html">.a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="co">#&gt; , , 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]    2    5</span></span>
+<span><span class="co">#&gt; [2,]    5    8</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   10   13</span></span>
+<span><span class="co">#&gt; [2,]   13   16</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; , , 3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,]   18   21</span></span>
+<span><span class="co">#&gt; [2,]   21   24</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-guidotti2022" class="csl-entry">
 Guidotti, Emanuele. 2022. “<strong>Calculus</strong>: High-Dimensional Numerical and Symbolic Calculus in <em>R</em>.” <em>Journal of Statistical Software</em> 104 (5). <a href="https://doi.org/10.18637/jss.v104.i05" class="external-link uri">https://doi.org/10.18637/jss.v104.i05</a>.
@@ -171,6 +432,8 @@ Guidotti, Emanuele. 2022. “<strong>Calculus</strong>: High-Dimensional Numeric
 </div>
 </div>
 </div>
+
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
