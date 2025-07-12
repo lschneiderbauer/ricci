@@ -248,11 +248,13 @@ print.tensor <- function(x, ...) {
 #' An index label order
 #' needs to be provided so that the array's [dim()] order is well defined.
 #'
+#' @inheritParams .a
 #' @param index_order
 #'  An index specification created with [.()].
 #'  The specification needs to match all the labels occurring in `x`.
 #'  The label order determines the dimension
 #'  order of the resulting array.
+#' @param ... Not used.
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> .a(k)
 #' @export

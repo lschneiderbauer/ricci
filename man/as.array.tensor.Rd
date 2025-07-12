@@ -7,10 +7,14 @@
 \method{as.array}{tensor}(x, index_order = NULL, ...)
 }
 \arguments{
+\item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
+
 \item{index_order}{An index specification created with \code{\link[=.]{.()}}.
 The specification needs to match all the labels occurring in \code{x}.
 The label order determines the dimension
 order of the resulting array.}
+
+\item{...}{Not used.}
 }
 \description{
 Converts tensor to array by stripping the index labels.
