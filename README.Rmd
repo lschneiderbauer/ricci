@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci) [![CRAN status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
+[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci) [![CRAN status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci) [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
 <!-- badges: end -->
 
@@ -41,14 +41,27 @@ pak::pak("lschneiderbauer/ricci")
 
 The central object is R's `array`. Adding index slot labels allows us to perform common tensor operations implicitly. After the desired calculations have been carried out we remove the labels to obtain an `array` again.
 
-For demonstration purposes we use an arbitrary array of rank 3.
+The following example shows how to express the contraction of two tensors, where one index has to be raised, and subsequent diagonal subsetting. For demonstration purposes we use an arbitrary array of rank 3.
 
 ```{r example}
 library(ricci)
 
+# a choice of metric tensor is required
+# for raising / lowering indices
+options(ricci.g = g_mink(2)())
+
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
+
+(a %_% .(i, j, A) * # create labeled tensor
+    a %_% .(j, i, A) |> .t(j -> +j)) |> # create a labeled tensor and raise index j
+  # * -j and +j dimension are implictely contracted
+  # * the i-diagonal is selected
+  # the result is a tensor of rank 2
+  .a(i, A) # we unlabel the tensor with index order (i, A)
 ```
+
+Below we outline more details on possible individual tasks.
 
 ### Creating a labeled tensor
 
@@ -118,10 +131,6 @@ $$
 
 ```{r}
 d <- a %_% .(i, j, k) * a %_% .(l, m, n)
-
-# retrieve array
-# we can use any index order we like
-d |> .a(l, m, i, n, j, k)
 ```
 
 #### Tensor multiplication w/ contractions

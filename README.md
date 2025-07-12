@@ -10,6 +10,8 @@
 coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 
 <!-- badges: end -->
 
@@ -45,14 +47,33 @@ perform common tensor operations implicitly. After the desired
 calculations have been carried out we remove the labels to obtain an
 `array` again.
 
-For demonstration purposes we use an arbitrary array of rank 3.
+The following example shows how to express the contraction of two
+tensors, where one index has to be raised, and subsequent diagonal
+subsetting. For demonstration purposes we use an arbitrary array of rank
+3.
 
 ``` r
 library(ricci)
 
+# a choice of metric tensor is required
+# for raising / lowering indices
+options(ricci.g = g_mink(2)())
+
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
+
+(a %_% .(i, j, A) * # create labeled tensor
+    a %_% .(j, i, A) |> .t(j -> +j)) |> # create a labeled tensor and raise index j
+  # * -j and +j dimension are implictely contracted
+  # * the i-diagonal is selected
+  # the result is a tensor of rank 2
+  .a(i, A) # we unlabel the tensor with index order (i, A)
+#>      [,1] [,2] [,3]
+#> [1,]    5   17   29
+#> [2,]   10   22   34
 ```
+
+Below we outline more details on possible individual tasks.
 
 ### Creating a labeled tensor
 
@@ -65,7 +86,7 @@ $$
 
 ``` r
 a %_% .(i, j, k)
-#> <Labeled Tensor> [2x2x3] <-> .(-i, -j, -k)
+#> <Labeled Tensor> [2x2x3] / .(-i, -j, -k)
 ```
 
 By default, indices are assumed to be lower indices. We can use a “+”
@@ -77,7 +98,7 @@ $$
 
 ``` r
 a %_% .(i, j, +k)
-#> <Labeled Tensor> [2x2x3] <-> .(-i, -j, +k)
+#> <Labeled Tensor> [2x2x3] / .(-i, -j, +k)
 ```
 
 ### Performing calculations
@@ -98,7 +119,7 @@ $$
 ``` r
 b <- a %_% .(i, +i, k)
 b
-#> <Labeled Tensor> [3] <-> .(-k)
+#> <Labeled Tensor> [3] / .(-k)
 #> [1]  5 13 21
 
 # retrieve array
@@ -118,7 +139,7 @@ $$
 ``` r
 c <- a %_% .(i, i, k)
 c
-#> <Labeled Tensor> [2x3] <-> .(-i, -k)
+#> <Labeled Tensor> [2x3] / .(-i, -k)
 #>      [,1] [,2] [,3]
 #> [1,]    1    5    9
 #> [2,]    4    8   12
@@ -140,225 +161,6 @@ $$
 
 ``` r
 d <- a %_% .(i, j, k) * a %_% .(l, m, n)
-
-# retrieve array
-# we can use any index order we like
-d |> .a(l, m, i, n, j, k)
-#> , , 1, 1, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    1    3
-#> [2,]    2    4
-#> 
-#> , , 2, 1, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    2    6
-#> [2,]    4    8
-#> 
-#> , , 1, 2, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    5    7
-#> [2,]    6    8
-#> 
-#> , , 2, 2, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   10   14
-#> [2,]   12   16
-#> 
-#> , , 1, 3, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    9   11
-#> [2,]   10   12
-#> 
-#> , , 2, 3, 1, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   18   22
-#> [2,]   20   24
-#> 
-#> , , 1, 1, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    3    9
-#> [2,]    6   12
-#> 
-#> , , 2, 1, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]    4   12
-#> [2,]    8   16
-#> 
-#> , , 1, 2, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   15   21
-#> [2,]   18   24
-#> 
-#> , , 2, 2, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   20   28
-#> [2,]   24   32
-#> 
-#> , , 1, 3, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   27   33
-#> [2,]   30   36
-#> 
-#> , , 2, 3, 2, 1
-#> 
-#>      [,1] [,2]
-#> [1,]   36   44
-#> [2,]   40   48
-#> 
-#> , , 1, 1, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]    5   15
-#> [2,]   10   20
-#> 
-#> , , 2, 1, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]    6   18
-#> [2,]   12   24
-#> 
-#> , , 1, 2, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   25   35
-#> [2,]   30   40
-#> 
-#> , , 2, 2, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   30   42
-#> [2,]   36   48
-#> 
-#> , , 1, 3, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   45   55
-#> [2,]   50   60
-#> 
-#> , , 2, 3, 1, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   54   66
-#> [2,]   60   72
-#> 
-#> , , 1, 1, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]    7   21
-#> [2,]   14   28
-#> 
-#> , , 2, 1, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]    8   24
-#> [2,]   16   32
-#> 
-#> , , 1, 2, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   35   49
-#> [2,]   42   56
-#> 
-#> , , 2, 2, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   40   56
-#> [2,]   48   64
-#> 
-#> , , 1, 3, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   63   77
-#> [2,]   70   84
-#> 
-#> , , 2, 3, 2, 2
-#> 
-#>      [,1] [,2]
-#> [1,]   72   88
-#> [2,]   80   96
-#> 
-#> , , 1, 1, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]    9   27
-#> [2,]   18   36
-#> 
-#> , , 2, 1, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   10   30
-#> [2,]   20   40
-#> 
-#> , , 1, 2, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   45   63
-#> [2,]   54   72
-#> 
-#> , , 2, 2, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   50   70
-#> [2,]   60   80
-#> 
-#> , , 1, 3, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   81   99
-#> [2,]   90  108
-#> 
-#> , , 2, 3, 1, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   90  110
-#> [2,]  100  120
-#> 
-#> , , 1, 1, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   11   33
-#> [2,]   22   44
-#> 
-#> , , 2, 1, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   12   36
-#> [2,]   24   48
-#> 
-#> , , 1, 2, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   55   77
-#> [2,]   66   88
-#> 
-#> , , 2, 2, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   60   84
-#> [2,]   72   96
-#> 
-#> , , 1, 3, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]   99  121
-#> [2,]  110  132
-#> 
-#> , , 2, 3, 2, 3
-#> 
-#>      [,1] [,2]
-#> [1,]  108  132
-#> [2,]  120  144
 ```
 
 #### Tensor multiplication w/ contractions
@@ -387,7 +189,7 @@ $$
 ``` r
 f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
 f
-#> <Labeled Tensor> [2] <-> .(-j)
+#> <Labeled Tensor> [2] / .(-j)
 #> [1] 247 403
 
 # retrieve array
@@ -407,7 +209,7 @@ $$
 ``` r
 g <- a %_% .(i, j, k) + a %_% .(j, i, k)
 g
-#> <Labeled Tensor> [2x2x3] <-> .(-i, -j, -k)
+#> <Labeled Tensor> [2x2x3] / .(-i, -j, -k)
 #> [1] "(not reduced)"
 
 g |> .a(i, j, k)
