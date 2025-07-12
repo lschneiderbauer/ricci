@@ -34,6 +34,7 @@
 #' a %_% .(i, j, k) |>
 #'   .t(.(j, k) -> l)
 #' @export
+#' @concept tensor
 .t <- function(x, ..., g = getOption("ricci.g")) {
   stopifnot(inherits(x, "tensor"))
 

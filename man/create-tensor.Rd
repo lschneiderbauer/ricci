@@ -40,4 +40,4 @@ as well which might be useful under some circumstances.
 a <- array(1:4, dim = c(2, 2))
 a \%_\% .(i, j)
 }
-\concept{create_tensor}
+\concept{tensor}

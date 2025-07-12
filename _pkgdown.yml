@@ -3,15 +3,12 @@ template:
   bootstrap: 5
 
 reference:
-- title: "Creating labeled tensors"
+- title: "Creating and modifying labeled tensors"
   contents:
-  - has_concept("create_tensor")
+  - has_concept("tensor")
 - title: "Predefined tensors"
   contents:
   - has_concept("tensor_instance")
 - title: "Testthat expectation"
   contents:
   - expect_tensor_equal
-- title: "todo"
-  contents:
-  - kr

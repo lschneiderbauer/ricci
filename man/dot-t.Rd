@@ -45,3 +45,4 @@ a \%_\% .(i, j, k) |>
 a \%_\% .(i, j, k) |>
   .t(.(j, k) -> l)
 }
+\concept{tensor}

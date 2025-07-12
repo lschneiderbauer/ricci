@@ -25,7 +25,7 @@
 #' a %_% .(i, j)
 #' @export
 #' @rdname create-tensor
-#' @concept create_tensor
+#' @concept tensor
 `%_%` <- function(a, i) {
   stopifnot(inherits(i, "tensor_indices"))
   tensor(a, i$i, i$p)
@@ -55,7 +55,7 @@
 #' # one lower and upper index
 #' .(i, +j)
 #' @export
-#' @concept create_tensor
+#' @concept tensor
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 
