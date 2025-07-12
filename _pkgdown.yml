@@ -6,6 +6,10 @@ reference:
 - title: "Creating and modifying labeled tensors"
   contents:
   - has_concept("tensor")
+- title: "Remove labels from tensor"
+  contents:
+  - .a
+  - as.array.tensor
 - title: "Predefined tensors"
   contents:
   - has_concept("tensor_instance")
