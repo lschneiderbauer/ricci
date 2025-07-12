@@ -68,8 +68,8 @@
 
   structure(
     list(
-      i = indices,
-      p = positions
+      i = indices %||% character(),
+      p = positions %||% character()
     ),
     class = "tensor_indices"
   )
