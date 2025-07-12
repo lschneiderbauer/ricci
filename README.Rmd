@@ -18,13 +18,15 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci)
-[![CRAN status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
+[![R-CMD-check](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lschneiderbauer/ricci/actions/workflows/R-CMD-check.yaml) [![Codecov test coverage](https://codecov.io/gh/lschneiderbauer/ricci/graph/badge.svg)](https://app.codecov.io/gh/lschneiderbauer/ricci) [![CRAN status](https://www.r-pkg.org/badges/version/ricci)](https://CRAN.R-project.org/package=ricci)
+
 <!-- badges: end -->
 
-The goal of {ricci} is to provide a *compact* R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by labeling (upper and lower) index slots of R's `array` and making use of Ricci calculus conventions to *implicitly* trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available via the standard operators (`*`, `+`, `-`). Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.
+The goal of {ricci} is to provide a *compact*[^1] R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by labeling (upper and lower) index slots of R's `array` and making use of Ricci calculus conventions to *implicitly* trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, multiplication of tensors, raising and lowering indices, or the Kronecker product are also available via the standard operators (`*`, `+`, `-`). Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.
 
-{ricci} uses [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.
+[^1]: By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.
+
+{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.
 
 ## Installation
 
@@ -35,9 +37,9 @@ You can install the development version of ricci from [GitHub](https://github.co
 pak::pak("lschneiderbauer/ricci")
 ```
 
-## Example
+## Examples
 
-The central object is R's `array`. Adding index slot labels allows us to perform common tensor operations implicitly.
+The central object is R's `array`. Adding index slot labels allows us to perform common tensor operations implicitly. After the desired calculations have been carried out we remove the labels to obtain an `array` again.
 
 For demonstration purposes we use an arbitrary array of rank 3.
 
@@ -50,7 +52,7 @@ a <- array(1:(2^2*3), dim = c(2,2,3))
 
 ### Creating a labeled tensor
 
-We can use `a` to create a labeled tensor with lower index labels i, j, and k:
+We can use the array `a` to create a labeled tensor with lower index labels i, j, and k:
 
 $$
 a_{ijk}
@@ -72,7 +74,7 @@ a %_% .(i, j, +k)
 
 ### Performing calculations
 
-Simply creating labels is not very interesting. The act of labeling tensor index slots becomes useful when the labels are such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.
+Creating labels on its own is not very interesting nor helpful. The act of labeling tensor index slots becomes useful when the labels are set such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.
 
 #### Contraction
 
@@ -83,7 +85,11 @@ b_j=a_{i\;k}^{\;i}
 $$
 
 ```{r}
-a %_% .(i, +i, k)
+b <- a %_% .(i, +i, k)
+b
+
+# retrieve array
+b |> .a(k)
 ```
 
 #### Diagonal subsetting
@@ -95,7 +101,11 @@ c_{ik}=a_{iik}
 $$
 
 ```{r}
-a %_% .(i, i, k)
+c <- a %_% .(i, i, k)
+c
+
+# retrieve array
+c |> .a(i, k)
 ```
 
 #### Outer tensor product
@@ -107,7 +117,11 @@ d_{ijklmn}=a_{ijk}a_{lmn}
 $$
 
 ```{r}
-a %_% .(i, j, k) * a %_% .(l, m, n)
+d <- a %_% .(i, j, k) * a %_% .(l, m, n)
+
+# retrieve array
+# we can use any index order we like
+d |> .a(l, m, i, n, j, k)
 ```
 
 #### Tensor multiplication w/ contractions
@@ -117,7 +131,11 @@ e=a_{ijk}a^{ijk}
 $$
 
 ```{r}
-a %_% .(i, j, k) * a %_% .(+i, +j, +k)
+e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
+e
+
+# convert to number
+as.numeric(e)
 ```
 
 #### Tensor multiplication w/ contractions and subsetting
@@ -127,7 +145,11 @@ f_j=a_{ijk}a^{i\;k}_{\;j}
 $$
 
 ```{r}
-a %_% .(i, j, k) * a %_% .(+i, j, +k)
+f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
+f
+
+# retrieve array
+f |> .a(j)
 ```
 
 #### Tensor addition
@@ -139,5 +161,8 @@ g_{ijk} = a_{ijk} + a_{jik}
 $$
 
 ```{r}
-a %_% .(i, j, k) + a %_% .(j, i, k)
+g <- a %_% .(i, j, k) + a %_% .(j, i, k)
+g
+
+g |> .a(i, j, k)
 ```
