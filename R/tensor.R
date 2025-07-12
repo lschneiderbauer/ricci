@@ -242,13 +242,33 @@ print.tensor <- function(x, ...) {
   }
 }
 
+#' Converts tensor to array
+#'
+#' Converts tensor to array by stripping the index labels.
+#' An index label order
+#' needs to be provided so that the array's [dim()] order is well defined.
+#'
+#' @param index_order
+#'  An index specification created with [.()].
+#'  The specification needs to match all the labels occurring in `x`.
+#'  The label order determines the dimension
+#'  order of the resulting array.
+#' @examples
+#' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> .a(k)
 #' @export
-# dim order: allows to specify a dimension order by index names
 as.array.tensor <- function(x, index_order = NULL, ...) {
   if (!is.null(index_order)) {
     stopifnot(setequal(index_order$i, tensor_index_names(x)))
 
-    # TODO: we need to lower/raise indices if necessary
+    # require position to be correct as well
+    # (we force to be explicit about index position in this case)
+    # TODO: provide a good error message explaining that
+
+    stopifnot(
+      all(tensor_index_positions(x)[index_order$i] ==
+        (index_order$p == "+"))
+    )
+
     x <- tensor_reorder(x, index_order$i)
   }
 
@@ -260,6 +280,35 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 
   x
 }
+
+#' Strip tensor index labels
+#'
+#' Converts a labeled tensor to a usual [array()] (hence the name).
+#' An index label order
+#' needs to be provided so that the array's [dim()] order is well defined.
+#'
+#' @param x  A labeled tensor object, created by [`%_%`] or [tensor()].
+#' @param ...
+#'  Index labels separated by commas optionally prefixed by "+" and "-"
+#'  to indicate the index position (upper and lower respectively).
+#'  If no prefix is provided, a lower index ("-") is assumed.
+#'  This argument uses non-standard evaluation: any R symbol
+#'  that is not a reserved keyword can be used.
+#'  The specification needs to match all the labels occurring in `x`.
+#'  The label order determines the dimension
+#'  ordering of the resulting array.
+#'
+#' @return
+#'  A usual [array()] without attached labels. The dimension order is
+#'  determined by `...`.
+#'
+#' @export
+#' @seealso The same functionality is implemented [as.array.tensor()] but with
+#'  standard evaluation.
+.a <- function(x, ...) {
+  as.array(x, .(...))
+}
+
 
 #' @export
 all.equal.tensor <- function(target, current, ...) {

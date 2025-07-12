@@ -219,4 +219,12 @@ test_that("tensor addition with reordering works", {
   )
 })
 
+test_that("convert tensor to array works", {
+  arr <- array(1:(2^2), c(2, 2))
+
+  expect_equal(
+    arr %_% .(i, j) |> .a(j, i),
+    t(arr)
+  )
+})
 

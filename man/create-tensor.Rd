@@ -23,7 +23,7 @@ The length of \code{index_positions} needs to agree with the length of
 \code{index_names}.}
 }
 \value{
-A labeled tensor object of class \code{"tensor"}, an \code{array}
+A labeled tensor object of class \code{"tensor"}, an \code{\link[=array]{array()}}
 with attached dimension labels. Note that the index structure
 of the resulting tensor does not necessarily have to match \code{i}. In case
 implicit calculations are already triggered (e.g. contractions)
