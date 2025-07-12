@@ -28,6 +28,6 @@ An index label order
 needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well defined.
 }
 \seealso{
-The same functionality is implemented \code{\link[=as.array.tensor]{as.array.tensor()}} but with
+The same functionality is implemented in \code{\link[=as.array.tensor]{as.array.tensor()}} but with
 standard evaluation.
 }

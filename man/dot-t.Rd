@@ -2,7 +2,7 @@
 % Please edit documentation in R/t.R
 \name{.t}
 \alias{.t}
-\title{Index transformation}
+\title{Index label related transformations}
 \usage{
 .t(x, ..., g = getOption("ricci.g"))
 }

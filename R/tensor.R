@@ -305,7 +305,7 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 #'  determined by `...`.
 #'
 #' @export
-#' @seealso The same functionality is implemented [as.array.tensor()] but with
+#' @seealso The same functionality is implemented in [as.array.tensor()] but with
 #'  standard evaluation.
 .a <- function(x, ...) {
   as.array(x, .(...))

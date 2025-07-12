@@ -1,4 +1,4 @@
-#' Index transformation
+#' Index label related transformations
 #'
 #' `.t()` allows to substitute index labels, raising and lowering indices
 #' and perform Kronecker products in any number or order. Multiple transformations
