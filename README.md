@@ -55,15 +55,14 @@ subsetting. For demonstration purposes we use an arbitrary array of rank
 ``` r
 library(ricci)
 
-# a choice of metric tensor is required
-# for raising / lowering indices
-options(ricci.g = g_mink(2)())
-
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
 
-(a %_% .(i, j, A) * # create labeled tensor
-    a %_% .(j, i, A) |> .t(j -> +j)) |> # create a labeled tensor and raise index j
+# create labeled tensor
+(a %_% .(i, j, A) * 
+  # create a labeled tensor and raise index j
+  a %_% .(j, i, A) |> .t(j -> +j, g = g_mink(2))
+  ) |> 
   # * -j and +j dimension are implictely contracted
   # * the i-diagonal is selected
   # the result is a tensor of rank 2
