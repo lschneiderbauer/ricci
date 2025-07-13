@@ -213,7 +213,7 @@ format.tensor <- function(x, ...) {
       paste0(
         "<Labeled Tensor> ",
         "[", paste0(dim(x), collapse = "x"),
-        "] / .(",
+        "] .(",
         paste0(
           ifelse(tensor_index_positions(x), "+", "-"),
           tensor_index_names(x),
