@@ -68,34 +68,36 @@ e <- function(...) {
 #' If the labels are left empty, and unlabeled n by n
 #' array of the covariant metric tensor is returned.
 #'
-#' @param n The dimension.
+#' @param dim The dimension of the metric tensor.
 #' @return
 #'  A function that expects index labels (see [.()]) and returns a
-#'  labeled tensor.
+#'  labeled tensor with dimension `c(dim, dim)`.
 #'
 #' @examples
 #' g_mink(4)(i, j)
 #'
 #' g_mink(4)(+i, +j)
+#'
+#' g_mink(4)()
 #' @export
 #' @concept tensor_instance
 #' @family metric tensors
-g_mink <- function(n) {
+g_mink <- function(dim) {
   function(...) {
     i <- .(...)
 
     if (length(i$i) == 0) {
-      return(diag(c(-1, rep(1, n - 1)), n, n))
+      return(diag(c(-1, rep(1, dim - 1)), dim, dim))
     }
 
     if (setequal(i$p, "+") || setequal(i$p, "-")) {
       # in this case the inverse is equal to g,
       # so we don't need to calculate it
-      g <- diag(c(-1, rep(1, n - 1)), n, n)
+      g <- diag(c(-1, rep(1, dim - 1)), dim, dim)
 
       tensor(g, i$i, i$p)
     } else {
-      d(n)(...)
+      d(dim)(...)
     }
   }
 }
@@ -109,26 +111,28 @@ g_mink <- function(n) {
 #' If the labels are left empty, an unlabeled n by n
 #' array of the covariant metric tensor is returned.
 #'
-#' @param n The dimension.
+#' @param dim The dimension of the metric tensor.
 #' @return
 #'  A function that expects index labels (see [.()]) and returns a
-#'  labeled tensor.
+#'  labeled tensor with dimension `c(dim, dim)`.
 #'
 #' @examples
 #' g_eucl(4)(i, j)
 #'
 #' g_eucl(4)(+i, +j)
+#'
+#' g_eucl(4)()
 #' @export
 #' @concept tensor_instance
 #' @family metric tensors
-g_eucl <- function(n) {
+g_eucl <- function(dim) {
   function(...) {
     i <- .(...)
 
     if (length(i$i) == 0) {
-      diag(1, n, n)
+      diag(1, dim, dim)
     } else {
-      tensor(diag(1, n, n), i$i, i$p)
+      tensor(diag(1, dim, dim), i$i, i$p)
     }
   }
 }

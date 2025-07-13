@@ -21,6 +21,8 @@
 #' @param g
 #'  An (unlabeled) covariant metric tensor as array used for raising and
 #'  lowering indices.
+#'  If no metric tensor is provided, indices are raised/lowered with
+#'  the identity matrix.
 #'
 #' @return A modified tensor object.
 #' @examples
@@ -35,7 +37,7 @@
 #'   .t(.(j, k) -> l)
 #' @export
 #' @concept tensor
-.t <- function(x, ..., g = getOption("ricci.g")) {
+.t <- function(x, ..., g = NULL) {
   stopifnot(inherits(x, "tensor"))
 
   exprs <- rlang::exprs(...)
@@ -84,6 +86,10 @@ tensor_raise <- function(x, ind_from, ind_to, g) {
     g <- diag(1, n, n)
   }
 
+  if (is.function(g)) {
+    g <- g()
+  }
+
   tensor_subst(
     x * new_tensor(solve(g), c(ind_to$i, "?"), c(TRUE, TRUE)),
     list(i="?", p = "+"), ind_to
@@ -94,6 +100,10 @@ tensor_lower <- function(x, ind_from, ind_to, g) {
   if (is.null(g)) {
     n <- tensor_dim(x, ind_from$i)
     g <- diag(1, n, n)
+  }
+
+  if (is.function(g)) {
+    g <- g()
   }
 
   tensor_subst(

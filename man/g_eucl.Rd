@@ -4,24 +4,28 @@
 \alias{g_eucl}
 \title{Euclidean metric tensor}
 \usage{
-g_eucl(n)
+g_eucl(dim)
 }
 \arguments{
-\item{n}{The dimension.}
+\item{dim}{The dimension of the metric tensor.}
 }
 \value{
 A function that expects index labels (see \code{\link[=.]{.()}}) and returns a
-labeled tensor.
+labeled tensor with dimension \code{c(dim, dim)}.
 }
 \description{
 Provides a labeled Euclidean metric tensor in \code{n} dimensions.
 Note that the numeric result will be different depending on the
 chosen index positions.
+If the labels are left empty, an unlabeled n by n
+array of the covariant metric tensor is returned.
 }
 \examples{
 g_eucl(4)(i, j)
 
 g_eucl(4)(+i, +j)
+
+g_eucl(4)()
 }
 \seealso{
 Other metric tensors: 

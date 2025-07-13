@@ -4,7 +4,7 @@
 \alias{.t}
 \title{Index label related transformations}
 \usage{
-.t(x, ..., g = getOption("ricci.g"))
+.t(x, ..., g = NULL)
 }
 \arguments{
 \item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
@@ -12,7 +12,9 @@
 \item{...}{Any number of transformation specifications separated by a comma.}
 
 \item{g}{An (unlabeled) covariant metric tensor as array used for raising and
-lowering indices.}
+lowering indices.
+If no metric tensor is provided, indices are raised/lowered with
+the identity matrix.}
 }
 \value{
 A modified tensor object.
