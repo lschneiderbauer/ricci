@@ -62,7 +62,7 @@ test_that("lowering tensor works", {
 })
 
 test_that("substituting labels works", {
-  arr <- array(1:4, dim = c(2,2))
+  arr <- array(1:4, dim = c(2, 2))
 
   expect_tensor_equal(
     arr %_% .(i, j) |> subst(i -> k),
@@ -79,3 +79,89 @@ test_that("substituting labels works", {
   )
 })
 
+test_that("antisymmetrized matrices are antisymmetric", {
+  arr <- array(1:25, dim = c(5, 5))
+
+  symmat <- as.array(arr %_% .(i, j) |> asym(i, j), .(i, j))
+
+  expect_equal(
+    symmat,
+    -t(symmat)
+  )
+})
+
+test_that("antisymmetrization on rank 3 arrays works", {
+  arr <- array(1:3^3, dim = c(3, 3, 3))
+
+  symarr <- arr %_% .(i, j, k) |>
+    asym(i, j, k) |>
+    as_a(i, j, k)
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    -symarr %_% .(j, i, k)
+  )
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    -symarr %_% .(i, k, j)
+  )
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    symarr %_% .(k, i, j)
+  )
+
+  expect_true(
+    e(i, j, k) |> asym(i, j, k) == e(i, j, k)
+  )
+})
+
+test_that("symmetrized matrices are symmetric", {
+  arr <- array(1:25, dim = c(5, 5))
+  symmat <- as.array(arr %_% .(i, j) |> sym(i, j), .(i, j))
+
+  expect_equal(
+    arr %_% .(i, j) |> sym(i, j),
+    (arr %_% .(i, j) + arr %_% .(j, i)) / 2
+  )
+
+  expect_equal(
+    symmat,
+    t(symmat)
+  )
+})
+
+test_that("symmetrization on rank 3 arrays works", {
+  arr <- array(1:3^3, dim = c(3, 3, 3))
+
+  symarr <- arr %_% .(i, j, k) |>
+    sym(i, j, k) |>
+    as_a(i, j, k)
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    symarr %_% .(j, i, k)
+  )
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    symarr %_% .(i, k, j)
+  )
+
+  expect_tensor_equal(
+    symarr %_% .(i, j, k),
+    symarr %_% .(k, i, j)
+  )
+})
+
+test_that("tensor = sym + antisym (two indices)", {
+  arr <- array(as.numeric(1:25), dim = c(5, 5))
+  tens <- arr %_% .(i, j)
+
+  expect_tensor_equal(
+    (tens |> sym(i, j)) +
+      (tens |> asym(i, j)),
+    tens
+  )
+})
