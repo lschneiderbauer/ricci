@@ -133,8 +133,9 @@ is_scalar <- function(x) {
   }
 }
 
+# outputs a vector of the same length as index_name
 tensor_dim <- function(x, index_name) {
-  dim(x)[tensor_index_names(x) == index_name]
+  dim(x)[match(index_name, tensor_index_names(x))]
 }
 
 # picks out "diagonal" indices of an array
