@@ -27,6 +27,9 @@ Converts a labeled tensor to a usual \code{\link[=array]{array()}} (hence the na
 An index label order
 needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well defined.
 }
+\examples{
+array(1:8, dim = c(2, 2, 2)) \%_\% .(i, +i, k) |> as_a(k)
+}
 \seealso{
 The same functionality is implemented in \code{\link[=as.array.tensor]{as.array.tensor()}} but with
 standard evaluation.

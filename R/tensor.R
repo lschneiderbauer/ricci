@@ -256,7 +256,7 @@ print.tensor <- function(x, ...) {
 #'  order of the resulting array.
 #' @param ... Not used.
 #' @examples
-#' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> .a(k)
+#' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as.array(.(k))
 #' @export
 #' @concept tensor
 as.array.tensor <- function(x, index_order = NULL, ...) {
@@ -305,6 +305,8 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 #'  A usual [array()] without attached labels. The dimension order is
 #'  determined by `...`.
 #'
+#' @examples
+#' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as_a(k)
 #' @export
 #' @seealso The same functionality is implemented in [as.array.tensor()] but with
 #'  standard evaluation.

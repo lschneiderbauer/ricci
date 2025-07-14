@@ -22,6 +22,6 @@ An index label order
 needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well defined.
 }
 \examples{
-array(1:8, dim = c(2, 2, 2)) \%_\% .(i, +i, k) |> .a(k)
+array(1:8, dim = c(2, 2, 2)) \%_\% .(i, +i, k) |> as.array(.(k))
 }
 \concept{tensor}
