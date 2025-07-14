@@ -14,9 +14,9 @@
 #' @seealso Underlying implementation: [calculus::delta()]
 #' @seealso Wikipedia: [Generalized Kronecker delta](https://en.wikipedia.org/wiki/Kronecker_delta#generalized_Kronecker_delta)
 #' @examples
-#' d(3)(i, j)
+#' d(3)(i, +j)
 #'
-#' d(3)(i, j, k, l)
+#' d(3)(i, j, +k, +l)
 #' @export
 #' @concept tensor_instance
 #' @family tensor symbols
