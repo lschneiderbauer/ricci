@@ -75,7 +75,7 @@ labeled tensor with dimension <code>c(dim, dim)</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">g_eucl</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Labeled Tensor&gt; [4x4] / .(-i, -j)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Labeled Tensor&gt; [4x4] .(-i, -j)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    1    0    0    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    1    0    0</span>
@@ -83,7 +83,7 @@ labeled tensor with dimension <code>c(dim, dim)</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    0    1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">g_eucl</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Labeled Tensor&gt; [4x4] / .(+i, +j)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Labeled Tensor&gt; [4x4] .(+i, +j)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    1    0    0    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    1    0    0</span>

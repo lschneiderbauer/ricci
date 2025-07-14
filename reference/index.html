@@ -31,7 +31,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="creating-and-modifying-labeled-tensors">Creating and modifying labeled tensors<a class="anchor" aria-label="anchor" href="#creating-and-modifying-labeled-tensors"></a></h2>
+      <h2 id="label-and-unlabel-tensors">Label and unlabel tensors<a class="anchor" aria-label="anchor" href="#label-and-unlabel-tensors"></a></h2>
 
 
 
@@ -42,6 +42,18 @@
 
 
       <dl><dt>
+
+          <code><a href="as.array.tensor.html">as.array(<i>&lt;tensor&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Converts tensor to array</dd>
+      </dl><dl><dt>
+
+          <code><a href="as_a.html">as_a()</a></code>
+
+        </dt>
+        <dd>Strip tensor index labels</dd>
+      </dl><dl><dt>
 
           <code><a href="create-tensor.html">`%_%`</a></code> <code><a href="create-tensor.html">tensor()</a></code>
 
@@ -53,14 +65,8 @@
 
         </dt>
         <dd>Index slot label specification</dd>
-      </dl><dl><dt>
-
-          <code><a href="dot-t.html">.t()</a></code>
-
-        </dt>
-        <dd>Index label related transformations</dd>
       </dl></div><div class="section level2">
-      <h2 id="remove-labels-from-tensor">Remove labels from tensor<a class="anchor" aria-label="anchor" href="#remove-labels-from-tensor"></a></h2>
+      <h2 id="tensor-operations">Tensor operations<a class="anchor" aria-label="anchor" href="#tensor-operations"></a></h2>
 
 
 
@@ -72,16 +78,40 @@
 
       <dl><dt>
 
-          <code><a href="dot-a.html">.a()</a></code>
+          <code><a href="asym.html">asym()</a></code>
 
         </dt>
-        <dd>Strip tensor index labels</dd>
+        <dd>Antisymmetric tensor part</dd>
       </dl><dl><dt>
 
-          <code><a href="as.array.tensor.html">as.array(<i>&lt;tensor&gt;</i>)</a></code>
+          <code><a href="kron.html">kron()</a></code>
 
         </dt>
-        <dd>Converts tensor to array</dd>
+        <dd>Kronecker product</dd>
+      </dl><dl><dt>
+
+          <code><a href="l.html">l()</a></code>
+
+        </dt>
+        <dd>Lower tensor indices</dd>
+      </dl><dl><dt>
+
+          <code><a href="r.html">r()</a></code>
+
+        </dt>
+        <dd>Raise tensor indices</dd>
+      </dl><dl><dt>
+
+          <code><a href="subst.html">subst()</a></code>
+
+        </dt>
+        <dd>Substitute tensor labels</dd>
+      </dl><dl><dt>
+
+          <code><a href="sym.html">sym()</a></code>
+
+        </dt>
+        <dd>Symmetric tensor part</dd>
       </dl></div><div class="section level2">
       <h2 id="predefined-tensors">Predefined tensors<a class="anchor" aria-label="anchor" href="#predefined-tensors"></a></h2>
 
@@ -104,7 +134,7 @@
           <code><a href="e.html">e()</a></code>
 
         </dt>
-        <dd>Levi Civita epsilon</dd>
+        <dd>Levi-Civita epsilon</dd>
       </dl><dl><dt>
 
           <code><a href="g_eucl.html">g_eucl()</a></code>
