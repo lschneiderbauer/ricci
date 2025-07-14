@@ -139,7 +139,19 @@ subst <- function(x, ...) {
 #' @concept tensor_ops
 #' @family tensor operations
 sym <- function(x, ...) {
-  stop("not yet implemented")
+  ind <- .(...)
+
+  # we still need to check if the request makes sense
+  # check that "from" indices actually exist in `x`
+  # indices must exist
+  stopifnot(ind$i %in% tensor_index_names(x))
+  # index positions must match
+  stopifnot(
+    all((ind$p == "+") == tensor_index_positions(x)[ind$i])
+  )
+
+  tensor_sym(x, ind) |>
+    tensor_reduce()
 }
 
 #' Antisymmetric tensor part
@@ -161,7 +173,19 @@ sym <- function(x, ...) {
 #' @concept tensor_ops
 #' @family tensor operations
 asym <- function(x, ...) {
-  stop("not yet implemented")
+  ind <- .(...)
+
+  # we still need to check if the request makes sense
+  # check that "from" indices actually exist in `x`
+  # indices must exist
+  stopifnot(ind$i %in% tensor_index_names(x))
+  # index positions must match
+  stopifnot(
+    all((ind$p == "+") == tensor_index_positions(x)[ind$i])
+  )
+
+  tensor_asym(x, ind) |>
+    tensor_reduce()
 }
 
 #' Kronecker product
@@ -210,7 +234,7 @@ kron <- function(x, ...) {
 
 tensor_subst <- function(x, ind_from, ind_to) {
   names <- tensor_index_names(x)
-  names[names == ind_from$i] <- ind_to$i
+  names[match(ind_from$i, names)] <- ind_to$i
 
   new_tensor(
     x,
@@ -231,7 +255,7 @@ tensor_raise <- function(x, ind_from, g) {
 
   tensor_subst(
     x * new_tensor(solve(g), c(ind_from$i, "?"), c(TRUE, TRUE)),
-    list(i="?", p = "+"), ind_from
+    list(i = "?", p = "+"), ind_from
   )
 }
 
@@ -247,7 +271,7 @@ tensor_lower <- function(x, ind_from, g) {
 
   tensor_subst(
     x * new_tensor(g, c(ind_from$i, "?"), c(FALSE, FALSE)),
-    list(i="?", p = "-"), ind_from
+    list(i = "?", p = "-"), ind_from
   )
 }
 
@@ -306,6 +330,74 @@ tensor_kron <- function(x, ind_comb, ind_new) {
     tensor_reduce()
 }
 
+tensor_asym <- function(x, ind) {
+  # indices must exist
+  stopifnot(ind$i %in% tensor_index_names(x))
+  # index positions must match
+  stopifnot(all((ind$p == "+") == tensor_index_positions(x)[ind$i]))
+
+  if (!tensor_is_reduced(x)) {
+    x <- tensor_reduce(x)
+  }
+
+  # the symmetrized indices need to have the same range (dimensions)
+  n <- unique(tensor_dim(x, ind$i))
+  stopifnot(length(n) == 1)
+
+  p <- length(ind$i)
+
+  tensor_asym <-
+    tensor(
+      calculus::delta(n, p),
+      index_names = c(ind$i, paste0("?", ind$i)),
+      index_positions = c(pos_inv(ind$p), ind$p)
+    ) * x / factorial(p)
+
+  tensor_subst(
+    tensor_asym,
+    list(
+      i = paste0("?", ind$i),
+      p = ind$p
+    ),
+    ind
+  )
+}
+
+tensor_sym <- function(x, ind) {
+  perms <- apply(permn(ind$i), MARGIN = 1, identity, simplify = FALSE)
+  norm <- length(perms)
+
+  ind_to <- ind
+  Reduce(
+    function(tens, perm) {
+      ind_to$i <- perm
+      tens + tensor_subst(tens, ind, ind_to)
+    },
+    perms[-1],
+    init = x
+  ) / norm
+}
+
+permn <- function(x) {
+  if (length(x) == 1) {
+    return(x)
+  }
+  else {
+    res <- matrix(nrow = 0, ncol = length(x))
+    for (i in seq_along(x)) {
+      res <- rbind(res, cbind(x[i], Recall(x[-i])))
+    }
+    return(res)
+  }
+}
+
+pos_inv <- function(pos) {
+  pos[pos == "+"] <- "++"
+  pos[pos == "-"] <- "+"
+  pos[pos == "++"] <- "-"
+  pos
+}
+
 ast_kr <- function(x) {
   if (rlang::is_call(x, "<-") && rlang::is_call(x[[3]], ".")) {
     ind_new <- .(!!x[[2]])
@@ -340,56 +432,4 @@ ast_subst <- function(x) {
   } else {
     stop("todo")
   }
-}
-
-ast_extr_transf <- function(x) {
-  if (rlang::is_call(x, "<-") && rlang::is_call(x[[3]], ".")) {
-    ind_new <- .(!!x[[2]])
-    ind_comb <- eval(x[[3]])
-
-    if (length(ind_new$i) > 1) {
-      stop("blah: only one index allowed")
-    }
-
-    return(
-      list(
-        name = "kron",
-        ind_from = ind_comb,
-        ind_to = ind_new
-      )
-    )
-  } else if (rlang::is_call(x, "<-")) {
-    ind_from <- .(!!x[[3]])
-    ind_to <- .(!!x[[2]])
-
-    if (ind_from$p != ind_to$p && ind_from$p == "+") {
-      return(
-        list(
-          name = "lower",
-          ind_from = ind_from,
-          ind_to = ind_to
-        )
-      )
-    } else if (ind_from$p != ind_to$p && ind_from$p == "-"){
-      return(
-        list(
-          name = "raise",
-          ind_from = ind_from,
-          ind_to = ind_to
-        )
-      )
-    } else if (ind_from$p == ind_to$p){
-      return(
-        list(
-          name = "subst",
-          ind_from = ind_from,
-          ind_to = ind_to
-        )
-      )
-    }
-
-  } else {
-    stop("blah")
-  }
-
 }
