@@ -223,7 +223,7 @@ test_that("convert tensor to array works", {
   arr <- array(1:(2^2), c(2, 2))
 
   expect_equal(
-    arr %_% .(i, j) |> .a(j, i),
+    arr %_% .(i, j) |> as_a(j, i),
     t(arr)
   )
 })
@@ -232,11 +232,11 @@ test_that("convert tensor to array errs if index does not fit", {
   arr <- array(1:(2^2), c(2, 2))
 
   expect_error(
-    arr %_% .(+i, j) |> .a(j, i)
+    arr %_% .(+i, j) |> as_a(j, i)
   )
 
   expect_no_error(
-    arr %_% .(+i, j) |> .a(j, +i)
+    arr %_% .(+i, j) |> as_a(j, +i)
   )
 })
 

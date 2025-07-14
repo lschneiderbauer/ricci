@@ -248,7 +248,7 @@ print.tensor <- function(x, ...) {
 #' An index label order
 #' needs to be provided so that the array's [dim()] order is well defined.
 #'
-#' @inheritParams .a
+#' @inheritParams as_a
 #' @param index_order
 #'  An index specification created with [.()].
 #'  The specification needs to match all the labels occurring in `x`.
@@ -258,6 +258,7 @@ print.tensor <- function(x, ...) {
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> .a(k)
 #' @export
+#' @concept tensor
 as.array.tensor <- function(x, index_order = NULL, ...) {
   if (!is.null(index_order)) {
     stopifnot(setequal(index_order$i, tensor_index_names(x)))
@@ -307,7 +308,8 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 #' @export
 #' @seealso The same functionality is implemented in [as.array.tensor()] but with
 #'  standard evaluation.
-.a <- function(x, ...) {
+#' @concept tensor
+as_a <- function(x, ...) {
   as.array(x, .(...))
 }
 

@@ -21,10 +21,10 @@ calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is
 achieved by labeling (upper and lower) index slots of R’s `array` and
 making use of Ricci calculus conventions to *implicitly* trigger
 contractions and diagonal subsetting. Explicit tensor operations, such
-as addition, multiplication of tensors, raising and lowering indices, or
-the Kronecker product are also available via the standard operators
-(`*`, `+`, `-`). Common tensors like the Kronecker delta, Levi Civita
-epsilon, and certain metric tensors are provided.
+as addition, subtraction, multiplication of tensors via the standard
+operators (`*`, `+`, `-`), raising and lowering indices, or the
+Kronecker product are also available. Common tensors like the Kronecker
+delta, Levi Civita epsilon, and certain metric tensors are provided.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and simply
@@ -61,18 +61,17 @@ a <- array(1:(2^2*3), dim = c(2,2,3))
 # create labeled tensor
 (a %_% .(i, j, A) * 
   # create a labeled tensor and raise index j
-  a %_% .(j, i, A) |> .t(j -> +j, g = g_mink(2))
-  ) |> 
+  a %_% .(j, i, A) |> r(j, g = g_mink(2))) |> 
   # * -j and +j dimension are implictely contracted
   # * the i-diagonal is selected
   # the result is a tensor of rank 2
-  .a(i, A) # we unlabel the tensor with index order (i, A)
+  as_a(i, A) # we unlabel the tensor with index order (i, A)
 #>      [,1] [,2] [,3]
 #> [1,]    5   17   29
 #> [2,]   10   22   34
 ```
 
-Below we outline more details on possible individual tasks.
+Below we outline more details on possible individual operations.
 
 ### Creating a labeled tensor
 
@@ -85,7 +84,7 @@ $$
 
 ``` r
 a %_% .(i, j, k)
-#> <Labeled Tensor> [2x2x3] / .(-i, -j, -k)
+#> <Labeled Tensor> [2x2x3] .(-i, -j, -k)
 ```
 
 By default, indices are assumed to be lower indices. We can use a “+”
@@ -97,7 +96,7 @@ $$
 
 ``` r
 a %_% .(i, j, +k)
-#> <Labeled Tensor> [2x2x3] / .(-i, -j, +k)
+#> <Labeled Tensor> [2x2x3] .(-i, -j, +k)
 ```
 
 ### Performing calculations
@@ -118,11 +117,11 @@ $$
 ``` r
 b <- a %_% .(i, +i, k)
 b
-#> <Labeled Tensor> [3] / .(-k)
+#> <Labeled Tensor> [3] .(-k)
 #> [1]  5 13 21
 
 # retrieve array
-b |> .a(k)
+b |> as_a(k)
 #> [1]  5 13 21
 ```
 
@@ -138,13 +137,13 @@ $$
 ``` r
 c <- a %_% .(i, i, k)
 c
-#> <Labeled Tensor> [2x3] / .(-i, -k)
+#> <Labeled Tensor> [2x3] .(-i, -k)
 #>      [,1] [,2] [,3]
 #> [1,]    1    5    9
 #> [2,]    4    8   12
 
 # retrieve array
-c |> .a(i, k)
+c |> as_a(i, k)
 #>      [,1] [,2] [,3]
 #> [1,]    1    5    9
 #> [2,]    4    8   12
@@ -188,11 +187,11 @@ $$
 ``` r
 f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
 f
-#> <Labeled Tensor> [2] / .(-j)
+#> <Labeled Tensor> [2] .(-j)
 #> [1] 247 403
 
 # retrieve array
-f |> .a(j)
+f |> as_a(j)
 #> [1] 247 403
 ```
 
@@ -208,10 +207,9 @@ $$
 ``` r
 g <- a %_% .(i, j, k) + a %_% .(j, i, k)
 g
-#> <Labeled Tensor> [2x2x3] / .(-i, -j, -k)
-#> [1] "(not reduced)"
+#> <Labeled Tensor> [2x2x3] .(-i, -j, -k)
 
-g |> .a(i, j, k)
+g |> as_a(i, j, k)
 #> , , 1
 #> 
 #>      [,1] [,2]

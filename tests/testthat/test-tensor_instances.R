@@ -1,7 +1,11 @@
 test_that("creating d works", {
   expect_tensor_equal(
-    d(3)(i, j),
-    diag(1, 3, 3) %_% .(i, j)
+    d(3)(i, +j),
+    diag(1, 3, 3) %_% .(i, +j)
+  )
+
+  expect_error(
+    d(3)(i, j)
   )
 })
 

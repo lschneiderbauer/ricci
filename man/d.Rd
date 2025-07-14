@@ -17,6 +17,8 @@ the number of labels provided.
 \description{
 Provides a labeled generalized Kronecker delta. In the special
 case of two labels this represents simply the identity matrix.
+Note that the first half of the tensor labels need to be lowered,
+while the second half needs upper indices. Otherwise an error is thrown.
 }
 \examples{
 d(3)(i, j)
@@ -25,6 +27,8 @@ d(3)(i, j, k, l)
 }
 \seealso{
 Underlying implementation: \code{\link[calculus:delta]{calculus::delta()}}
+
+Wikipedia: \href{https://en.wikipedia.org/wiki/Kronecker_delta#generalized_Kronecker_delta}{Generalized Kronecker delta}
 
 Other tensor symbols: 
 \code{\link{e}()}

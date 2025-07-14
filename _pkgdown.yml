@@ -3,13 +3,12 @@ template:
   bootstrap: 5
 
 reference:
-- title: "Creating and modifying labeled tensors"
+- title: "Label and unlabel tensors"
   contents:
   - has_concept("tensor")
-- title: "Remove labels from tensor"
+- title: "Tensor operations"
   contents:
-  - .a
-  - as.array.tensor
+  - has_concept("tensor_ops")
 - title: "Predefined tensors"
   contents:
   - has_concept("tensor_instance")

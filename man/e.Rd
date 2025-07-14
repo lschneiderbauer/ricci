@@ -2,7 +2,7 @@
 % Please edit documentation in R/tensor_instances.R
 \name{e}
 \alias{e}
-\title{Levi Civita epsilon}
+\title{Levi-Civita epsilon}
 \usage{
 e(...)
 }
@@ -19,7 +19,8 @@ The underlying data will differs depending on
 the number of labels provided.
 }
 \description{
-Provides a labeled Levi Civita epsilon tensor.
+Provides a labeled Levi-Civita epsilon (pseude) tensor.
+The indices are required to be lowered. Otherwise an error is thrown.
 }
 \examples{
 e(i, j)
@@ -28,6 +29,8 @@ e(i, j, k)
 }
 \seealso{
 Underlying implementation: \code{\link[calculus:epsilon]{calculus::epsilon()}}
+
+Wikipedia: \href{https://en.wikipedia.org/wiki/Levi-Civita_symbol}{Levi-Civita symbol}
 
 Other tensor symbols: 
 \code{\link{d}()}
