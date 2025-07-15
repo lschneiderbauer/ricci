@@ -66,10 +66,14 @@
 
   positions[positions == ""] <- "-"
 
+  new_tensor_indices(indices, positions)
+}
+
+new_tensor_indices <- function(i, p) {
   structure(
     list(
-      i = indices %||% character(),
-      p = positions %||% character()
+      i = unname(i) %||% character(),
+      p = unname(p) %||% character()
     ),
     class = "tensor_indices"
   )

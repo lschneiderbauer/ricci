@@ -57,29 +57,22 @@ l <- function(x, ..., g = NULL) {
 #' @concept tensor_ops
 #' @family tensor operations
 subst <- function(x, ...) {
-  exprs <- rlang::exprs(...)
+  tensor_indices <- Map(ast_subst, rlang::exprs(...))
 
-  Reduce(
-    function(tens, expr) {
-      l <- ast_subst(expr)
+  ind_from <-
+    new_tensor_indices(
+      i = unlist(Map(\(x) x$ind_from$i, tensor_indices)),
+      p = unlist(Map(\(x) x$ind_from$p, tensor_indices))
+    )
 
-      # we still need to check if the request makes sense
-      # check that "from" indices actually exist in `x`
-      # indices must exist
-      stopifnot(l$ind_from$i %in% tensor_index_names(tens))
-      # index positions must match
-      stopifnot(
-        all((l$ind_from$p == "+") == tensor_index_positions(tens)[l$ind_from$i])
-      )
-      # index position must match between in and out
-      stopifnot(all(l$ind_from$p == l$ind_to$p))
+  ind_to <-
+    new_tensor_indices(
+      i = unlist(Map(\(x) x$ind_to$i, tensor_indices)),
+      p = unlist(Map(\(x) x$ind_to$p, tensor_indices))
+    )
 
-      tensor_subst(tens, l$ind_from, l$ind_to) |>
-        tensor_reduce()
-    },
-    exprs,
-    init = x
-  )
+  tensor_subst(x, ind_from, ind_to, arg = "...") |>
+    tensor_reduce()
 }
 
 #' Symmetric tensor part
@@ -184,7 +177,6 @@ kron <- function(x, ...) {
       stopifnot(
         all((l$ind_from$p == "+") == tensor_index_positions(tens)[l$ind_from$i])
       )
-
       tensor_kron(tens, l$ind_from, l$ind_to) |>
         tensor_reduce()
     },
@@ -193,7 +185,21 @@ kron <- function(x, ...) {
   )
 }
 
-tensor_subst <- function(x, ind_from, ind_to) {
+tensor_subst <- function(x, ind_from, ind_to,
+                         arg = rlang::caller_arg(ind_from),
+                         call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind_from,
+    arg = arg, call = call
+  )
+
+  # index position must match between ind_from and ind_to
+  validate_index_position(
+    ind_to, ind_from$p,
+    info = "Substitions need to leave index position invariant.",
+    arg = arg, call = call
+  )
+
   names <- tensor_index_names(x)
   names[match(ind_from$i, names)] <- ind_to$i
 
@@ -232,16 +238,14 @@ tensor_raise <- function(x, ind_from, g,
   ginv <- solve(g)
 
   Reduce(
-    function(tens, index) {
-      i <- ind_from$i[[index]]
-      p <- ind_from$p[[index]]
-
+    function(tens, i) {
       tensor_subst(
         tens * new_tensor(ginv, c(i, "?"), c(TRUE, TRUE)),
-        list(i = "?", p = "+"), list(i = i, p = p)
+        new_tensor_indices(i = "?", p = "+"),
+        new_tensor_indices(i = i, p = "+")
       )
     },
-    seq_along(ind_from$i),
+    ind_from$i,
     init = x
   )
 }
@@ -273,16 +277,14 @@ tensor_lower <- function(x, ind_from, g,
   }
 
   Reduce(
-    function(tens, index) {
-      i <- ind_from$i[[index]]
-      p <- ind_from$p[[index]]
-
+    function(tens, i) {
       tensor_subst(
         tens * new_tensor(g, c(i, "?"), c(FALSE, FALSE)),
-        list(i = "?", p = "-"), list(i = i, p = p)
+        new_tensor_indices(i = "?", p = "-"),
+        new_tensor_indices(i = i, p = "-")
       )
     },
-    seq_along(ind_from$i),
+    ind_from$i,
     init = x
   )
 }
@@ -367,7 +369,7 @@ tensor_asym <- function(x, ind) {
 
   tensor_subst(
     tensor_asym,
-    list(
+    new_tensor_indices(
       i = paste0("?", ind$i),
       p = ind$p
     ),
