@@ -371,7 +371,7 @@ tensor_sym <- function(x, ind) {
   Reduce(
     function(tens, perm) {
       ind_to$i <- perm
-      tens + tensor_subst(tens, ind, ind_to)
+      tens + tensor_subst(x, ind, ind_to)
     },
     perms[-1],
     init = x
