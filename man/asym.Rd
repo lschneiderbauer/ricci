@@ -21,8 +21,8 @@ specified indices \code{...}.
 An error is thrown if the specified indices do not exist.
 }
 \examples{
-a <- array(1:8, dim = c(2, 2, 2))
-a \%_\% .(i, j, k) |> sym(i, j)
+a <- array(1:4, dim = c(2, 2))
+a \%_\% .(i, j) |> asym(i, j)
 }
 \seealso{
 Wikipedia: \href{https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts}{Ricci calculus - Symmetric and antisymmetric parts}

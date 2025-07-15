@@ -132,10 +132,11 @@ subst <- function(x, ...) {
 #' @param ... Any number of index expressions. The indices need to occur
 #'            in `x`.
 #' @return A modified tensor object.
-#'
+#' @examples
+#' a <- array(1:4, dim = c(2, 2))
+#' a %_% .(i, j) |> sym(i, j)
 #' @export
 #' @seealso Wikipedia: [Ricci calculus - Symmetric and antisymmetric parts](https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts)
-
 #' @concept tensor_ops
 #' @family tensor operations
 sym <- function(x, ...) {
@@ -166,8 +167,8 @@ sym <- function(x, ...) {
 #' @return A modified tensor object.
 #'
 #' @examples
-#' a <- array(1:8, dim = c(2, 2, 2))
-#' a %_% .(i, j, k) |> sym(i, j)
+#' a <- array(1:4, dim = c(2, 2))
+#' a %_% .(i, j) |> asym(i, j)
 #' @export
 #' @seealso Wikipedia: [Ricci calculus - Symmetric and antisymmetric parts](https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts)
 #' @concept tensor_ops
