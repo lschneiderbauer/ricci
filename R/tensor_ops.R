@@ -2,6 +2,7 @@
 #'
 #' `r()` raises specified tensor indices using a covariant metric tensor
 #' provided in `g`.
+#' Note that the order of indices is not preserved due to performance reasons.
 #' An error is thrown if the specified indices do not exist or are not in the
 #' correct position.
 #'
@@ -19,35 +20,15 @@
 #' @concept tensor_ops
 #' @family tensor operations
 r <- function(x, ..., g = NULL) {
-  exprs <- rlang::exprs(...)
-
-  Reduce(
-    function(tens, expr) {
-      l <- .(!!expr)
-
-      # we still need to check if the request makes sense
-      # check that "from" indices actually exist in `x`
-      # indices must exist
-      stopifnot(l$i %in% tensor_index_names(tens))
-      # index positions must match
-      stopifnot(
-        all((l$p == "+") == tensor_index_positions(tens)[l$i])
-      )
-      # index must be lowered
-      stopifnot(all(l$p == "-"))
-
-      tensor_raise(tens, l, g) |>
-        tensor_reduce()
-    },
-    exprs,
-    init = x
-  )
+  tensor_raise(x, .(...), g, arg = "...") |>
+    tensor_reduce()
 }
 
 #' Lower tensor indices
 #'
 #' `l()` lowers specified tensor indices using a covariant metric tensor
 #' provided in `g`.
+#' Note that the order of indices is not preserved due to performance reasons.
 #' An error is thrown if the specified indices do not exist or are not in the
 #' correct position.
 #'
@@ -57,29 +38,8 @@ r <- function(x, ..., g = NULL) {
 #' @concept tensor_ops
 #' @family tensor operations
 l <- function(x, ..., g = NULL) {
-  exprs <- rlang::exprs(...)
-
-  Reduce(
-    function(tens, expr) {
-      l <- .(!!expr)
-
-      # we still need to check if the request makes sense
-      # check that "from" indices actually exist in `x`
-      # indices must exist
-      stopifnot(l$i %in% tensor_index_names(tens))
-      # index positions must match
-      stopifnot(
-        all((l$p == "+") == tensor_index_positions(tens)[l$i])
-      )
-      # index must be raised
-      stopifnot(all(l$p == "+"))
-
-      tensor_lower(tens, l, g) |>
-        tensor_reduce()
-    },
-    exprs,
-    init = x
-  )
+  tensor_lower(x, .(...), g, arg = "...") |>
+    tensor_reduce()
 }
 
 #' Substitute tensor labels
@@ -244,7 +204,23 @@ tensor_subst <- function(x, ind_from, ind_to) {
   )
 }
 
-tensor_raise <- function(x, ind_from, g) {
+tensor_raise <- function(x, ind_from, g,
+                         arg = rlang::caller_arg(ind_from),
+                         call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind_from,
+    arg = arg,
+    call = call
+  )
+
+  # index must be lowered
+  validate_index_position(
+    ind_from, "-",
+    info = "Only lowered indices can be raised.",
+    arg = arg,
+    call = call
+  )
+
   if (is.null(g)) {
     n <- tensor_dim(x, ind_from$i)
     g <- diag(1, n, n)
@@ -253,14 +229,40 @@ tensor_raise <- function(x, ind_from, g) {
   if (is.function(g)) {
     g <- g()
   }
+  ginv <- solve(g)
 
-  tensor_subst(
-    x * new_tensor(solve(g), c(ind_from$i, "?"), c(TRUE, TRUE)),
-    list(i = "?", p = "+"), ind_from
+  Reduce(
+    function(tens, index) {
+      i <- ind_from$i[[index]]
+      p <- ind_from$p[[index]]
+
+      tensor_subst(
+        tens * new_tensor(ginv, c(i, "?"), c(TRUE, TRUE)),
+        list(i = "?", p = "+"), list(i = i, p = p)
+      )
+    },
+    seq_along(ind_from$i),
+    init = x
   )
 }
 
-tensor_lower <- function(x, ind_from, g) {
+tensor_lower <- function(x, ind_from, g,
+                         arg = rlang::caller_arg(ind_from),
+                         call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind_from,
+    arg = arg,
+    call = call
+  )
+
+  # index must be lowered
+  validate_index_position(
+    ind_from, "+",
+    info = "Only raised indices can be lowered.",
+    arg = arg,
+    call = call
+  )
+
   if (is.null(g)) {
     n <- tensor_dim(x, ind_from$i)
     g <- diag(1, n, n)
@@ -270,9 +272,18 @@ tensor_lower <- function(x, ind_from, g) {
     g <- g()
   }
 
-  tensor_subst(
-    x * new_tensor(g, c(ind_from$i, "?"), c(FALSE, FALSE)),
-    list(i = "?", p = "-"), ind_from
+  Reduce(
+    function(tens, index) {
+      i <- ind_from$i[[index]]
+      p <- ind_from$p[[index]]
+
+      tensor_subst(
+        tens * new_tensor(g, c(i, "?"), c(FALSE, FALSE)),
+        list(i = "?", p = "-"), list(i = i, p = p)
+      )
+    },
+    seq_along(ind_from$i),
+    init = x
   )
 }
 
@@ -382,8 +393,7 @@ tensor_sym <- function(x, ind) {
 permn <- function(x) {
   if (length(x) == 1) {
     return(x)
-  }
-  else {
+  } else {
     res <- matrix(nrow = 0, ncol = length(x))
     for (i in seq_along(x)) {
       res <- rbind(res, cbind(x[i], Recall(x[-i])))

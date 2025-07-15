@@ -23,6 +23,7 @@ A modified tensor object.
 \description{
 \code{r()} raises specified tensor indices using a covariant metric tensor
 provided in \code{g}.
+Note that the order of indices is not preserved due to performance reasons.
 An error is thrown if the specified indices do not exist or are not in the
 correct position.
 }

@@ -21,6 +21,7 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     calculus,
+    cli,
     rlang
 URL: https://github.com/lschneiderbauer/ricci, https://lschneiderbauer.github.io/ricci/
 BugReports: https://github.com/lschneiderbauer/ricci/issues

@@ -118,3 +118,27 @@ expr_type <- function(x) {
     typeof(x)
   }
 }
+
+#' @importFrom cli cli_abort
+validate_index_position <-
+  function(ind, pos, info,
+           arg = rlang::caller_arg(ind),
+           call = rlang::caller_env()) {
+    stopifnot(inherits(ind, "tensor_indices"))
+    stopifnot(all(pos %in% c("+", "-")))
+
+    if (!all(ind$p == pos)) {
+      affected_ind <- ind$i[ind$p != pos]
+      incorrect_state <-
+        ifelse(pos == "+", "lowered", "raised")
+
+      cli_abort(
+        c(
+          "{.arg {arg}} constains index with invalid position.",
+          x = "Index {.code {affected_ind}} {?is/are} {incorrect_state}.",
+          i = info
+        ),
+        call = call
+      )
+    }
+  }

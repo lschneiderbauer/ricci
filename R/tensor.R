@@ -78,6 +78,49 @@ tensor <- function(a, index_names, index_positions) {
   )
 }
 
+#' @importFrom cli cli_abort
+tensor_validate_index_matching <-
+  function(x, ind,
+           arg = rlang::caller_arg(ind),
+           call = rlang::caller_env()) {
+    stopifnot(inherits(x, "tensor"))
+    stopifnot(inherits(ind, "tensor_indices"))
+
+    if (!all(ind$i %in% tensor_index_names(x))) {
+      missing_ind <- setdiff(ind$i, tensor_index_names(x))
+
+      cli_abort(
+        c(
+          "{.arg {arg}} contains invalid index.",
+          x = "Index {.code {missing_ind}} not present in {format(x)}.",
+          i = "Make sure you only select indices that match the tensor indices."
+        ),
+        call = call
+      )
+    }
+
+    check_position <- (ind$p == "+") == tensor_index_positions(x)[ind$i]
+    if (!all(check_position)) {
+      pos_issue_ind <-
+        paste0(
+          ifelse(tensor_index_positions(x)[!check_position], "+", "-"),
+          tensor_index_names(x)[!check_position]
+        )
+
+      cli_abort(
+        c(
+        "{.arg {arg}} contains index with incorrect position.",
+        x = "Position of index {.code {pos_issue_ind}} do{?es/} not match index
+              position{?s} in {format(x)}.",
+        i = "Make sure you explicitely specify the correct index position."
+        ),
+        call = call
+      )
+    }
+  }
+
+
+
 # reduces a tensor by performing contractions
 # and diagonal selections
 # after a tensor reduction every index name is unique
@@ -212,7 +255,7 @@ format.tensor <- function(x, ...) {
   header <-
     if (!is_scalar(x)) {
       paste0(
-        "<Labeled Tensor> ",
+        "<Labeled Array> ",
         "[", paste0(dim(x), collapse = "x"),
         "] .(",
         paste0(
@@ -220,10 +263,10 @@ format.tensor <- function(x, ...) {
           tensor_index_names(x),
           collapse = ", "
         ),
-        ")\n"
+        ")"
       )
     } else {
-      "<Scalar>\n"
+      "<Scalar>"
     }
 
   header
@@ -232,7 +275,7 @@ format.tensor <- function(x, ...) {
 #' @export
 print.tensor <- function(x, ...) {
   cat(format(x))
-
+  cat("\n")
 
   if (length(dim(x)) <= 2) {
     print(as.array(x))
