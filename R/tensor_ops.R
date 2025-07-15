@@ -93,18 +93,7 @@ subst <- function(x, ...) {
 #' @concept tensor_ops
 #' @family tensor operations
 sym <- function(x, ...) {
-  ind <- .(...)
-
-  # we still need to check if the request makes sense
-  # check that "from" indices actually exist in `x`
-  # indices must exist
-  stopifnot(ind$i %in% tensor_index_names(x))
-  # index positions must match
-  stopifnot(
-    all((ind$p == "+") == tensor_index_positions(x)[ind$i])
-  )
-
-  tensor_sym(x, ind) |>
+  tensor_sym(x, .(...)) |>
     tensor_reduce()
 }
 
@@ -127,18 +116,7 @@ sym <- function(x, ...) {
 #' @concept tensor_ops
 #' @family tensor operations
 asym <- function(x, ...) {
-  ind <- .(...)
-
-  # we still need to check if the request makes sense
-  # check that "from" indices actually exist in `x`
-  # indices must exist
-  stopifnot(ind$i %in% tensor_index_names(x))
-  # index positions must match
-  stopifnot(
-    all((ind$p == "+") == tensor_index_positions(x)[ind$i])
-  )
-
-  tensor_asym(x, ind) |>
+  tensor_asym(x, .(...), arg = "...") |>
     tensor_reduce()
 }
 
@@ -358,11 +336,25 @@ tensor_kron <- function(x, ind_comb, ind_new,
     tensor_reduce()
 }
 
-tensor_asym <- function(x, ind) {
-  # indices must exist
-  stopifnot(ind$i %in% tensor_index_names(x))
-  # index positions must match
-  stopifnot(all((ind$p == "+") == tensor_index_positions(x)[ind$i]))
+#' @importFrom cli cli_warn
+tensor_asym <- function(x, ind,
+                        arg = rlang::caller_arg(ind),
+                        call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind,
+    arg = arg, call = call
+  )
+
+  if (length(ind$i) == 1) {
+    cli_warn(
+      c(
+        "Antisymmetrization over a single index has no effect.",
+        i = "You might want to consider to remove this call."
+      ),
+      call = call
+    )
+    return(x)
+  }
 
   if (!tensor_is_reduced(x)) {
     x <- tensor_reduce(x)
@@ -391,11 +383,31 @@ tensor_asym <- function(x, ind) {
   )
 }
 
-tensor_sym <- function(x, ind) {
+#' @importFrom cli cli_warn
+tensor_sym <- function(x, ind,
+                       arg = rlang::caller_arg(ind),
+                       call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind,
+    arg = arg, call = call
+  )
+
+  if (length(ind$i) == 1) {
+    cli_warn(
+      c(
+        "Symmetrization over a single index has no effect.",
+        i = "You might want to consider to remove this call."
+      ),
+      call = call
+    )
+    return(x)
+  }
+
   perms <- apply(permn(ind$i), MARGIN = 1, identity, simplify = FALSE)
   norm <- length(perms)
 
   ind_to <- ind
+
   Reduce(
     function(tens, perm) {
       ind_to$i <- perm
