@@ -109,10 +109,10 @@ tensor_validate_index_matching <-
 
       cli_abort(
         c(
-        "{.arg {arg}} contains index with incorrect position.",
-        x = "Position of index {.code {pos_issue_ind}} do{?es/} not match index
+          "{.arg {arg}} contains index with incorrect position.",
+          x = "Position of index {.code {pos_issue_ind}} do{?es/} not match index
               position{?s} in {format(x)}.",
-        i = "Make sure you explicitely specify the correct index position."
+          i = "Make sure you explicitely specify the correct index position."
         ),
         call = call
       )
