@@ -266,7 +266,7 @@ tensor_lower <- function(x, ind_from, g,
 # single index k where dim(k) = dim(i)*dim(j)
 #' @importFrom cli cli_abort
 tensor_kron <- function(x, ind_comb, ind_new,
-                        arg = rlang::caller_arg(ind_from),
+                        arg = rlang::caller_arg(ind_comb),
                         call = rlang::caller_env()) {
   tensor_validate_index_matching(
     x, ind_comb,
