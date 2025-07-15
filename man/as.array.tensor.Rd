@@ -2,12 +2,12 @@
 % Please edit documentation in R/tensor.R
 \name{as.array.tensor}
 \alias{as.array.tensor}
-\title{Converts tensor to array}
+\title{Strip array labels}
 \usage{
 \method{as.array}{tensor}(x, index_order = NULL, ...)
 }
 \arguments{
-\item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
+\item{x}{A labeled array ("tensor" object) created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
 
 \item{index_order}{An index specification created with \code{\link[=.]{.()}}.
 The specification needs to match all the labels occurring in \code{x}.
@@ -17,7 +17,7 @@ order of the resulting array.}
 \item{...}{Not used.}
 }
 \description{
-Converts tensor to array by stripping the index labels.
+Converts a \code{\link[=tensor]{tensor()}} to an \code{\link[=array]{array()}} by stripping the index labels.
 An index label order
 needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well defined.
 }

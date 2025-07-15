@@ -2,12 +2,12 @@
 % Please edit documentation in R/tensor.R
 \name{as_a}
 \alias{as_a}
-\title{Strip tensor index labels}
+\title{Strip array labels}
 \usage{
 as_a(x, ...)
 }
 \arguments{
-\item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
+\item{x}{A labeled array ("tensor" object) created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
 
 \item{...}{Index labels separated by commas optionally prefixed by "+" and "-"
 to indicate the index position (upper and lower respectively).
@@ -23,7 +23,7 @@ A usual \code{\link[=array]{array()}} without attached labels. The dimension ord
 determined by \code{...}.
 }
 \description{
-Converts a labeled tensor to a usual \code{\link[=array]{array()}} (hence the name).
+Converts a \code{\link[=tensor]{tensor()}} to an \code{\link[=array]{array()}} by stripping the index labels.
 An index label order
 needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well defined.
 }
@@ -31,7 +31,7 @@ needs to be provided so that the array's \code{\link[=dim]{dim()}} order is well
 array(1:8, dim = c(2, 2, 2)) \%_\% .(i, +i, k) |> as_a(k)
 }
 \seealso{
-The same functionality is implemented in \code{\link[=as.array.tensor]{as.array.tensor()}} but with
-standard evaluation.
+The same functionality is implemented in \code{\link[=as.array.tensor]{as.array.tensor()}}
+but with standard evaluation.
 }
 \concept{tensor}

@@ -1,6 +1,6 @@
-#' Create a labeled tensor
+#' Create a labeled array (tensor)
 #'
-#' Creates a labeled tensor from an array. `%_%` and `tensor()` serve
+#' Creates a labeled array (tensor) from an array. `%_%` and `tensor()` serve
 #' the same purpose, but typically usage of `%_%` is preferred due to
 #' brevity.
 #' `tensor()` is exported to provide a standard-evaluation interface

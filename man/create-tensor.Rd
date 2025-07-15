@@ -3,7 +3,7 @@
 \name{\%_\%}
 \alias{\%_\%}
 \alias{tensor}
-\title{Create a labeled tensor}
+\title{Create a labeled array (tensor)}
 \usage{
 a \%_\% i
 
@@ -30,7 +30,7 @@ implicit calculations are already triggered (e.g. contractions)
 the index structure reflects the resulting tensor.
 }
 \description{
-Creates a labeled tensor from an array. \verb{\%_\%} and \code{tensor()} serve
+Creates a labeled array (tensor) from an array. \verb{\%_\%} and \code{tensor()} serve
 the same purpose, but typically usage of \verb{\%_\%} is preferred due to
 brevity.
 \code{tensor()} is exported to provide a standard-evaluation interface

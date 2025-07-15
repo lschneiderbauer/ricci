@@ -307,9 +307,9 @@ print.tensor <- function(x, ...) {
   }
 }
 
-#' Converts tensor to array
+#' Strip array labels
 #'
-#' Converts tensor to array by stripping the index labels.
+#' Converts a [tensor()] to an [array()] by stripping the index labels.
 #' An index label order
 #' needs to be provided so that the array's [dim()] order is well defined.
 #'
@@ -349,13 +349,13 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
   x
 }
 
-#' Strip tensor index labels
+#' Strip array labels
 #'
-#' Converts a labeled tensor to a usual [array()] (hence the name).
+#' Converts a [tensor()] to an [array()] by stripping the index labels.
 #' An index label order
 #' needs to be provided so that the array's [dim()] order is well defined.
 #'
-#' @param x  A labeled tensor object, created by [`%_%`] or [tensor()].
+#' @param x  A labeled array ("tensor" object) created by [`%_%`] or [tensor()].
 #' @param ...
 #'  Index labels separated by commas optionally prefixed by "+" and "-"
 #'  to indicate the index position (upper and lower respectively).
@@ -373,8 +373,8 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as_a(k)
 #' @export
-#' @seealso The same functionality is implemented in [as.array.tensor()] but with
-#'  standard evaluation.
+#' @seealso The same functionality is implemented in [as.array.tensor()]
+#'  but with standard evaluation.
 #' @concept tensor
 as_a <- function(x, ...) {
   as.array(x, .(...))
