@@ -21,21 +21,34 @@ expect_tensor_equal <- function(object, expected, ...) {
     stop("Package waldo required.") # nocov
   }
 
-  stopifnot(inherits(object, "tensor"))
-
   # 1. Capture object and label
   act <- testthat::quasi_label(rlang::enquo(object), arg = "object")
   exp <- testthat::quasi_label(rlang::enquo(expected), arg = "expected")
 
+  stopifnot(inherits(object, "tensor"))
+
   # 2. Call expect()
-  act$n <- length(act$val)
+  equal <- object == expected
+
+  comp <-
+    if (!equal) {
+      waldo::compare(
+        act$val, tensor_align(exp$val, act$val),
+        ...,
+        x_arg = "actual", y_arg = "expected"
+      )
+    } else {
+      list(message = "")
+    }
+
   testthat::expect(
-    object == expected,
-    waldo::compare(
-      object, tensor_align(expected, object),
-      x_arg = act$lab, y_arg = exp$lab,
-      ...
-    )
+    equal,
+    sprintf(
+      "%s (`actual`) not equal to %s (`expected`).\n\n%s",
+      act$lab, exp$lab,
+      paste0(comp, collapse = "\n\n" )
+    ),
+    trace_env = rlang::caller_env()
   )
 
   # 3. Invisibly return the value
