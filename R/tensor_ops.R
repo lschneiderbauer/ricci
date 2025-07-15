@@ -169,15 +169,10 @@ kron <- function(x, ...) {
     function(tens, expr) {
       l <- ast_kr(expr)
 
-      # we still need to check if the request makes sense
-      # check that "from" indices actually exist in `x`
-      # indices must exist
-      stopifnot(l$ind_from$i %in% tensor_index_names(tens))
-      # index positions must match
-      stopifnot(
-        all((l$ind_from$p == "+") == tensor_index_positions(tens)[l$ind_from$i])
-      )
-      tensor_kron(tens, l$ind_from, l$ind_to) |>
+      tensor_kron(
+        tens, l$ind_from, l$ind_to,
+        arg = "...", call = rlang::env_parent()
+      ) |>
         tensor_reduce()
     },
     exprs,
@@ -291,15 +286,34 @@ tensor_lower <- function(x, ind_from, g,
 
 # generalized kronecker product: combines two (or more) indices i,j to a
 # single index k where dim(k) = dim(i)*dim(j)
-tensor_kron <- function(x, ind_comb, ind_new) {
-  # indices must exist
-  stopifnot(ind_comb$i %in% tensor_index_names(x))
-  # index positions must match
-  stopifnot(all((ind_comb$p == "+") == tensor_index_positions(x)[ind_comb$i]))
+#' @importFrom cli cli_abort
+tensor_kron <- function(x, ind_comb, ind_new,
+                        arg = rlang::caller_arg(ind_from),
+                        call = rlang::caller_env()) {
+  tensor_validate_index_matching(
+    x, ind_comb,
+    arg = arg, call = call
+  )
+
   # we require the combining indices to have the same position
-  ind_new_pos <- unique(tensor_index_positions(x)[ind_comb$i])
-  stopifnot(length(ind_new_pos) == 1)
-  stopifnot((ind_new$p == "+") == ind_new_pos)
+  if (length(unique(ind_comb$p)) > 1) {
+    cli_abort(
+      c(
+        "In {.arg {arg}}: indices with different positions cannot be combined.",
+        x = "Indices {.code {ind_comb$i}} have different position{?s}.",
+        i = "Make sure you combine only indices of the same position."
+      ),
+      call = call
+    )
+  }
+
+  # index position must match between ind_comb and ind_new
+  validate_index_position(
+    ind_new, unique(ind_comb$p),
+    info = "The Kronecker product can only create an index of the same position.",
+    arg = arg, call = call
+  )
+
 
   if (!tensor_is_reduced(x)) {
     x <- tensor_reduce(x)
@@ -339,7 +353,7 @@ tensor_kron <- function(x, ind_comb, ind_new) {
   new_tensor(
     x,
     index_names = c(ind_new$i, ind_invariant),
-    index_positions = c(ind_new_pos, tensor_index_positions(x)[ind_invariant])
+    index_positions = c(ind_new$p == "+", tensor_index_positions(x)[ind_invariant])
   ) |>
     tensor_reduce()
 }
