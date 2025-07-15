@@ -26,8 +26,16 @@
 #' @export
 #' @rdname create-tensor
 #' @concept tensor
+#' @importFrom cli cli_abort
 `%_%` <- function(a, i) {
-  stopifnot(inherits(i, "tensor_indices"))
+  if(!inherits(i, "tensor_indices")) {
+    cli_abort(
+      c(
+        "Second argument of {.fun %_%} is not an index specification.",
+        i = "Indices need to be specified with {.fun ricci::.}."
+      )
+    )
+  }
   tensor(a, i$i, i$p)
 }
 
@@ -50,7 +58,7 @@
 #'
 #' @examples
 #' # three lower index slots
-#' .(i,j,k)
+#' .(i, j, k)
 #'
 #' # one lower and upper index
 #' .(i, +j)
@@ -59,7 +67,14 @@
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 
-  parsed <- unlist(lapply(exprs, ast_extr_ind))
+  parsed <- unlist(lapply(
+    exprs,
+    \(x) ast_extr_ind(
+      x,
+      arg = "...",
+      call = rlang::env_parent()
+    )
+  ))
 
   indices <- unname(parsed)
   positions <- names(parsed)
@@ -79,7 +94,9 @@ new_tensor_indices <- function(i, p) {
   )
 }
 
-ast_extr_ind <- function(x) {
+ast_extr_ind <- function(x,
+                         arg = rlang::caller_arg(x),
+                         call = rlang::caller_env()) {
   switch_expr(x,
     # Base cases
     symbol = as.character(x),
@@ -88,18 +105,29 @@ ast_extr_ind <- function(x) {
     # Recursive cases
     call =
       if (rlang::is_call(x, "+")) {
-        return(c("+" = ast_extr_ind(x[[2]])))
+        return(c("+" = ast_extr_ind(x[[2]], arg, call)))
       } else if (rlang::is_call(x, "-")) {
-        return(c("-" = ast_extr_ind(x[[2]])))
+        return(c("-" = ast_extr_ind(x[[2]], arg, call)))
       } else {
-        stop_invalid_expr()
+        stop_invalid_expr(x, arg = arg, call = call)
       },
-    pairlist = stop_invalid_expr()
+    pairlist = stop_invalid_expr(x, arg = arg, call = call)
   )
 }
 
-stop_invalid_expr <- function() {
-  stop("Index expression in `.()` not allowed. Only use symbols and '+'/'-' unary operators.", call. = FALSE)
+#' @importFrom cli cli_abort
+stop_invalid_expr <- function(expr,
+                              arg = rlang::caller_arg(expr),
+                              call = rlang::caller_env()) {
+  cli_abort(
+    c(
+      "Invalid expression in {.arg {arg}}.",
+      x = "Expression {.code {format(expr)}} cannot be parsed.",
+      i = "A valid expressions is of the form
+            {{[+|-]<label1>, [+|-]<label2>, ...}}"
+    ),
+    call = call
+  )
 }
 
 switch_expr <- function(x, ...) {

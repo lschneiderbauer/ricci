@@ -24,7 +24,7 @@ can serve as a label. \code{.()} is typically used in conjunction with
 }
 \examples{
 # three lower index slots
-.(i,j,k)
+.(i, j, k)
 
 # one lower and upper index
 .(i, +j)

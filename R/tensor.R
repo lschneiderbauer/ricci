@@ -52,6 +52,7 @@ tensor_is_reduced <- function(x) {
 #' @export
 #' @rdname create-tensor
 #' @concept tensor
+#' @importFrom cli cli_abort
 tensor <- function(a, index_names, index_positions) {
   a <- as.array(a)
   stopifnot(is.character(index_names))
@@ -65,16 +66,21 @@ tensor <- function(a, index_names, index_positions) {
   }
 
   if (length(index_names) != length(dim(a))) {
-    stop(paste0(
-      "The number of indices (", length(index_names),
-      ") does not match the number of array dimensions (",
-      length(dim(a)),
-      ")."
-    ))
+    cli_abort(
+      c(
+        "The number of provided indices do not match the array dimensions.",
+        x = "{length(index_names)} indices provided for a
+              rank {length(dim(a))} tensor.",
+        i = "The number of indices needs to match the rank of
+              argument {.arg a}."
+      ),
+      call = rlang::caller_env()
+    )
   }
 
   tensor_reduce(
-    new_tensor(a, index_names, index_positions == "+")
+    new_tensor(a, index_names, index_positions == "+"),
+    call = rlang::caller_env()
   )
 }
 
@@ -124,7 +130,8 @@ tensor_validate_index_matching <-
 # reduces a tensor by performing contractions
 # and diagonal selections
 # after a tensor reduction every index name is unique
-tensor_reduce <- function(x) {
+#' @importFrom cli cli_abort
+tensor_reduce <- function(x, call = rlang::caller_env()) {
   if (is_scalar(x) || tensor_is_reduced(x)) {
     attr(x, "reduced") <- TRUE
     return(x)
@@ -141,6 +148,20 @@ tensor_reduce <- function(x) {
   i_dups <- unique(i[dups])
   for (i_dup in i_dups) {
     w <- which(i == i_dup)
+
+    if (length(unique(dim(x)[w])) > 1) {
+      cli_abort(
+        c(
+          "Attempted diagonal subsetting on slots with different dimensions.",
+          x = "Index {.code {i_dup}} is associated to dimension
+              {.val {dim(x)[w]}}.",
+          i = "Only assign identical index labels to slots with the equal
+                dimension."
+        ),
+        call = call
+      )
+    }
+
     x <- adiag(x, w)
     # remove this duplicate in i
     ind_dup <- setdiff(w, which.max(i == i_dup))
@@ -178,7 +199,7 @@ is_scalar <- function(x) {
 
 # outputs a vector of the same length as index_name
 tensor_dim <- function(x, index_name) {
-  dim(x)[match(index_name, tensor_index_names(x))]
+  dim(x)[tensor_index_names(x) %in% index_name]
 }
 
 # picks out "diagonal" indices of an array
