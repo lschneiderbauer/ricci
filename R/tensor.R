@@ -359,10 +359,20 @@ tensor_add <- function(x, y) {
 tensor_diff <- function(x, y) {
   stopifnot("tensors not compatible" = tensor_alignable(x, y))
 
+  # before we can properly add tensors we need to reduce them
+  if (!tensor_is_reduced(x)) {
+    x <- tensor_reduce(x)
+  }
+  if (!tensor_is_reduced(y)) {
+    y <- tensor_reduce(y)
+  }
+
   new_tensor(
     calculus::`%diff%`(as.array(x), as.array(tensor_align(y, x))),
     index_names = tensor_index_names(x),
-    index_positions = tensor_index_positions(y)
+    index_positions = tensor_index_positions(y),
+    # the result is also reduced by definition
+    reduced = TRUE
   )
 }
 
