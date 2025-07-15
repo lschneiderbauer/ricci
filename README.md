@@ -44,8 +44,8 @@ pak::pak("lschneiderbauer/ricci")
 
 The central object is R’s `array`. Adding index slot labels allows us to
 perform common tensor operations implicitly. After the desired
-calculations have been carried out we remove the labels to obtain an
-`array` again.
+calculations have been carried out we can remove the labels to obtain an
+ordinary `array`.
 
 The following example shows how to express the contraction of two
 tensors, where one index has to be raised, and subsequent diagonal
@@ -58,9 +58,9 @@ library(ricci)
 # the data
 a <- array(1:(2^2*3), dim = c(2,2,3))
 
-# create labeled tensor
+# create labeled array (tensor)
 (a %_% .(i, j, A) * 
-  # create a labeled tensor and raise index j
+  # create a labeled array (tensor) and raise index j
   a %_% .(j, i, A) |> r(j, g = g_mink(2))) |> 
   # * -j and +j dimension are implictely contracted
   # * the i-diagonal is selected
@@ -73,10 +73,10 @@ a <- array(1:(2^2*3), dim = c(2,2,3))
 
 Below we outline more details on possible individual operations.
 
-### Creating a labeled tensor
+### Creating a labeled array (tensor)
 
-We can use the array `a` to create a labeled tensor with lower index
-labels i, j, and k:
+We can use the array `a` to create a labeled array (tensor) with lower
+index labels i, j, and k:
 
 $$
 a_{ijk}
@@ -84,7 +84,7 @@ $$
 
 ``` r
 a %_% .(i, j, k)
-#> <Labeled Tensor> [2x2x3] .(-i, -j, -k)
+#> <Labeled Array> [2x2x3] .(-i, -j, -k)
 ```
 
 By default, indices are assumed to be lower indices. We can use a “+”
@@ -96,15 +96,15 @@ $$
 
 ``` r
 a %_% .(i, j, +k)
-#> <Labeled Tensor> [2x2x3] .(-i, -j, +k)
+#> <Labeled Array> [2x2x3] .(-i, -j, +k)
 ```
 
 ### Performing calculations
 
-Creating labels on its own is not very interesting nor helpful. The act
-of labeling tensor index slots becomes useful when the labels are set
-such that they trigger implicit calculations, or they are combined with
-other tensors via multiplication or addition.
+Creating index labels on its own is not very interesting nor helpful.
+The act of labeling tensor index slots becomes useful when the labels
+are set such that they trigger implicit calculations, or they are
+combined with other tensors via multiplication or addition.
 
 #### Contraction
 
@@ -117,7 +117,7 @@ $$
 ``` r
 b <- a %_% .(i, +i, k)
 b
-#> <Labeled Tensor> [3] .(-k)
+#> <Labeled Array> [3] .(-k)
 #> [1]  5 13 21
 
 # retrieve array
@@ -137,7 +137,7 @@ $$
 ``` r
 c <- a %_% .(i, i, k)
 c
-#> <Labeled Tensor> [2x3] .(-i, -k)
+#> <Labeled Array> [2x3] .(-i, -k)
 #>      [,1] [,2] [,3]
 #> [1,]    1    5    9
 #> [2,]    4    8   12
@@ -187,7 +187,7 @@ $$
 ``` r
 f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
 f
-#> <Labeled Tensor> [2] .(-j)
+#> <Labeled Array> [2] .(-j)
 #> [1] 247 403
 
 # retrieve array
@@ -207,7 +207,7 @@ $$
 ``` r
 g <- a %_% .(i, j, k) + a %_% .(j, i, k)
 g
-#> <Labeled Tensor> [2x2x3] .(-i, -j, -k)
+#> <Labeled Array> [2x2x3] .(-i, -j, -k)
 
 g |> as_a(i, j, k)
 #> , , 1
