@@ -112,8 +112,9 @@ test_that("antisymmetrization on rank 3 arrays works", {
     symarr %_% .(k, i, j)
   )
 
-  expect_true(
-    e(i, j, k) |> asym(i, j, k) == e(i, j, k)
+  expect_tensor_equal(
+    e(i, j, k) |> asym(i, j, k),
+    e(i, j, k)
   )
 })
 
@@ -165,3 +166,4 @@ test_that("tensor = sym + antisym (two indices)", {
     tens
   )
 })
+
