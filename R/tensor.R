@@ -103,8 +103,8 @@ tensor_validate_index_matching <-
     if (!all(check_position)) {
       pos_issue_ind <-
         paste0(
-          ifelse(tensor_index_positions(x)[!check_position], "+", "-"),
-          tensor_index_names(x)[!check_position]
+          ind$p[!check_position],
+          ind$i[!check_position]
         )
 
       cli_abort(
