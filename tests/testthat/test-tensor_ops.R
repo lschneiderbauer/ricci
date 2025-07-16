@@ -37,8 +37,14 @@ test_that("raising tensor works", {
   )
 
   # we are not allowed to raise already raised index
-  expect_error(
-    arr %_% .(+i) |> r(i)
+  expect_snapshot(
+    arr %_% .(+i) |> r(i),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i) |> r(i, g = g_mink(2)),
+    error = TRUE
   )
 })
 
@@ -74,8 +80,14 @@ test_that("substituting labels works", {
     arr %_% .(k, l)
   )
 
-  expect_error(
-    arr %_% .(i, +j) |> subst(j -> k)
+  expect_snapshot(
+    arr %_% .(i, +j) |> subst(j -> k),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i, j) |> subst(k -> l),
+    error = TRUE
   )
 })
 
