@@ -283,21 +283,18 @@ print.tensor <- function(x, ...) {
 #'  The label order determines the dimension
 #'  order of the resulting array.
 #' @param ... Not used.
+#' @param arg,call Used for error handling. Can be ignored by the user.
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as.array(.(k))
 #' @export
 #' @concept tensor
-as.array.tensor <- function(x, index_order = NULL, ...) {
+as.array.tensor <- function(x, index_order = NULL, ...,
+                            arg = "index_order",
+                            call = rlang::caller_env()) {
   if (!is.null(index_order)) {
-    stopifnot(setequal(index_order$i, tensor_index_names(x)))
-
-    # require position to be correct as well
-    # (we force to be explicit about index position in this case)
-    # TODO: provide a good error message explaining that
-
-    stopifnot(
-      all(tensor_index_positions(x)[index_order$i] ==
-        (index_order$p == "+"))
+    tensor_validate_index_matching(
+      x, index_order, match_all = TRUE,
+      arg = arg, call = call
     )
 
     x <- tensor_reorder(x, index_order$i)
@@ -340,7 +337,7 @@ as.array.tensor <- function(x, index_order = NULL, ...) {
 #'  but with standard evaluation.
 #' @concept tensor
 as_a <- function(x, ...) {
-  as.array(x, .(...))
+  as.array(x, .(...), arg = "...")
 }
 
 

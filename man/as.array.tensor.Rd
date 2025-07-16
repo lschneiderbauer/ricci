@@ -4,7 +4,13 @@
 \alias{as.array.tensor}
 \title{Strip array labels}
 \usage{
-\method{as.array}{tensor}(x, index_order = NULL, ...)
+\method{as.array}{tensor}(
+  x,
+  index_order = NULL,
+  ...,
+  arg = "index_order",
+  call = rlang::caller_env()
+)
 }
 \arguments{
 \item{x}{A labeled array ("tensor" object) created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}.}
@@ -15,6 +21,8 @@ The label order determines the dimension
 order of the resulting array.}
 
 \item{...}{Not used.}
+
+\item{arg, call}{Used for error handling. Can be ignored by the user.}
 }
 \description{
 Converts a \code{\link[=tensor]{tensor()}} to an \code{\link[=array]{array()}} by stripping the index labels.

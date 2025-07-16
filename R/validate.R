@@ -1,17 +1,27 @@
 #' @importFrom cli cli_abort
 tensor_validate_index_matching <-
-  function(x, ind,
+  function(x, ind, match_all = FALSE,
            arg = rlang::caller_arg(ind),
            call = rlang::caller_env()) {
     stopifnot(inherits(x, "tensor"))
-    stopifnot(inherits(ind, "tensor_indices"))
+
+    if (!inherits(ind, "tensor_indices")) {
+      cli_abort(
+        c(
+          "Argument {.arg {arg}} is not specified correctly.",
+          i = "Use {.fun .} to specify an index set."
+        ),
+        call = call
+      )
+    }
+
 
     if (!all(ind$i %in% tensor_index_names(x))) {
       missing_ind <- setdiff(ind$i, tensor_index_names(x))
 
       cli_abort(
         c(
-          "{.arg {arg}} contains invalid index.",
+          "Argument {.arg {arg}} contains invalid index.",
           x = "Index {.code {missing_ind}} not present in {format(x)}.",
           i = "Make sure you only select indices that match the tensor indices."
         ),
@@ -29,10 +39,24 @@ tensor_validate_index_matching <-
 
       cli_abort(
         c(
-          "{.arg {arg}} contains index with incorrect position.",
+          "Argument {.arg {arg}} contains index with incorrect position.",
           x = "Position of index {.code {pos_issue_ind}} do{?es/} not match index
               position{?s} in {format(x)}.",
           i = "Make sure you explicitely specify the correct index position."
+        ),
+        call = call
+      )
+    }
+
+    # we require that all indices are selected
+    if (match_all && !setequal(tensor_index_names(x), ind$i)) {
+      missing_ind <- setdiff(tensor_index_names(x), ind$i)
+
+      cli_abort(
+        c(
+          "Argument {.arg {arg}} does not contain all indices.",
+          x = "Index {.code {missing_ind}} missing.",
+          i = "Operation requires the explicit selection of all indices."
         ),
         call = call
       )
@@ -150,7 +174,7 @@ validate_index_position <-
 
       cli_abort(
         c(
-          "{.arg {arg}} constains index with invalid position.",
+          "Argument {.arg {arg}} constains index with invalid position.",
           x = "Index {.code {affected_ind}} {?is/are} {incorrect_state}.",
           i = info
         ),
