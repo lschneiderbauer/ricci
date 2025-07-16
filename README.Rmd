@@ -26,7 +26,7 @@ The goal of {ricci} is to provide a *compact*[^1] R interface for performing [te
 
 [^1]: By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.
 
-{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.
+{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations to provide an alternative interface to a subset of its functionality. Notably, {[calculus](https://calculus.eguidotti.com/)} also supports symbolic calculations which also enables {ricci} to do the same.
 
 ## Installation
 
@@ -43,21 +43,39 @@ The central object is R's `array`. Adding index slot labels allows us to perform
 
 The following example shows how to express the contraction of two tensors, where one index has to be raised, and subsequent diagonal subsetting. For demonstration purposes we use an arbitrary array of rank 3.
 
-```{r example}
+```{r example_num}
 library(ricci)
 
-# the data
-a <- array(1:(2^2*3), dim = c(2,2,3))
+# numeric data
+a <- array(1:(2^3), dim = c(2,2,2))
 
 # create labeled array (tensor)
-(a %_% .(i, j, A) * 
-  # create a labeled array (tensor) and raise index j
-  a %_% .(j, i, A) |> r(j, g = g_mink(2))) |> 
-  # * -j and +j dimension are implictely contracted
-  # * the i-diagonal is selected
+(a %_% .(i, j, k) * 
+  # mutliply with a labeled array (tensor) and raise index i and k
+  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
-  as_a(i, A) # we unlabel the tensor with index order (i, A)
+  sym(j, l) |> # symmetrize over i and l
+  subst(l -> j) |> # rename index and trigger diagonal subsetting
+  as_a(j) # we unlabel the tensor with index order (j)
+```
 
+The same instructions work for a symbolic array:
+
+```{r example_symb}
+library(ricci)
+
+# symbolic data
+a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
+
+(a %_% .(i, j, k) * 
+  # mutliply with a labeled array (tensor) and raise index i and k
+  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  # * -i and +i as well as -k and +k dimension are implictely contracted
+  # the result is a tensor of rank 2
+  sym(j, l) |> # symmetrize over i and l
+  subst(l -> j) |> # rename index and trigger diagonal subsetting
+  as_a(j) # we unlabel the tensor with index order (j)
 ```
 
 Below we outline more details on possible individual operations.

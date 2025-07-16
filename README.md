@@ -29,8 +29,10 @@ Civita epsilon, and certain metric tensors are provided. An effort was
 made to provide the user with meaningful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
-(Guidotti 2022) behind the scenes to perform calculations and simply
-provides an alternative interface to a subset of its functionality.
+(Guidotti 2022) behind the scenes to perform calculations to provide an
+alternative interface to a subset of its functionality. Notably,
+{[calculus](https://calculus.eguidotti.com/)} also supports symbolic
+calculations which also enables {ricci} to do the same.
 
 ## Installation
 
@@ -57,20 +59,39 @@ subsetting. For demonstration purposes we use an arbitrary array of rank
 ``` r
 library(ricci)
 
-# the data
-a <- array(1:(2^2*3), dim = c(2,2,3))
+# numeric data
+a <- array(1:(2^3), dim = c(2,2,2))
 
 # create labeled array (tensor)
-(a %_% .(i, j, A) * 
-  # create a labeled array (tensor) and raise index j
-  a %_% .(j, i, A) |> r(j, g = g_mink(2))) |> 
-  # * -j and +j dimension are implictely contracted
-  # * the i-diagonal is selected
+(a %_% .(i, j, k) * 
+  # mutliply with a labeled array (tensor) and raise index i and k
+  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
-  as_a(i, A) # we unlabel the tensor with index order (i, A)
-#>      [,1] [,2] [,3]
-#> [1,]    5   17   29
-#> [2,]   10   22   34
+  sym(j, l) |> # symmetrize over i and l
+  subst(l -> j) |> # rename index and trigger diagonal subsetting
+  as_a(j) # we unlabel the tensor with index order (j)
+#> [1] 8 8
+```
+
+The same instructions work for a symbolic array:
+
+``` r
+library(ricci)
+
+# symbolic data
+a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
+
+(a %_% .(i, j, k) * 
+  # mutliply with a labeled array (tensor) and raise index i and k
+  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  # * -i and +i as well as -k and +k dimension are implictely contracted
+  # the result is a tensor of rank 2
+  sym(j, l) |> # symmetrize over i and l
+  subst(l -> j) |> # rename index and trigger diagonal subsetting
+  as_a(j) # we unlabel the tensor with index order (j)
+#> [1] "((a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1) + (a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1)) / 2"
+#> [2] "((a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1) + (a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1)) / 2"
 ```
 
 Below we outline more details on possible individual operations.
@@ -86,7 +107,7 @@ $$
 
 ``` r
 a %_% .(i, j, k)
-#> <Labeled Array> [2x2x3] .(-i, -j, -k)
+#> <Labeled Array> [2x2x2] .(-i, -j, -k)
 ```
 
 By default, indices are assumed to be lower indices. We can use a “+”
@@ -98,7 +119,7 @@ $$
 
 ``` r
 a %_% .(i, j, +k)
-#> <Labeled Array> [2x2x3] .(-i, -j, +k)
+#> <Labeled Array> [2x2x2] .(-i, -j, +k)
 ```
 
 ### Performing calculations
@@ -119,12 +140,12 @@ $$
 ``` r
 b <- a %_% .(i, +i, k)
 b
-#> <Labeled Array> [3] .(-k)
-#> [1]  5 13 21
+#> <Labeled Array> [2] .(-k)
+#> [1] "a1 + a4" "a5 + a8"
 
 # retrieve array
 b |> as_a(k)
-#> [1]  5 13 21
+#> [1] "a1 + a4" "a5 + a8"
 ```
 
 #### Diagonal subsetting
@@ -139,16 +160,16 @@ $$
 ``` r
 c <- a %_% .(i, i, k)
 c
-#> <Labeled Array> [2x3] .(-i, -k)
-#>      [,1] [,2] [,3]
-#> [1,]    1    5    9
-#> [2,]    4    8   12
+#> <Labeled Array> [2x2] .(-i, -k)
+#>      [,1] [,2]
+#> [1,] "a1" "a5"
+#> [2,] "a4" "a8"
 
 # retrieve array
 c |> as_a(i, k)
-#>      [,1] [,2] [,3]
-#> [1,]    1    5    9
-#> [2,]    4    8   12
+#>      [,1] [,2]
+#> [1,] "a1" "a5"
+#> [2,] "a4" "a8"
 ```
 
 #### Outer tensor product
@@ -173,11 +194,12 @@ $$
 e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
 e
 #> <Scalar>
-#> [1] 650
+#> [1] "(a1) * (a1) + (a2) * (a2) + (a3) * (a3) + (a4) * (a4) + (a5) * (a5) + (a6) * (a6) + (a7) * (a7) + (a8) * (a8)"
 
 # convert to number
 as.numeric(e)
-#> [1] 650
+#> Warning: NAs introduced by coercion
+#> [1] NA
 ```
 
 #### Tensor multiplication w/ contractions and subsetting
@@ -190,11 +212,13 @@ $$
 f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
 f
 #> <Labeled Array> [2] .(-j)
-#> [1] 247 403
+#> [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"
+#> [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"
 
 # retrieve array
 f |> as_a(j)
-#> [1] 247 403
+#> [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"
+#> [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"
 ```
 
 #### Tensor addition
@@ -209,26 +233,20 @@ $$
 ``` r
 g <- a %_% .(i, j, k) + a %_% .(j, i, k)
 g
-#> <Labeled Array> [2x2x3] .(-i, -j, -k)
+#> <Labeled Array> [2x2x2] .(-i, -j, -k)
 
 g |> as_a(i, j, k)
 #> , , 1
 #> 
-#>      [,1] [,2]
-#> [1,]    2    5
-#> [2,]    5    8
+#>      [,1]      [,2]     
+#> [1,] "a1 + a1" "a3 + a2"
+#> [2,] "a2 + a3" "a4 + a4"
 #> 
 #> , , 2
 #> 
-#>      [,1] [,2]
-#> [1,]   10   13
-#> [2,]   13   16
-#> 
-#> , , 3
-#> 
-#>      [,1] [,2]
-#> [1,]   18   21
-#> [2,]   21   24
+#>      [,1]      [,2]     
+#> [1,] "a5 + a5" "a7 + a6"
+#> [2,] "a6 + a7" "a8 + a8"
 ```
 
 <div id="refs" class="references csl-bib-body hanging-indent"
