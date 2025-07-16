@@ -143,10 +143,6 @@ tensor_reduce <- function(x, call = rlang::caller_env()) {
   )
 }
 
-is_tensor <- function(x) {
-  inherits(x, "tensor")
-}
-
 is_scalar <- function(x) {
   if (inherits(x, "tensor")) {
     return(length(attr(x, "index_names")) == 0)

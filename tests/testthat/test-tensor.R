@@ -116,7 +116,14 @@ test_that("tensor diagonalization works for three identical indices", {
   }
 })
 
+test_that("tensor diaginalization fails if dimensions do not agree", {
+  arr <- array(1:(2 * 3), c(2, 3))
 
+  expect_snapshot(
+    arr %_% .(i, i),
+    error = TRUE
+  )
+})
 
 test_that("convert tensor to array works", {
   arr <- array(1:(2^2), c(2, 2))
@@ -124,6 +131,16 @@ test_that("convert tensor to array works", {
   expect_equal(
     arr %_% .(i, j) |> as_a(j, i),
     t(arr)
+  )
+
+  expect_equal(
+    arr %_% .(i, j) |> as.array(.(j, i)),
+    t(arr)
+  )
+
+  expect_equal(
+    arr %_% .(i, j) |> as.array(),
+    arr
   )
 })
 
@@ -145,3 +162,8 @@ test_that("convert tensor to array errs if index does not fit", {
   )
 })
 
+test_that("print() does not err", {
+  expect_output(
+    print(array(1) %_% .(i))
+  )
+})
