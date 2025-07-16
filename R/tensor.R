@@ -239,6 +239,12 @@ Ops.tensor <- function(e1, e2) {
         call = rlang::call2("-")
       ),
     "*" = tensor_mul(e1, e2),
+    "/" =
+      tensor_div(e1, e2,
+        arg1 = rlang::caller_arg(e1),
+        arg2 = rlang::caller_arg(e2),
+        call = rlang::call2("-")
+      ),
     "==" =
       tensor_eq(e1, e2,
         arg1 = rlang::caller_arg(e1),
@@ -374,10 +380,7 @@ tensor_eq <- function(x, y,
                       arg1 = rlang::caller_arg(x),
                       arg2 = rlang::caller_arg(y),
                       call = rlang::caller_env()) {
-  tensor_validate_alignability(
-    x, y,
-    arg1 = arg1, arg2 = arg2, call = call
-  )
+  tensor_validate_alignability(x, y, arg1, arg2, call)
 
   all(as.array(x) == as.array(tensor_align(y, x)))
 }
@@ -386,8 +389,6 @@ tensor_add <- function(x, y,
                        arg1 = rlang::caller_arg(x),
                        arg2 = rlang::caller_arg(y),
                        call = rlang::caller_env()) {
-  tensor_validate_alignability(x, y, arg1, arg2, call)
-
   # before we can properly add tensors we need to reduce them
   if (!tensor_is_reduced(x)) {
     x <- tensor_reduce(x)
@@ -396,10 +397,12 @@ tensor_add <- function(x, y,
     y <- tensor_reduce(y)
   }
 
+  tensor_validate_alignability(x, y, arg1, arg2, call)
+
   new_tensor(
     calculus::`%sum%`(as.array(x), as.array(tensor_align(y, x))),
     index_names = tensor_index_names(x),
-    index_positions = tensor_index_positions(y),
+    index_positions = tensor_index_positions(x),
     # the result is also reduced by definition
     reduced = TRUE
   )
@@ -409,8 +412,6 @@ tensor_diff <- function(x, y,
                         arg1 = rlang::caller_arg(x),
                         arg2 = rlang::caller_arg(y),
                         call = rlang::caller_env()) {
-  tensor_validate_alignability(x, y, arg1, arg2, call)
-
   # before we can properly add tensors we need to reduce them
   if (!tensor_is_reduced(x)) {
     x <- tensor_reduce(x)
@@ -419,10 +420,39 @@ tensor_diff <- function(x, y,
     y <- tensor_reduce(y)
   }
 
+  tensor_validate_alignability(x, y, arg1, arg2, call)
+
   new_tensor(
     calculus::`%diff%`(as.array(x), as.array(tensor_align(y, x))),
     index_names = tensor_index_names(x),
-    index_positions = tensor_index_positions(y),
+    index_positions = tensor_index_positions(x),
+    # the result is also reduced by definition
+    reduced = TRUE
+  )
+}
+
+tensor_div <- function(x, y,
+                       arg1 = rlang::caller_arg(x),
+                       arg2 = rlang::caller_arg(y),
+                       call = rlang::caller_env()) {
+  # x must be a tensor, but y doesn't need to be
+
+  # before we can properly add tensors we need to reduce them
+  if (!tensor_is_reduced(x)) {
+    x <- tensor_reduce(x)
+  }
+  if (inherits(y, "tensor") && !tensor_is_reduced(y)) {
+    y <- tensor_reduce(y)
+  }
+
+  if (inherits(x, "tensor") && inherits(y, "tensor")) {
+    tensor_validate_alignability(x, y, arg1, arg2, call)
+  }
+
+  new_tensor(
+    calculus::`%div%`(as.array(x), as.array(y)),
+    index_names = tensor_index_names(x),
+    index_positions = tensor_index_positions(x),
     # the result is also reduced by definition
     reduced = TRUE
   )
