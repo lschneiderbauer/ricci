@@ -51,8 +51,8 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p>The goal of {ricci} is to provide a <em>compact</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.&lt;/p&gt;"><sup>1</sup></a> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to <em>implicitly</em> trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, subtraction, multiplication of tensors via the standard operators (<code>*</code>, <code>+</code>, <code>-</code>), raising and lowering indices, or the Kronecker product are also available. Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided.</p>
-<p>{ricci} uses the <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022) behind the scenes to perform calculations and simply provides an alternative interface to a subset of its functionality.</p>
+<p>The goal of {ricci} is to provide a <em>compact</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.&lt;/p&gt;"><sup>1</sup></a> R interface for performing <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">tensor calculations</a>. This is achieved by labeling (upper and lower) index slots of R’s <code>array</code> and making use of Ricci calculus conventions to <em>implicitly</em> trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, subtraction, multiplication of tensors via the standard operators (<code>*</code>, <code>+</code>, <code>-</code>), raising and lowering indices, taking symmetric or antisymmetric tensor parts, as well as the Kronecker product are available. Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided. An effort was made to provide the user with meaningful error messages.</p>
+<p>{ricci} uses the <a href="https://calculus.eguidotti.com/" class="external-link">calculus</a> package (Guidotti 2022) behind the scenes to perform calculations to provide an alternative interface to a subset of its functionality. Notably, {<a href="https://calculus.eguidotti.com/" class="external-link">calculus</a>} also supports symbolic calculations which also enables {ricci} to do the same.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -69,20 +69,36 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lschneiderbauer/ricci" class="external-link">ricci</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># the data</span></span>
-<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fl">2</span><span class="op">^</span><span class="fl">2</span><span class="op">*</span><span class="fl">3</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># numeric data</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fl">2</span><span class="op">^</span><span class="fl">3</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create labeled array (tensor)</span></span>
-<span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">A</span><span class="op">)</span> <span class="op">*</span> </span>
-<span>  <span class="co"># create a labeled array (tensor) and raise index j</span></span>
-<span>  <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">A</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/r.html">r</a></span><span class="op">(</span><span class="va">j</span>, g <span class="op">=</span> <span class="fu"><a href="reference/g_mink.html">g_mink</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="co"># * -j and +j dimension are implictely contracted</span></span>
-<span>  <span class="co"># * the i-diagonal is selected</span></span>
+<span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> </span>
+<span>  <span class="co"># mutliply with a labeled array (tensor) and raise index i and k</span></span>
+<span>  <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">l</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/r.html">r</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">k</span>, g <span class="op">=</span> <span class="fu"><a href="reference/g_mink.html">g_mink</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># * -i and +i as well as -k and +k dimension are implictely contracted</span></span>
 <span>  <span class="co"># the result is a tensor of rank 2</span></span>
-<span>  <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">A</span><span class="op">)</span> <span class="co"># we unlabel the tensor with index order (i, A)</span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,]    5   17   29</span></span>
-<span><span class="co">#&gt; [2,]   10   22   34</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/sym.html">sym</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">l</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># symmetrize over i and l</span></span>
+<span>  <span class="fu"><a href="reference/subst.html">subst</a></span><span class="op">(</span><span class="va">l</span> <span class="op">-&gt;</span> <span class="va">j</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># rename index and trigger diagonal subsetting</span></span>
+<span>  <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">j</span><span class="op">)</span> <span class="co"># we unlabel the tensor with index order (j)</span></span>
+<span><span class="co">#&gt; [1] 8 8</span></span></code></pre></div>
+<p>The same instructions work for a symbolic array:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lschneiderbauer/ricci" class="external-link">ricci</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># symbolic data</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fl">2</span><span class="op">^</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> </span>
+<span>  <span class="co"># mutliply with a labeled array (tensor) and raise index i and k</span></span>
+<span>  <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">l</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/r.html">r</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">k</span>, g <span class="op">=</span> <span class="fu"><a href="reference/g_mink.html">g_mink</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># * -i and +i as well as -k and +k dimension are implictely contracted</span></span>
+<span>  <span class="co"># the result is a tensor of rank 2</span></span>
+<span>  <span class="fu"><a href="reference/sym.html">sym</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">l</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># symmetrize over i and l</span></span>
+<span>  <span class="fu"><a href="reference/subst.html">subst</a></span><span class="op">(</span><span class="va">l</span> <span class="op">-&gt;</span> <span class="va">j</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># rename index and trigger diagonal subsetting</span></span>
+<span>  <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">j</span><span class="op">)</span> <span class="co"># we unlabel the tensor with index order (j)</span></span>
+<span><span class="co">#&gt; [1] "((a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1) + (a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1)) / 2"</span></span>
+<span><span class="co">#&gt; [2] "((a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1) + (a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1)) / 2"</span></span></code></pre></div>
 <p>Below we outline more details on possible individual operations.</p>
 <div class="section level3">
 <h3 id="creating-a-labeled-array-tensor">Creating a labeled array (tensor)<a class="anchor" aria-label="anchor" href="#creating-a-labeled-array-tensor"></a>
@@ -91,16 +107,16 @@
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">
 a_{ijk}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x3] .(-i, -j, -k)</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span></code></pre></div>
 <p>By default, indices are assumed to be lower indices. We can use a “+” prefix to create an upper index label.</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mspace width="0.278em"></mspace><mspace width="0.278em"></mspace><mi>k</mi></mrow></msubsup><annotation encoding="application/x-tex">
 a_{ij}^{\;\;k}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x3] .(-i, -j, +k)</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, +k)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="performing-calculations">Performing calculations<a class="anchor" aria-label="anchor" href="#performing-calculations"></a>
@@ -113,15 +129,15 @@ a_{ij}^{\;\;k}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>a</mi><mrow><mi>i</mi><mspace width="0.278em"></mspace><mi>k</mi></mrow><mrow><mspace width="0.278em"></mspace><mi>i</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">
 b_j=a_{i\;k}^{\;i}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">b</span></span>
-<span><span class="co">#&gt; &lt;Labeled Array&gt; [3] .(-k)</span></span>
-<span><span class="co">#&gt; [1]  5 13 21</span></span>
+<span><span class="co">#&gt; &lt;Labeled Array&gt; [2] .(-k)</span></span>
+<span><span class="co">#&gt; [1] "a1 + a4" "a5 + a8"</span></span>
 <span></span>
 <span><span class="co"># retrieve array</span></span>
 <span><span class="va">b</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1]  5 13 21</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "a1 + a4" "a5 + a8"</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="diagonal-subsetting">Diagonal subsetting<a class="anchor" aria-label="anchor" href="#diagonal-subsetting"></a>
@@ -130,19 +146,19 @@ b_j=a_{i\;k}^{\;i}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>i</mi><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 c_{ik}=a_{iik}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">c</span></span>
-<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x3] .(-i, -k)</span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,]    1    5    9</span></span>
-<span><span class="co">#&gt; [2,]    4    8   12</span></span>
+<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2] .(-i, -k)</span></span>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,] "a1" "a5"</span></span>
+<span><span class="co">#&gt; [2,] "a4" "a8"</span></span>
 <span></span>
 <span><span class="co"># retrieve array</span></span>
 <span><span class="va">c</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,]    1    5    9</span></span>
-<span><span class="co">#&gt; [2,]    4    8   12</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1] [,2]</span></span>
+<span><span class="co">#&gt; [1,] "a1" "a5"</span></span>
+<span><span class="co">#&gt; [2,] "a4" "a8"</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="outer-tensor-product">Outer tensor product<a class="anchor" aria-label="anchor" href="#outer-tensor-product"></a>
@@ -151,7 +167,7 @@ c_{ik}=a_{iik}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi><mi>l</mi><mi>m</mi><mi>n</mi></mrow></msub><mo>=</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>a</mi><mrow><mi>l</mi><mi>m</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 d_{ijklmn}=a_{ijk}a_{lmn}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -160,15 +176,16 @@ d_{ijklmn}=a_{ijk}a_{lmn}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo>=</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><msup><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msup></mrow><annotation encoding="application/x-tex">
 e=a_{ijk}a^{ijk}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">e</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
-<span><span class="co">#&gt; [1] 650</span></span>
+<span><span class="co">#&gt; [1] "(a1) * (a1) + (a2) * (a2) + (a3) * (a3) + (a4) * (a4) + (a5) * (a5) + (a6) * (a6) + (a7) * (a7) + (a8) * (a8)"</span></span>
 <span></span>
 <span><span class="co"># convert to number</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">e</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 650</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: NAs introduced by coercion</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="tensor-multiplication-w-contractions-and-subsetting">Tensor multiplication w/ contractions and subsetting<a class="anchor" aria-label="anchor" href="#tensor-multiplication-w-contractions-and-subsetting"></a>
@@ -176,15 +193,17 @@ e=a_{ijk}a^{ijk}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>j</mi></msub><mo>=</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><msubsup><mi>a</mi><mrow><mspace width="0.278em"></mspace><mi>j</mi></mrow><mrow><mi>i</mi><mspace width="0.278em"></mspace><mi>k</mi></mrow></msubsup></mrow><annotation encoding="application/x-tex">
 f_j=a_{ijk}a^{i\;k}_{\;j}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">f</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2] .(-j)</span></span>
-<span><span class="co">#&gt; [1] 247 403</span></span>
+<span><span class="co">#&gt; [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"</span></span>
+<span><span class="co">#&gt; [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"</span></span>
 <span></span>
 <span><span class="co"># retrieve array</span></span>
 <span><span class="va">f</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">j</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 247 403</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"</span></span>
+<span><span class="co">#&gt; [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="tensor-addition">Tensor addition<a class="anchor" aria-label="anchor" href="#tensor-addition"></a>
@@ -193,29 +212,23 @@ f_j=a_{ijk}a^{i\;k}_{\;j}
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><mo>+</mo><msub><mi>a</mi><mrow><mi>j</mi><mi>i</mi><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 g_{ijk} = a_{ijk} + a_{jik}
 </annotation></semantics></math></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">+</span> <span class="va">a</span> <span class="op"><a href="reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">g</span></span>
-<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x3] .(-i, -j, -k)</span></span>
+<span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span>
 <span></span>
 <span><span class="va">g</span> <span class="op">|&gt;</span> <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; [1,]    2    5</span></span>
-<span><span class="co">#&gt; [2,]    5    8</span></span>
+<span><span class="co">#&gt;      [,1]      [,2]     </span></span>
+<span><span class="co">#&gt; [1,] "a1 + a1" "a3 + a2"</span></span>
+<span><span class="co">#&gt; [2,] "a2 + a3" "a4 + a4"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; , , 2</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; [1,]   10   13</span></span>
-<span><span class="co">#&gt; [2,]   13   16</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; , , 3</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; [1,]   18   21</span></span>
-<span><span class="co">#&gt; [2,]   21   24</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1]      [,2]     </span></span>
+<span><span class="co">#&gt; [1,] "a5 + a5" "a7 + a6"</span></span>
+<span><span class="co">#&gt; [2,] "a6 + a7" "a8 + a8"</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-guidotti2022" class="csl-entry">
 Guidotti, Emanuele. 2022. “<strong>Calculus</strong>: High-Dimensional Numerical and Symbolic Calculus in <em>R</em>.” <em>Journal of Statistical Software</em> 104 (5). <a href="https://doi.org/10.18637/jss.v104.i05" class="external-link uri">https://doi.org/10.18637/jss.v104.i05</a>.
