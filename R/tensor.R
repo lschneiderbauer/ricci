@@ -226,10 +226,25 @@ adiag <- function(x, dims_diag) {
 #' @export
 Ops.tensor <- function(e1, e2) {
   switch(.Generic,
-    "+" = tensor_add(e1, e2, call = rlang::call2("+")),
-    "-" = tensor_diff(e1, e2, call = rlang::call2("-")),
+    "+" =
+      tensor_add(e1, e2,
+        arg1 = rlang::caller_arg(e1),
+        arg2 = rlang::caller_arg(e2),
+        call = rlang::call2("+")
+      ),
+    "-" =
+      tensor_diff(e1, e2,
+        arg1 = rlang::caller_arg(e1),
+        arg2 = rlang::caller_arg(e2),
+        call = rlang::call2("-")
+      ),
     "*" = tensor_mul(e1, e2),
-    "==" = tensor_eq(e1, e2),
+    "==" =
+      tensor_eq(e1, e2,
+        arg1 = rlang::caller_arg(e1),
+        arg2 = rlang::caller_arg(e2),
+        call = rlang::call2("==")
+      ),
     NextMethod()
   )
 }
@@ -293,7 +308,8 @@ as.array.tensor <- function(x, index_order = NULL, ...,
                             call = rlang::caller_env()) {
   if (!is.null(index_order)) {
     tensor_validate_index_matching(
-      x, index_order, match_all = TRUE,
+      x, index_order,
+      match_all = TRUE,
       arg = arg, call = call
     )
 
@@ -354,8 +370,14 @@ all.equal.tensor <- function(target, current, ...) {
   }
 }
 
-tensor_eq <- function(x, y) {
-  tensor_validate_alignability(x, y)
+tensor_eq <- function(x, y,
+                      arg1 = rlang::caller_arg(x),
+                      arg2 = rlang::caller_arg(y),
+                      call = rlang::caller_env()) {
+  tensor_validate_alignability(
+    x, y,
+    arg1 = arg1, arg2 = arg2, call = call
+  )
 
   all(as.array(x) == as.array(tensor_align(y, x)))
 }
