@@ -120,27 +120,39 @@ tensor_validate_alignability <- function(x, y,
       )
     }
 
-    dim_equal <-
-      tensor_dim(x, tensor_index_names(x)) == tensor_dim(y, tensor_index_names(x))
-
-    if (!all(dim_equal)) {
-      ind_faulty <- tensor_index_names(x)[!dim_equal]
-
-      cli_abort(
-        c(
-          "Tensor index dimensions do not agree.",
-          "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
-                    {tensor_dim(x, ind_faulty)} in {.arg {arg1}}.",
-          "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
-                    {tensor_dim(y, ind_faulty)} in {.arg {arg2}}.",
-          i = "Operation can only be carried out with two tensors having
-                identical index dimensions."
-        ),
-        call = call
-      )
-    }
+    tensor_validate_index_dim(x, y, arg1, arg2, call)
 
     stop("error, but no error description provided. Please open a bug.")
+  }
+}
+
+tensor_validate_index_dim <- function(x, y,
+                                      arg1 = rlang::caller_arg(x),
+                                      arg2 = rlang::caller_arg(y),
+                                      call = rlang::caller_env()) {
+  # if indices have the same name,
+  # they should have the same dimension
+
+  shared_ind <- intersect(tensor_index_names(x), tensor_index_names(y))
+
+  dim_equal <-
+    tensor_dim(x, shared_ind) == tensor_dim(y, shared_ind)
+
+  if (!all(dim_equal)) {
+    ind_faulty <- shared_ind[!dim_equal]
+
+    cli_abort(
+      c(
+        "Tensor index dimensions do not agree.",
+        "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
+                    {tensor_dim(x, ind_faulty)} in {.arg {arg1}}.",
+        "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
+                    {tensor_dim(y, ind_faulty)} in {.arg {arg2}}.",
+        i = "Operation can only be carried out with two tensors having
+                identical index dimensions."
+      ),
+      call = call
+    )
   }
 }
 

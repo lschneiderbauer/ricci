@@ -225,32 +225,20 @@ adiag <- function(x, dims_diag) {
 # "==", "!=", "<", "<=", ">=", ">"
 #' @export
 Ops.tensor <- function(e1, e2) {
+  call <- function(fun, name) {
+    fun(e1, e2,
+      arg1 = rlang::caller_arg(e1),
+      arg2 = rlang::caller_arg(e2),
+      call = rlang::call2(name)
+    )
+  }
+
   switch(.Generic,
-    "+" =
-      tensor_add(e1, e2,
-        arg1 = rlang::caller_arg(e1),
-        arg2 = rlang::caller_arg(e2),
-        call = rlang::call2("+")
-      ),
-    "-" =
-      tensor_diff(e1, e2,
-        arg1 = rlang::caller_arg(e1),
-        arg2 = rlang::caller_arg(e2),
-        call = rlang::call2("-")
-      ),
-    "*" = tensor_mul(e1, e2),
-    "/" =
-      tensor_div(e1, e2,
-        arg1 = rlang::caller_arg(e1),
-        arg2 = rlang::caller_arg(e2),
-        call = rlang::call2("-")
-      ),
-    "==" =
-      tensor_eq(e1, e2,
-        arg1 = rlang::caller_arg(e1),
-        arg2 = rlang::caller_arg(e2),
-        call = rlang::call2("==")
-      ),
+    "+" = call(tensor_add, "+"),
+    "-" = call(tensor_diff, "-"),
+    "*" = call(tensor_mul, "*"),
+    "/" = call(tensor_div, "/"),
+    "==" = call(tensor_eq, "=="),
     NextMethod()
   )
 }
@@ -459,7 +447,10 @@ tensor_div <- function(x, y,
 }
 
 #' @importFrom stats setNames
-tensor_mul <- function(x, y) {
+tensor_mul <- function(x, y,
+                       arg1 = rlang::caller_arg(x),
+                       arg2 = rlang::caller_arg(y),
+                       call = rlang::caller_env()) {
   # perform Einstein summation if applicable
 
   if (is_scalar(x)) {
@@ -487,6 +478,8 @@ tensor_mul <- function(x, y) {
     if (!tensor_is_reduced(y)) {
       y <- tensor_reduce(y)
     }
+
+    tensor_validate_index_dim(x, y, arg1, arg2, call)
 
     # only sum over lower and upper indices
     common_indices <- intersect(tensor_index_names(x), tensor_index_names(y))

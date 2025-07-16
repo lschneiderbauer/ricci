@@ -20,7 +20,11 @@
 #' @concept tensor_ops
 #' @family tensor operations
 r <- function(x, ..., g = NULL) {
-  tensor_raise(x, .(...), g, arg = "...") |>
+  tensor_raise(x, .(...), g,
+    arg_x = rlang::caller_arg(x),
+    arg_ind = "...",
+    arg_g = rlang::caller_arg(g)
+  ) |>
     tensor_reduce()
 }
 
@@ -38,7 +42,11 @@ r <- function(x, ..., g = NULL) {
 #' @concept tensor_ops
 #' @family tensor operations
 l <- function(x, ..., g = NULL) {
-  tensor_lower(x, .(...), g, arg = "...") |>
+  tensor_lower(x, .(...), g,
+    arg_x = rlang::caller_arg(x),
+    arg_ind = "...",
+    arg_g = rlang::caller_arg(g)
+  ) |>
     tensor_reduce()
 }
 
@@ -184,11 +192,13 @@ tensor_subst <- function(x, ind_from, ind_to,
 }
 
 tensor_raise <- function(x, ind_from, g,
-                         arg = rlang::caller_arg(ind_from),
+                         arg_x = rlang::caller_arg(x),
+                         arg_ind = rlang::caller_arg(ind_from),
+                         arg_g = rlang::caller_arg(g),
                          call = rlang::caller_env()) {
   tensor_validate_index_matching(
     x, ind_from,
-    arg = arg,
+    arg = arg_ind,
     call = call
   )
 
@@ -196,7 +206,7 @@ tensor_raise <- function(x, ind_from, g,
   validate_index_position(
     ind_from, "-",
     info = "Only lowered indices can be raised.",
-    arg = arg,
+    arg = arg_ind,
     call = call
   )
 
@@ -208,12 +218,19 @@ tensor_raise <- function(x, ind_from, g,
   if (is.function(g)) {
     g <- g()
   }
+
   ginv <- solve(g)
+
 
   Reduce(
     function(tens, i) {
+      tginv <- new_tensor(ginv, c(i, "?"), c(TRUE, TRUE))
+
+      # check that g has the right dimensions
+      tensor_validate_index_dim(x, tginv, arg_x, arg_g, call)
+
       tensor_subst(
-        tens * new_tensor(ginv, c(i, "?"), c(TRUE, TRUE)),
+        tens * tginv,
         new_tensor_indices(i = "?", p = "+"),
         new_tensor_indices(i = i, p = "+")
       )
@@ -224,11 +241,13 @@ tensor_raise <- function(x, ind_from, g,
 }
 
 tensor_lower <- function(x, ind_from, g,
-                         arg = rlang::caller_arg(ind_from),
+                         arg_x = rlang::caller_arg(x),
+                         arg_ind = rlang::caller_arg(ind_from),
+                         arg_g = rlang::caller_arg(g),
                          call = rlang::caller_env()) {
   tensor_validate_index_matching(
     x, ind_from,
-    arg = arg,
+    arg = arg_ind,
     call = call
   )
 
@@ -236,7 +255,7 @@ tensor_lower <- function(x, ind_from, g,
   validate_index_position(
     ind_from, "+",
     info = "Only raised indices can be lowered.",
-    arg = arg,
+    arg = arg_ind,
     call = call
   )
 
@@ -251,8 +270,13 @@ tensor_lower <- function(x, ind_from, g,
 
   Reduce(
     function(tens, i) {
+      tg <- new_tensor(g, c(i, "?"), c(FALSE, FALSE))
+
+      # check that g has the right dimensions
+      tensor_validate_index_dim(x, tg, arg_x, arg_g, call)
+
       tensor_subst(
-        tens * new_tensor(g, c(i, "?"), c(FALSE, FALSE)),
+        tens * tg,
         new_tensor_indices(i = "?", p = "-"),
         new_tensor_indices(i = i, p = "-")
       )
