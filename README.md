@@ -22,9 +22,11 @@ achieved by labeling (upper and lower) index slots of R’s `array` and
 making use of Ricci calculus conventions to *implicitly* trigger
 contractions and diagonal subsetting. Explicit tensor operations, such
 as addition, subtraction, multiplication of tensors via the standard
-operators (`*`, `+`, `-`), raising and lowering indices, or the
-Kronecker product are also available. Common tensors like the Kronecker
-delta, Levi Civita epsilon, and certain metric tensors are provided.
+operators (`*`, `+`, `-`), raising and lowering indices, taking
+symmetric or antisymmetric tensor parts, as well as the Kronecker
+product are available. Common tensors like the Kronecker delta, Levi
+Civita epsilon, and certain metric tensors are provided. An effort was
+made to provide the user with meaningful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and simply
