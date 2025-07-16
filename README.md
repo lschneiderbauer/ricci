@@ -29,8 +29,8 @@ Civita epsilon, and certain metric tensors are provided. An effort was
 made to provide the user with meaningful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
-(Guidotti 2022) behind the scenes to perform calculations to provide an
-alternative interface to a subset of its functionality. Notably,
+(Guidotti 2022) behind the scenes to perform calculations and provides
+an alternative interface to a subset of its functionality. Notably,
 {[calculus](https://calculus.eguidotti.com/)} also supports symbolic
 calculations which also enables {ricci} to do the same.
 
@@ -195,11 +195,6 @@ e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
 e
 #> <Scalar>
 #> [1] "(a1) * (a1) + (a2) * (a2) + (a3) * (a3) + (a4) * (a4) + (a5) * (a5) + (a6) * (a6) + (a7) * (a7) + (a8) * (a8)"
-
-# convert to number
-as.numeric(e)
-#> Warning: NAs introduced by coercion
-#> [1] NA
 ```
 
 #### Tensor multiplication w/ contractions and subsetting
