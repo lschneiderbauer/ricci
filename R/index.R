@@ -28,7 +28,7 @@
 #' @concept tensor
 #' @importFrom cli cli_abort
 `%_%` <- function(a, i) {
-  if(!inherits(i, "tensor_indices")) {
+  if (!inherits(i, "tensor_indices")) {
     cli_abort(
       c(
         "Second argument of {.fun %_%} is not an index specification.",
@@ -115,20 +115,6 @@ ast_extr_ind <- function(x,
   )
 }
 
-#' @importFrom cli cli_abort
-stop_invalid_expr <- function(expr,
-                              arg = rlang::caller_arg(expr),
-                              call = rlang::caller_env()) {
-  cli_abort(
-    c(
-      "Invalid expression in {.arg {arg}}.",
-      x = "Expression {.code {format(expr)}} cannot be parsed.",
-      i = "A valid expressions is of the form
-            {{[+|-]<label1>, [+|-]<label2>, ...}}"
-    ),
-    call = call
-  )
-}
 
 switch_expr <- function(x, ...) {
   switch(expr_type(x),
@@ -150,27 +136,3 @@ expr_type <- function(x) {
     typeof(x)
   }
 }
-
-#' @importFrom cli cli_abort
-validate_index_position <-
-  function(ind, pos, info,
-           arg = rlang::caller_arg(ind),
-           call = rlang::caller_env()) {
-    stopifnot(inherits(ind, "tensor_indices"))
-    stopifnot(all(pos %in% c("+", "-")))
-
-    if (!all(ind$p == pos)) {
-      affected_ind <- ind$i[ind$p != pos]
-      incorrect_state <-
-        ifelse(pos == "+", "lowered", "raised")
-
-      cli_abort(
-        c(
-          "{.arg {arg}} constains index with invalid position.",
-          x = "Index {.code {affected_ind}} {?is/are} {incorrect_state}.",
-          i = info
-        ),
-        call = call
-      )
-    }
-  }
