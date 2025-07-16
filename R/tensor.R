@@ -199,7 +199,12 @@ is_scalar <- function(x) {
 
 # outputs a vector of the same length as index_name
 tensor_dim <- function(x, index_name) {
-  dim(x)[tensor_index_names(x) %in% index_name]
+  ndim <- setNames(dim(x), nm = tensor_index_names(x))
+  unname(ndim[index_name])
+}
+
+tensor_rank <- function(x) {
+  length(dim(x))
 }
 
 # picks out "diagonal" indices of an array
@@ -263,8 +268,8 @@ adiag <- function(x, dims_diag) {
 #' @export
 Ops.tensor <- function(e1, e2) {
   switch(.Generic,
-    "+" = tensor_add(e1, e2),
-    "-" = tensor_diff(e1, e2),
+    "+" = tensor_add(e1, e2, call = rlang::call2("+")),
+    "-" = tensor_diff(e1, e2, call = rlang::call2("-")),
     "*" = tensor_mul(e1, e2),
     "==" = tensor_eq(e1, e2),
     NextMethod()
@@ -395,13 +400,16 @@ all.equal.tensor <- function(target, current, ...) {
 }
 
 tensor_eq <- function(x, y) {
-  stopifnot("tensors not compatible" = tensor_alignable(x, y))
+  tensor_validate_alignability(x, y)
 
   all(as.array(x) == as.array(tensor_align(y, x)))
 }
 
-tensor_add <- function(x, y) {
-  stopifnot("tensors not compatible" = tensor_alignable(x, y))
+tensor_add <- function(x, y,
+                       arg1 = rlang::caller_arg(x),
+                       arg2 = rlang::caller_arg(y),
+                       call = rlang::caller_env()) {
+  tensor_validate_alignability(x, y, arg1, arg2, call)
 
   # before we can properly add tensors we need to reduce them
   if (!tensor_is_reduced(x)) {
@@ -420,8 +428,11 @@ tensor_add <- function(x, y) {
   )
 }
 
-tensor_diff <- function(x, y) {
-  stopifnot("tensors not compatible" = tensor_alignable(x, y))
+tensor_diff <- function(x, y,
+                        arg1 = rlang::caller_arg(x),
+                        arg2 = rlang::caller_arg(y),
+                        call = rlang::caller_env()) {
+  tensor_validate_alignability(x, y, arg1, arg2, call)
 
   # before we can properly add tensors we need to reduce them
   if (!tensor_is_reduced(x)) {
@@ -535,12 +546,89 @@ tensor_mul <- function(x, y) {
 
 
 tensor_alignable <- function(x, y) {
-  dx <- setNames(dim(x), tensor_index_names(x))
-  dy <- setNames(dim(y), tensor_index_names(x))
-
   setequal(tensor_index_names(x), tensor_index_names(y)) &&
     all(tensor_index_positions(x)[tensor_index_names(y)] == tensor_index_positions(y)) &&
-    all(dx[tensor_index_names(y)] == dy)
+    all(tensor_dim(x, tensor_index_names(x)) == tensor_dim(y, tensor_index_names(x)))
+}
+
+#' @importFrom cli cli_abort
+tensor_validate_alignability <- function(x, y,
+                                         arg1 = rlang::caller_arg(x),
+                                         arg2 = rlang::caller_arg(y),
+                                         call = rlang::caller_env()) {
+  stopifnot(inherits(x, "tensor"))
+  stopifnot(inherits(y, "tensor"))
+
+  if (!tensor_alignable(x, y)) {
+    if (tensor_rank(x) != tensor_rank(y)) {
+      cli_abort(
+        c(
+          "Tensor ranks do not agree.",
+          "x" = "Tensor rank of {.arg {arg1}} is {tensor_rank(x)}.",
+          "x" = "Tensor rank of {.arg {arg2}} is {tensor_rank(y)}.",
+          i = "Operation can only be carried out with two tensors of same rank."
+        ),
+        call = call
+      )
+    }
+
+    if (!setequal(tensor_index_names(x), tensor_index_names(y))) {
+      diff_x <- setdiff(tensor_index_names(x), tensor_index_names(y))
+      diff_y <- setdiff(tensor_index_names(y), tensor_index_names(x))
+
+      cli_abort(
+        c(
+          "Tensor indices do not agree.",
+          "x" = "Tensor index {.code {diff_x}} appear{?s/} in {.arg {arg1}} but
+                  not in {.arg {arg2}}.",
+          "x" = "Tensor index {.code {diff_y}} appear{?s/} in {.arg {arg2}} but
+                  not in {.arg {arg1}}.",
+          i = "Operation can only be carried out with two tensors having
+                  identical indices."
+        ),
+        call = call
+      )
+    }
+
+    pos_equal <-
+      tensor_index_positions(x)[tensor_index_names(y)] == tensor_index_positions(y)
+    if (!all(pos_equal)) {
+      ind_faulty <- tensor_index_names(x)[!pos_equal]
+
+      cli_abort(
+        c(
+          "Tensor index positions do not agree.",
+          "x" = "Tensor index {.code {ind_faulty}} appears with different
+                  positions in {.arg {arg1}} and {.arg {arg2}}.",
+          i = "Operation can only be carried out with two tensors having
+                identical index positions."
+        ),
+        call = call
+      )
+    }
+
+    dim_equal <-
+      tensor_dim(x, tensor_index_names(x)) == tensor_dim(y, tensor_index_names(x))
+
+    if (!all(dim_equal)) {
+      ind_faulty <- tensor_index_names(x)[!dim_equal]
+
+      cli_abort(
+        c(
+          "Tensor index dimensions do not agree.",
+          "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
+                    {tensor_dim(x, ind_faulty)} in {.arg {arg1}}.",
+          "x" = "Tensor index {.code {ind_faulty}} ha{?s/ve} dimension{?s}
+                    {tensor_dim(y, ind_faulty)} in {.arg {arg2}}.",
+          i = "Operation can only be carried out with two tensors having
+                identical index dimensions."
+        ),
+        call = call
+      )
+    }
+
+    stop("error, but no error description provided. Please open a bug.")
+  }
 }
 
 # aligns y dimensions to x
