@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-{ricci} uses nonstandard evaluation to specify tensor indices (see [.()]). The main purpose is to safe a lot of quotation marks which otherwise would clutter the code (`i` instead of `"i"`). In addition this also allows to specify some operations in more direct way (e.g. substitution is specified as `subst(x, i -> f)` is short for substitute index `i` with `f`).
+{ricci} uses nonstandard evaluation to specify tensor indices (see `.()`). The main purpose of using nonstandard evaluation is to safe a lot of quotation marks which otherwise would clutter the code (`i` instead of `"i"`). Using nonstandard evaluation also allows to specify some operations in more direct way (e.g. substitution is specified as `subst(x, i -> f)` is short for substitute index `i` with `f`).
 
-A key point about specifying the index labels is that we can make use of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus) conventions and pack a bunch of different multiplications into one operator (`*`). There are no separate "inner product", "outer product", "dot product", "Kronecker product" or "element-wise product". All are represented by a single product `*`. The arrangement of the indices determines what product is carried out, as is in the spirit of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus).
+A key point about specifying the index labels is that we can make use of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus) conventions and pack a bunch of different operations into one operator (`*`). There is no separate "inner product", "outer product", "dot product", "Kronecker product" nor "element-wise product". All products are represented by a single product `*`. The arrangement of the indices determines what product is carried out, as is in the spirit of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus).
 
 A typical workflow when working with {ricci} is
 
@@ -84,7 +84,7 @@ c <- a %_% .(i, i, k)
 c
 ```
 
-### Outer tensor product
+### Outer product
 
 The same conventions apply for arbitrary tensor multiplication.
 
