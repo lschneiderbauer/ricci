@@ -1,0 +1,180 @@
+---
+title: "ricci"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ricci}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+{ricci} uses nonstandard evaluation to specify tensor indices (see [.()]). The main purpose is to safe a lot of quotation marks which otherwise would clutter the code (`i` instead of `"i"`). In addition this also allows to specify some operations in more direct way (e.g. substitution is specified as `subst(x, i -> f)` is short for substitute index `i` with `f`).
+
+A key point about specifying the index labels is that we can make use of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus) conventions and pack a bunch of different multiplications into one operator (`*`). There are no separate "inner product", "outer product", "dot product", "Kronecker product" or "element-wise product". All are represented by a single product `*`. The arrangement of the indices determines what product is carried out, as is in the spirit of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus).
+
+A typical workflow when working with {ricci} is
+
+1.  Create labeled arrays from arrays.
+
+2.  Perform calculations making use of Ricci calculus conventions.
+
+3.  Unlabel results to obtain normal [array()] objects.
+
+## Creating a labeled array (tensor)
+
+```{r setup}
+library(ricci)
+
+a <- array(1:(2^3), dim = c(2,2,2))
+```
+
+We can use the array `a` to create a labeled array (tensor) with lower index labels i, j, and k:
+
+$$
+a_{ijk}
+$$
+
+```{r}
+a %_% .(i, j, k)
+```
+
+By default, indices are assumed to be lower indices. We can use a "+" prefix to create an upper index label.
+
+$$
+a_{ij}^{\;\;k}
+$$
+
+```{r}
+a %_% .(i, j, +k)
+```
+
+## Performing calculations
+
+Creating index labels on its own is not very interesting nor helpful. The act of labeling tensor index slots becomes useful when the labels are set such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.
+
+### Contraction
+
+Repeated index labels with opposite position are implicitly contracted.
+
+$$
+b_j=a_{i\;k}^{\;i}
+$$
+
+```{r}
+b <- a %_% .(i, +i, k)
+b
+```
+
+### Diagonal subsetting
+
+Repeated labels on the same position (upper or lower) will trigger diagonal subsetting.
+
+$$
+c_{ik}=a_{iik}
+$$
+
+```{r}
+c <- a %_% .(i, i, k)
+c
+```
+
+### Outer tensor product
+
+The same conventions apply for arbitrary tensor multiplication.
+
+$$
+d_{ijklmn}=a_{ijk}a_{lmn}
+$$
+
+```{r}
+d <- a %_% .(i, j, k) * a %_% .(l, m, n)
+d
+```
+
+### Inner product
+
+$$
+e=a_{ijk}a^{ijk}
+$$
+
+```{r}
+e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
+e
+```
+
+### Mixed product: tensor multiplication w/ contractions and subsetting
+
+$$
+f_j=a_{ijk}a^{i\;k}_{\;j}
+$$
+
+```{r}
+f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
+f
+```
+
+### Element-wise product
+
+$$
+g_{ijk}=a_{ijk}a_{ijk}
+$$
+
+```{r}
+g <- a %_% .(i, j, k) * a %_% .(i, j, k)
+g
+```
+
+### Kronecker product
+
+A Kronecker product is simply a tensor product whose underlying vector space basis is relabeled. In the present context this is realized by combining multiple index labels into one. The associated dimension to the new label is then simply the product of the dimensions associated to the old index labels respectively.
+
+```{r}
+(a %_% .(i, j, k) * a %_% .(l, m, n)) |> 
+  kron(.(i, l) -> r, .(j, m) -> p, .(k, n) -> q)
+```
+
+### Addition and Substraction
+
+Tensor addition or subtraction is taking care of correct index slot matching (by index labels), so the position of the index does not matter.
+
+$$
+h_{ijk} = a_{ijk} + a_{jik}
+$$
+
+```{r}
+h <- a %_% .(i, j, k) + a %_% .(j, i, k)
+h
+```
+
+### (Anti-)symmetrization
+
+Taking the symmetric or antisymmetric part w.r.t. certain indices is a standard tool in Ricci calculus.
+
+```{r}
+a %_% .(i, j, k) |> sym(i, j)
+a %_% .(i, j, k) |> sym(i, j, k)
+
+a %_% .(i, j, k) |> asym(i, j)
+a %_% .(i, j, k) |> asym(i, j, k)
+```
+
+
+## Unlabel a tensor
+
+After we are done with our calculations we usually want to retrieve an unlabeled array again to use the result elsewhere and get on with life. In contrast to a labeled array (tensor) of this package an R `array` has a well-defined dimension ordering and so when stripping labels of a tensor one has to specify an index order.
+
+```{r}
+g |> as_a(i, j, k)
+```
+
+The same works with the standard generic [as.array()]. However, to avoid nonstandard evaluation in its S3 method, we wrap indices using [.()].
+
+```{r}
+as.array(g, .(i, j, k))
+```

@@ -44,17 +44,17 @@ You can install the development version of ricci from
 pak::pak("lschneiderbauer/ricci")
 ```
 
-## Examples
+## Example
 
 The central object is R’s `array`. Adding index slot labels allows us to
 perform common tensor operations implicitly. After the desired
 calculations have been carried out we can remove the labels to obtain an
 ordinary `array`.
 
-The following example shows how to express the contraction of two
-tensors, where one index has to be raised, and subsequent diagonal
-subsetting. For demonstration purposes we use an arbitrary array of rank
-3.
+The following (admittedly very artificial) example shows how to express
+the contraction of two tensors, and subsequent symmetrization and
+diagonal subsetting. For demonstration purposes we use an arbitrary
+array of rank 3.
 
 ``` r
 library(ricci)
@@ -77,8 +77,6 @@ a <- array(1:(2^3), dim = c(2,2,2))
 The same instructions work for a symbolic array:
 
 ``` r
-library(ricci)
-
 # symbolic data
 a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
 
@@ -94,155 +92,7 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
 #> [2] "((a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1) + (a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1)) / 2"
 ```
 
-Below we outline more details on possible individual operations.
-
-### Creating a labeled array (tensor)
-
-We can use the array `a` to create a labeled array (tensor) with lower
-index labels i, j, and k:
-
-$$
-a_{ijk}
-$$
-
-``` r
-a %_% .(i, j, k)
-#> <Labeled Array> [2x2x2] .(-i, -j, -k)
-```
-
-By default, indices are assumed to be lower indices. We can use a “+”
-prefix to create an upper index label.
-
-$$
-a_{ij}^{\;\;k}
-$$
-
-``` r
-a %_% .(i, j, +k)
-#> <Labeled Array> [2x2x2] .(-i, -j, +k)
-```
-
-### Performing calculations
-
-Creating index labels on its own is not very interesting nor helpful.
-The act of labeling tensor index slots becomes useful when the labels
-are set such that they trigger implicit calculations, or they are
-combined with other tensors via multiplication or addition.
-
-#### Contraction
-
-Repeated index labels with opposite position are implicitly contracted.
-
-$$
-b_j=a_{i\;k}^{\;i}
-$$
-
-``` r
-b <- a %_% .(i, +i, k)
-b
-#> <Labeled Array> [2] .(-k)
-#> [1] "a1 + a4" "a5 + a8"
-
-# retrieve array
-b |> as_a(k)
-#> [1] "a1 + a4" "a5 + a8"
-```
-
-#### Diagonal subsetting
-
-Repeated labels on the same position (upper or lower) will trigger
-diagonal subsetting.
-
-$$
-c_{ik}=a_{iik}
-$$
-
-``` r
-c <- a %_% .(i, i, k)
-c
-#> <Labeled Array> [2x2] .(-i, -k)
-#>      [,1] [,2]
-#> [1,] "a1" "a5"
-#> [2,] "a4" "a8"
-
-# retrieve array
-c |> as_a(i, k)
-#>      [,1] [,2]
-#> [1,] "a1" "a5"
-#> [2,] "a4" "a8"
-```
-
-#### Outer tensor product
-
-The same conventions apply for arbitrary tensor multiplication.
-
-$$
-d_{ijklmn}=a_{ijk}a_{lmn}
-$$
-
-``` r
-d <- a %_% .(i, j, k) * a %_% .(l, m, n)
-```
-
-#### Tensor multiplication w/ contractions
-
-$$
-e=a_{ijk}a^{ijk}
-$$
-
-``` r
-e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
-e
-#> <Scalar>
-#> [1] "(a1) * (a1) + (a2) * (a2) + (a3) * (a3) + (a4) * (a4) + (a5) * (a5) + (a6) * (a6) + (a7) * (a7) + (a8) * (a8)"
-```
-
-#### Tensor multiplication w/ contractions and subsetting
-
-$$
-f_j=a_{ijk}a^{i\;k}_{\;j}
-$$
-
-``` r
-f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
-f
-#> <Labeled Array> [2] .(-j)
-#> [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"
-#> [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"
-
-# retrieve array
-f |> as_a(j)
-#> [1] "(a1) * (a1) + (a2) * (a2) + (a5) * (a5) + (a6) * (a6)"
-#> [2] "(a3) * (a3) + (a4) * (a4) + (a7) * (a7) + (a8) * (a8)"
-```
-
-#### Tensor addition
-
-Tensor addition is taking care of correct index slot matching (by index
-labels), so the position of the index does not matter.
-
-$$
-g_{ijk} = a_{ijk} + a_{jik}
-$$
-
-``` r
-g <- a %_% .(i, j, k) + a %_% .(j, i, k)
-g
-#> <Labeled Array> [2x2x2] .(-i, -j, -k)
-
-g |> as_a(i, j, k)
-#> , , 1
-#> 
-#>      [,1]      [,2]     
-#> [1,] "a1 + a1" "a3 + a2"
-#> [2,] "a2 + a3" "a4 + a4"
-#> 
-#> , , 2
-#> 
-#>      [,1]      [,2]     
-#> [1,] "a5 + a5" "a7 + a6"
-#> [2,] "a6 + a7" "a8 + a8"
-```
+For more details, see `vignette("ricci", package = "ricci")`.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">

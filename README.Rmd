@@ -37,11 +37,11 @@ You can install the development version of ricci from [GitHub](https://github.co
 pak::pak("lschneiderbauer/ricci")
 ```
 
-## Examples
+## Example
 
 The central object is R's `array`. Adding index slot labels allows us to perform common tensor operations implicitly. After the desired calculations have been carried out we can remove the labels to obtain an ordinary `array`.
 
-The following example shows how to express the contraction of two tensors, where one index has to be raised, and subsequent diagonal subsetting. For demonstration purposes we use an arbitrary array of rank 3.
+The following (admittedly very artificial) example shows how to express the contraction of two tensors, and subsequent symmetrization and diagonal subsetting. For demonstration purposes we use an arbitrary array of rank 3.
 
 ```{r example_num}
 library(ricci)
@@ -63,8 +63,6 @@ a <- array(1:(2^3), dim = c(2,2,2))
 The same instructions work for a symbolic array:
 
 ```{r example_symb}
-library(ricci)
-
 # symbolic data
 a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
 
@@ -78,114 +76,4 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
   as_a(j) # we unlabel the tensor with index order (j)
 ```
 
-Below we outline more details on possible individual operations.
-
-### Creating a labeled array (tensor)
-
-We can use the array `a` to create a labeled array (tensor) with lower index labels i, j, and k:
-
-$$
-a_{ijk}
-$$
-
-```{r}
-a %_% .(i, j, k)
-```
-
-By default, indices are assumed to be lower indices. We can use a "+" prefix to create an upper index label.
-
-$$
-a_{ij}^{\;\;k}
-$$
-
-```{r}
-a %_% .(i, j, +k)
-```
-
-### Performing calculations
-
-Creating index labels on its own is not very interesting nor helpful. The act of labeling tensor index slots becomes useful when the labels are set such that they trigger implicit calculations, or they are combined with other tensors via multiplication or addition.
-
-#### Contraction
-
-Repeated index labels with opposite position are implicitly contracted.
-
-$$
-b_j=a_{i\;k}^{\;i}
-$$
-
-```{r}
-b <- a %_% .(i, +i, k)
-b
-
-# retrieve array
-b |> as_a(k)
-```
-
-#### Diagonal subsetting
-
-Repeated labels on the same position (upper or lower) will trigger diagonal subsetting.
-
-$$
-c_{ik}=a_{iik}
-$$
-
-```{r}
-c <- a %_% .(i, i, k)
-c
-
-# retrieve array
-c |> as_a(i, k)
-```
-
-#### Outer tensor product
-
-The same conventions apply for arbitrary tensor multiplication.
-
-$$
-d_{ijklmn}=a_{ijk}a_{lmn}
-$$
-
-```{r}
-d <- a %_% .(i, j, k) * a %_% .(l, m, n)
-```
-
-#### Tensor multiplication w/ contractions
-
-$$
-e=a_{ijk}a^{ijk}
-$$
-
-```{r}
-e <- a %_% .(i, j, k) * a %_% .(+i, +j, +k)
-e
-```
-
-#### Tensor multiplication w/ contractions and subsetting
-
-$$
-f_j=a_{ijk}a^{i\;k}_{\;j}
-$$
-
-```{r}
-f <- a %_% .(i, j, k) * a %_% .(+i, j, +k)
-f
-
-# retrieve array
-f |> as_a(j)
-```
-
-#### Tensor addition
-
-Tensor addition is taking care of correct index slot matching (by index labels), so the position of the index does not matter.
-
-$$
-g_{ijk} = a_{ijk} + a_{jik}
-$$
-
-```{r}
-g <- a %_% .(i, j, k) + a %_% .(j, i, k)
-g
-
-g |> as_a(i, j, k)
-```
+For more details, see `vignette("ricci", package = "ricci")`.

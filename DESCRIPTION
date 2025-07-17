@@ -25,3 +25,4 @@ Imports:
     rlang
 URL: https://github.com/lschneiderbauer/ricci, https://lschneiderbauer.github.io/ricci/
 BugReports: https://github.com/lschneiderbauer/ricci/issues
+VignetteBuilder: knitr
