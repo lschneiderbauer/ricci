@@ -1,6 +1,7 @@
 url: https://lschneiderbauer.github.io/ricci/
 template:
   bootstrap: 5
+  math-rendering: katex
 
 reference:
 - title: "Label and unlabel tensors"
