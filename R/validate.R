@@ -194,3 +194,17 @@ validate_index_position <-
       )
     }
   }
+
+#' @importFrom cli cli_abort
+validate_metric_tensor_indices <-
+  function(i, call = rlang::caller_env()) {
+    if (length(unique(i$p)) > 1) {
+      cli_abort(
+        c(
+          "The metric tensor indices cannot be mixed",
+          i = "Indices either must be all lowered or all raised."
+        ),
+        call = call
+      )
+    }
+  }

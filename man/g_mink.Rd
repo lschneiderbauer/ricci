@@ -4,32 +4,33 @@
 \alias{g_mink}
 \title{Minkowski metric tensor}
 \usage{
-g_mink(dim)
+g_mink(n)
 }
 \arguments{
-\item{dim}{The dimension of the metric tensor.}
+\item{n}{The dimension of the metric tensor.}
 }
 \value{
 A function that expects index labels (see \code{\link[=.]{.()}}) and returns a
-labeled tensor with dimension \code{c(dim, dim)}.
+labeled tensor with dimension \code{c(n, n)}.
 }
 \description{
-Provides a labeled Minkowski metric tensor in \code{n} dimensions.
+Provides a labeled Minkowski metric tensor in \code{n} dimensions in
+Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
 Note that the numeric result will be different depending on the
 chosen index positions.
-If the labels are left empty, and unlabeled n by n
+If no labels are specified, an unlabeled n by n
 array of the covariant metric tensor is returned.
 }
 \examples{
 g_mink(4)(i, j)
-
 g_mink(4)(+i, +j)
-
 g_mink(4)()
 }
 \seealso{
+Wikipedia \href{https://en.wikipedia.org/wiki/Minkowski_space#Minkowski_metric}{Minkowski metric tensor}
+
 Other metric tensors: 
-\code{\link{g_eucl}()}
+\code{\link{g_eucl_cart}()}
 }
 \concept{metric tensors}
 \concept{tensor_instance}

@@ -19,7 +19,7 @@ The underlying data will differs depending on
 the number of labels provided.
 }
 \description{
-Provides a labeled Levi-Civita epsilon (pseude) tensor.
+Provides a labeled Levi-Civita epsilon (pseudo) tensor.
 The indices are required to be lowered. Otherwise an error is thrown.
 }
 \examples{
