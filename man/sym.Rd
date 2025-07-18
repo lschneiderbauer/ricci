@@ -28,6 +28,7 @@ a \%_\% .(i, j) |> sym(i, j)
 Wikipedia: \href{https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts}{Ricci calculus - Symmetric and antisymmetric parts}
 
 Other tensor operations: 
+\code{\link{Ops.tensor}()},
 \code{\link{asym}()},
 \code{\link{kron}()},
 \code{\link{l}()},

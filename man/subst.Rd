@@ -22,6 +22,7 @@ An error is thrown if the specified indices do not exist.
 }
 \seealso{
 Other tensor operations: 
+\code{\link{Ops.tensor}()},
 \code{\link{asym}()},
 \code{\link{kron}()},
 \code{\link{l}()},

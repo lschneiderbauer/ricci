@@ -1,7 +1,65 @@
-# "+", "-", "*", "/", "^", "%%", "%/%"
-# "&", "|", "!"
-# "==", "!=", "<", "<=", ">=", ">"
+#' Arithmetic tensor operations
+#'
+#' Once a labeled array (tensor) has been defined, tensor arithmetic operations
+#' can be carried out with the usual `+`, `-`, `*`, `/`, and `==` symbols.
+#'
+#' # Addition and Subtraction
+#'
+#' Addition and subtraction requires the two tensors to have an equal index
+#' structure, i.e. the index names their position and the dimensions
+#' associated to the index names have to agree.
+#' The index order does not matter, the operation will match dimensions
+#' by index name.
+#'
+#' # Multiplication
+#'
+#' Tensor multiplication takes into account implicit Ricci calculus rules
+#' depending on index placement.
+#' * Equal-named and opposite-positioned dimensions are contracted.
+#' * Equal-named and equal-positioned dimensions are subsetted.
+#' * The result is an outer product for distinct index names.
+#'
+#' # Division
+#'
+#' Division performs element-wise division. If the second argument is a
+#' scalar, each element is simply divided by the scalar.
+#' Similar to addition and subtraction, division requires the two tensors
+#' to have an equal index structure, i.e. the index names their position
+#' and the dimensions associated to the index names have to agree.
+#'
+#' # Equality check
+#'
+#' A tensor \eqn{a_{i_1 i_2 ...}} is equal to a tensor \eqn{b_{j_1 j_2 ...}} if
+#' and only if the index structure agrees and all components are equal.
+#'
+#' @param e1,e2 Labeled arrays created with [%_%].
+#' @return A resulting labeled array in case of `+`, `-`, `*`, `/`.
+#'  `TRUE` or `FALSE` in case of `==`.
+#' @examples
+#' a <- array(1:4, c(2,2))
+#' b <- array(3 + 1:4, c(2,2))
+#'
+#' # addition
+#' a %_% .(i, j) + b %_% .(j, i)
+#'
+#' # multiplication
+#' a %_% .(i, j) * b %_% .(+i, k)
+#'
+#' # division
+#' a %_% .(i, j) / 10
+#'
+#' # equality check
+#' a %_% .(i, j) == a %_% .(i, j)
+#' a %_% .(i, j) == a %_% .(j, i)
+#' a %_% .(i, j) == b %_% .(i, j)
+#'
+#' \dontrun{
+#' # this will err because index structure does not agree
+#' a %_% .(i, j) == a %_% .(k, j)
+#' }
 #' @export
+#' @concept tensor_ops
+#' @family tensor operations
 Ops.tensor <- function(e1, e2) {
   call <- function(fun, name) {
     fun(e1, e2,
@@ -10,6 +68,11 @@ Ops.tensor <- function(e1, e2) {
       call = rlang::call2(name)
     )
   }
+
+  # Possible operators
+  # "+", "-", "*", "/", "^", "%%", "%/%"
+  # "&", "|", "!"
+  # "==", "!=", "<", "<=", ">=", ">"
 
   switch(.Generic,
     "+" = call(tensor_add, "+"),

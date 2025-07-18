@@ -29,6 +29,7 @@ correct position.
 }
 \seealso{
 Other tensor operations: 
+\code{\link{Ops.tensor}()},
 \code{\link{asym}()},
 \code{\link{kron}()},
 \code{\link{r}()},

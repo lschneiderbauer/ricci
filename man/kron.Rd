@@ -30,6 +30,7 @@ a \%_\% .(i, j, k) |> kron(.(i, j) -> l)
 Wikipedia: \href{https://en.wikipedia.org/wiki/Kronecker_product}{Kronecker Product}
 
 Other tensor operations: 
+\code{\link{Ops.tensor}()},
 \code{\link{asym}()},
 \code{\link{l}()},
 \code{\link{r}()},
