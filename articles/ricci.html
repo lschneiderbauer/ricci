@@ -76,12 +76,23 @@ product”. All products are represented by a single product
 <code>*</code>. The arrangement of the indices determines what product
 is carried out, as is in the spirit of <a href="https://en.wikipedia.org/wiki/Ricci_calculus" class="external-link">Ricci
 calculus</a>.</p>
+<p>In this package we are using the terms “labeled array” and “tensor”
+synonymously. While in literature the word “tensor” is sometimes used to
+specifically refer to a “tensor field” we do not make that
+identification, and a tensor can exist without an underlying
+differential manifold. To model tensor <em>fields</em> one can make use
+of “symbolic” <code>array</code>s, i.e. arrays that do not contain
+numerical values, but strings that contain mathematical expressions
+(like <code>"sin(x)"</code> for <span class="math inline">sin(x)</span>,
+where <code>x</code> can be interpreted as a manifold coordinate).
+(TODO: see tensor field vignette)</p>
 <p>A typical workflow when working with {ricci} is</p>
 <ol style="list-style-type: decimal">
 <li><p>Create labeled arrays from arrays.</p></li>
 <li><p>Perform calculations making use of Ricci calculus
 conventions.</p></li>
-<li><p>Unlabel results to obtain normal [array()] objects.</p></li>
+<li><p>Unlabel results to obtain normal <code><a href="https://rdrr.io/r/base/array.html" class="external-link">array()</a></code>
+objects.</p></li>
 </ol>
 <div class="section level2">
 <h2 id="creating-a-labeled-array-tensor">Creating a labeled array (tensor)<a class="anchor" aria-label="anchor" href="#creating-a-labeled-array-tensor"></a>
@@ -257,9 +268,9 @@ stripping labels of a tensor one has to specify an index order.</p>
 <span><span class="co">#&gt;      [,1] [,2]</span></span>
 <span><span class="co">#&gt; [1,]   25   49</span></span>
 <span><span class="co">#&gt; [2,]   36   64</span></span></code></pre></div>
-<p>The same works with the standard generic [as.array()]. However, to
-avoid nonstandard evaluation in its S3 method, we wrap indices using
-[.()].</p>
+<p>The same works with the standard generic <code><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array()</a></code>.
+However, to avoid nonstandard evaluation in its S3 method, we wrap
+indices using <code><a href="../reference/dot-.html">.()</a></code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="va">g</span>, <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
