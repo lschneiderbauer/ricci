@@ -96,7 +96,7 @@ asimplify <- function(a, timeout = 10) {
         },
         FUN.VALUE = ""
       ),
-      dim(a)
+      dim(a) %||% length(a)
     )
   } else {
     a
