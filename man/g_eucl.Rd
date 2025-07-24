@@ -19,17 +19,13 @@ to match the tensor dimensions.}
 The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
-Provides a labeled Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
-Note that the numeric result will be different depending on the
-chosen index positions.
-If no labels are specified, an unlabeled n by n
-array of the covariant metric tensor is returned.
+Provides the Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
 }
 \details{
 \code{g_eucl_cart()} returns a numeric (constant) tensor in Cartesian coordinates,
 while \code{g_eucl_sph()} returns a symbolic tensor field in generalized spherical
 coordinates \eqn{{r, \phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
-As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
+As usual, spherical coordinates are degenerate at \eqn{r = 0} and \eqn{\phi_l = 0}, so be
 careful around those points.
 }
 \examples{

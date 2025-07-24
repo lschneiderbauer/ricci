@@ -75,7 +75,7 @@ e <- function(...) {
 
 #' Minkowski metric tensor
 #'
-#' Provides a labeled Minkowski metric tensor in `n` dimensions in
+#' Provides the covariant metric tensor in `n` dimensions in
 #' Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
 #'
 #' @param n The dimension of the metric tensor.
@@ -103,17 +103,13 @@ g_mink <- function(n, coords = paste0("x", 1:n - 1)) {
 
 #' Euclidean metric tensor
 #'
-#' Provides a labeled Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
-#' Note that the numeric result will be different depending on the
-#' chosen index positions.
-#' If no labels are specified, an unlabeled n by n
-#' array of the covariant metric tensor is returned.
+#' Provides the Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
 #'
 #' @details
 #' `g_eucl_cart()` returns a numeric (constant) tensor in Cartesian coordinates,
 #' while `g_eucl_sph()` returns a symbolic tensor field in generalized spherical
 #' coordinates \eqn{{r, \phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
-#' As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
+#' As usual, spherical coordinates are degenerate at \eqn{r = 0} and \eqn{\phi_l = 0}, so be
 #' careful around those points.
 #'
 #' @param n The dimension of the metric tensor.

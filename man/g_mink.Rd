@@ -16,7 +16,7 @@ to match the tensor dimensions.}
 The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
-Provides a labeled Minkowski metric tensor in \code{n} dimensions in
+Provides the covariant metric tensor in \code{n} dimensions in
 Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
 }
 \examples{
