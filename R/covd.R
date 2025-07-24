@@ -1,5 +1,5 @@
 # used indices
-globalVariables(c("i", "j", "k", "l", "i2"))
+globalVariables(c("i", "j", "k", "l", "i2", "s"))
 
 #' Christoffel symbols
 #'
@@ -126,28 +126,39 @@ covd <- function(g) {
     new_ind <- .(...)
 
     # TODO: check that we got only one index
+    # TODO: check that dimension matches
 
     partiald <- pd(x, coords, new_ind$i)
 
     # for each upper index one + chr term
     # for each lower index one - chr term
     pos <- tensor_index_positions(x)
-    Reduce(
-      function(index_name, tadd) {
-        if (pos[index_name] == "+") {
-          tadd +
-            tensor(chr, c(index_name, "?", new_ind$i), c("+", "-", "-")) *
-              x |> subst(+!!index_name -> +`?`)
-        } else {
-          tadd -
-            tensor(chr, c("?", index_name, new_ind$i), c("+", "-", "-")) *
-              x |> subst(!!index_name -> `?`)
-        }
-      },
-      tensor_index_names(x),
-      init = partiald
-    )
 
-    # TODO: raise index if required
+    res <-
+      Reduce(
+        function(tadd, index_name) {
+          if (pos[[index_name]] == "+") {
+            tadd +
+              tensor(chr, c(index_name, "?", new_ind$i), c("+", "-", "-")) *
+                x |>
+                  tensor_subst(
+                    list(i = index_name, p = "+"),
+                    list(i = "?", p = "+")
+                  )
+          } else {
+            tadd -
+              tensor(chr, c("?", index_name, new_ind$i), c("+", "-", "-")) *
+                x |> subst(!!index_name -> `?`)
+          }
+        },
+        tensor_index_names(x),
+        init = partiald
+      )
+
+    if (new_ind$p == "+") {
+      res |> r(!!(new_ind$i), g = g)
+    } else {
+      res
+    }
   }
 }
