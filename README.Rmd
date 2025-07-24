@@ -26,7 +26,7 @@ The goal of {ricci} is to provide a *compact*[^1] R interface for performing [te
 
 [^1]: By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.
 
-{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and provides an alternative interface to a subset of its functionality. Notably, {[calculus](https://calculus.eguidotti.com/)} also supports symbolic calculations which also enables {ricci} to do the same.
+{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and provides an alternative interface to a subset of its functionality. Notably, {[calculus](https://calculus.eguidotti.com/)} also supports symbolic calculations which also enables {ricci} to do the same. Symbolic expressions are optionally (and transparently) simplified when the [Ryacas](https://r-cas.github.io/ryacas/) package is installed.
 
 ## Installation
 
