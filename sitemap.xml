@@ -9,6 +9,7 @@
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/as.array.tensor.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/as_a.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/asym.html</loc></url>
+<url><loc>https://lschneiderbauer.github.io/ricci/reference/christoffel.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/create-tensor.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/d.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/dot-.html</loc></url>
@@ -19,7 +20,11 @@
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/index.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/kron.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/l.html</loc></url>
+<url><loc>https://lschneiderbauer.github.io/ricci/reference/metric_field.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/r.html</loc></url>
+<url><loc>https://lschneiderbauer.github.io/ricci/reference/ricci.html</loc></url>
+<url><loc>https://lschneiderbauer.github.io/ricci/reference/ricci_sc.html</loc></url>
+<url><loc>https://lschneiderbauer.github.io/ricci/reference/riemann.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/subst.html</loc></url>
 <url><loc>https://lschneiderbauer.github.io/ricci/reference/sym.html</loc></url>
 </urlset>
