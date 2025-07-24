@@ -172,13 +172,15 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
         },
         FUN.VALUE = ""
       )
-    )
+    ) |>
+    asimplify()
 
   mat <- array("0", c(n, n))
   diag(mat) <- mat_diag
 
   mat_inv <- mat
-  diag(mat_inv) <- calculus::`%div%`("1", diag(mat_inv))
+  diag(mat_inv) <-
+    asimplify(calculus::`%div%`("1", diag(mat_inv)))
 
   metric_field(
     mat,
