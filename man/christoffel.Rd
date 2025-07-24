@@ -12,11 +12,11 @@ to create a new metric tensor, or use predefined metrics,
 e.g. \code{\link[=g_eucl_cart]{g_eucl_cart()}}.}
 }
 \value{
-Returns the Christoffel symbols of the first kind \eqn{Gamma_{ijk}}
+Returns the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}}
 as rank 3 \code{\link[=array]{array()}}.
 }
 \description{
-Provides the Christoffel symbols of the first kind \eqn{Gamma_{ijk}} with
+Provides the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}} with
 respect to the Levi Civita connection for a given metric tensor.
 }
 \details{

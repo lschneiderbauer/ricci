@@ -3,7 +3,7 @@ globalVariables(c("i", "j", "k", "l", "i2"))
 
 #' Christoffel symbols
 #'
-#' Provides the Christoffel symbols of the first kind \eqn{Gamma_{ijk}} with
+#' Provides the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}} with
 #' respect to the Levi Civita connection for a given metric tensor.
 #'
 #' The Christoffel symbols are a rank 3 array of numbers.
@@ -13,7 +13,7 @@ globalVariables(c("i", "j", "k", "l", "i2"))
 #'  to create a new metric tensor, or use predefined metrics,
 #'  e.g. [g_eucl_cart()].
 #' @return
-#'  Returns the Christoffel symbols of the first kind \eqn{Gamma_{ijk}}
+#'  Returns the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}}
 #'  as rank 3 [array()].
 #'
 #' @examples
