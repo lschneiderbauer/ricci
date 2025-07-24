@@ -60,7 +60,7 @@ array of rank 3.
 library(ricci)
 
 # numeric data
-a <- array(1:(2^3), dim = c(2,2,2))
+a <- array(1:(2^3), dim = c(2, 2, 2))
 
 # create labeled array (tensor)
 (a %_% .(i, j, k) * 
@@ -78,7 +78,7 @@ The same instructions work for a symbolic array:
 
 ``` r
 # symbolic data
-a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
+a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k

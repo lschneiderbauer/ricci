@@ -375,3 +375,26 @@ tensor_reorder <- function(x, new_index_names) {
     reduced = tensor_is_reduced(x)
   )
 }
+
+
+at <- function(x, ...) {
+  UseMethod("at")
+}
+
+#' @export
+at.array <- function(x, ...) {
+  coords <- unlist(rlang::list2(...))
+
+  calculus::evaluate(x, coords)
+}
+
+#' @export
+at.tensor <- function(x, ...) {
+  coords <- unlist(rlang::list2(...))
+
+  tensor(
+    at(as.array(x), ...),
+    tensor_index_names(x),
+    tensor_index_positions(x)
+  )
+}

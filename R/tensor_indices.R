@@ -26,7 +26,6 @@
 #' @export
 #' @rdname create-tensor
 #' @concept tensor
-#' @importFrom cli cli_abort
 `%_%` <- function(a, i) {
   if (!inherits(i, "tensor_indices")) {
     cli_abort(
@@ -36,6 +35,12 @@
       )
     )
   }
+
+  UseMethod("%_%")
+}
+
+#' @export
+`%_%.array` <- function(a, i) {
   tensor(a, i$i, i$p)
 }
 

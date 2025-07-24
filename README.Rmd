@@ -47,7 +47,7 @@ The following (admittedly very artificial) example shows how to express the cont
 library(ricci)
 
 # numeric data
-a <- array(1:(2^3), dim = c(2,2,2))
+a <- array(1:(2^3), dim = c(2, 2, 2))
 
 # create labeled array (tensor)
 (a %_% .(i, j, k) * 
@@ -64,7 +64,7 @@ The same instructions work for a symbolic array:
 
 ```{r example_symb}
 # symbolic data
-a <- array(paste0("a", 1:(2^3)), dim = c(2,2,2))
+a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k

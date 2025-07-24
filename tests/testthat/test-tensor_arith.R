@@ -26,11 +26,11 @@ test_that("tensor multiplication that yields a diagonal works", {
 
 
 test_that("tensor multiplication that yields a diagonal works with singletons", {
-  arr_mul <- 1 %_% .(i) * 1 %_% .(i)
+  arr_mul <- as.array(1) %_% .(i) * as.array(1) %_% .(i)
 
   expect_tensor_equal(
     arr_mul,
-    1 %_% .(i)
+    as.array(1) %_% .(i)
   )
 })
 

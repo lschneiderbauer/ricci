@@ -3,7 +3,7 @@ test_that("tensor kronecker product works", {
 
   expect_tensor_equal(
     arr %_% .(i, j) |> kron(.(i, j) -> k),
-    1:4 %_% .(k)
+    as.array(1:4) %_% .(k)
   )
 
   arr <- array(1:(2^3), c(2, 2, 2))
@@ -24,7 +24,7 @@ test_that("kronecker commutes with contraction", {
 })
 
 test_that("raising tensor works", {
-  arr <- c(1, 2, 3, 4)
+  arr <- as.array(c(1, 2, 3, 4))
 
   expect_equal(
     arr %_% .(i) |> r(i) |> as_a(+i),
@@ -34,6 +34,14 @@ test_that("raising tensor works", {
   expect_equal(
     arr %_% .(i) |> r(i, g = g_mink(4)) |> as_a(+i),
     as.array(c(-1, 2, 3, 4))
+  )
+
+  expect_equal(
+    arr %_% .(i) |>
+      r(i, g = g_eucl_sph(4)) |>
+      as_a(+i) |>
+      at(r = 1, ph1 = pi/2, ph2 = pi/2),
+    arr
   )
 
   # we are not allowed to raise already raised index
@@ -49,7 +57,7 @@ test_that("raising tensor works", {
 })
 
 test_that("lowering tensor works", {
-  arr <- c(1, 2, 3, 4)
+  arr <- as.array(c(1, 2, 3, 4))
 
   expect_equal(
     arr %_% .(+i) |> l(+i) |> as_a(i),

@@ -213,14 +213,10 @@ tensor_raise <- function(x, ind_from, g,
   if (is.null(g)) {
     n <- tensor_dim(x, ind_from$i)
     g <- diag(1, n, n)
+    ginv <- g
+  } else {
+    ginv <- metric_inv(g)
   }
-
-  if (is.function(g)) {
-    g <- g()
-  }
-
-  ginv <- solve(g)
-
 
   Reduce(
     function(tens, i) {

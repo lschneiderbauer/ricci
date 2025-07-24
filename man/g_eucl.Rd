@@ -5,16 +5,18 @@
 \alias{g_eucl_sph}
 \title{Euclidean metric tensor}
 \usage{
-g_eucl_cart(n)
+g_eucl_cart(n, coords = paste0("x", 1:n))
 
-g_eucl_sph(n)
+g_eucl_sph(n, coords = c("r", paste0("ph", 1:(n - 1))))
 }
 \arguments{
 \item{n}{The dimension of the metric tensor.}
+
+\item{coords}{A character vector of coordinate names. The length needs
+to match the tensor dimensions.}
 }
 \value{
-A function that expects index labels (see \code{\link[=.]{.()}}) and returns a
-labeled array with dimension \code{c(n, n)}.
+The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
 Provides a labeled Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
@@ -31,12 +33,10 @@ As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
 careful around those points.
 }
 \examples{
-g_eucl_cart(3)(i, j)
-g_eucl_cart(3)(+i, +j)
-g_eucl_cart(3)()
-g_eucl_sph(3)(i, j)
-g_eucl_sph(3)(+i, +j)
-g_eucl_sph(3)()
+g_eucl_cart(3)
+g_eucl_cart(3) \%_\% .(+i, +j)
+g_eucl_sph(3)
+g_eucl_sph(3) \%_\% .(+i, +j)
 }
 \seealso{
 Wikipedia: \href{https://en.wikipedia.org/wiki/Metric_tensor#Euclidean_metric}{Euclidean metric tensor}
