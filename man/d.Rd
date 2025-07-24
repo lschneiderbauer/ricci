@@ -34,4 +34,4 @@ Other tensor symbols:
 \code{\link{e}()}
 }
 \concept{tensor symbols}
-\concept{tensor_instance}
+\concept{tensor_symbols}

@@ -27,7 +27,8 @@ g_mink(4) \%_\% .(+i, +j)
 Wikipedia \href{https://en.wikipedia.org/wiki/Minkowski_space#Minkowski_metric}{Minkowski metric tensor}
 
 Other metric tensors: 
-\code{\link{g_eucl_cart}()}
+\code{\link{g_eucl_cart}()},
+\code{\link{metric_field}()}
 }
 \concept{metric tensors}
-\concept{tensor_instance}
+\concept{metric_tensors}

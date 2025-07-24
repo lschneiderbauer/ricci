@@ -12,8 +12,9 @@ r(x, ..., g = NULL)
 \item{...}{Any number of index expressions. The indices need to occur
 in \code{x}.}
 
-\item{g}{An (unlabeled) covariant metric tensor as array used for raising and
-lowering indices.
+\item{g}{A covariant metric tensor, a "metric_field" object. See \code{\link[=metric_field]{metric_field()}}
+to create a new metric tensor, or use predefined metrics,
+e.g. \code{\link[=g_eucl_cart]{g_eucl_cart()}}.
 If no metric tensor is provided, indices are raised/lowered with
 the identity matrix.}
 }

@@ -36,4 +36,4 @@ Other tensor symbols:
 \code{\link{d}()}
 }
 \concept{tensor symbols}
-\concept{tensor_instance}
+\concept{tensor_symbols}

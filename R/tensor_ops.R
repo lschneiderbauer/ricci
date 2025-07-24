@@ -8,8 +8,9 @@
 #'
 #' @param x  A labeled tensor object, created by [`%_%`] or [tensor()].
 #' @param g
-#'  An (unlabeled) covariant metric tensor as array used for raising and
-#'  lowering indices.
+#'  A covariant metric tensor, a "metric_field" object. See [metric_field()]
+#'  to create a new metric tensor, or use predefined metrics,
+#'  e.g. [g_eucl_cart()].
 #'  If no metric tensor is provided, indices are raised/lowered with
 #'  the identity matrix.
 #' @param ... Any number of index expressions. The indices need to occur

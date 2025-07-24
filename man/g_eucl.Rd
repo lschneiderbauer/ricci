@@ -38,7 +38,8 @@ g_eucl_sph(3) \%_\% .(+i, +j)
 Wikipedia: \href{https://en.wikipedia.org/wiki/Metric_tensor#Euclidean_metric}{Euclidean metric tensor}
 
 Other metric tensors: 
-\code{\link{g_mink}()}
+\code{\link{g_mink}()},
+\code{\link{metric_field}()}
 }
 \concept{metric tensors}
-\concept{tensor_instance}
+\concept{metric_tensors}

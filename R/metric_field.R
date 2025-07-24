@@ -9,6 +9,34 @@ new_metric_field <- function(metric, coords, metric_inv) {
   )
 }
 
+#' Create a metric tensor field
+#'
+#' Metric tensors are an essential ingredient of (Pseudo-) Riemannian
+#' manifolds and define distance relations between points.
+#' They are used to define geometric tensors such as e.g. the Ricci curvature
+#' [ricci()], and a metric connection, i.e. a covariant derivative.
+#' They are also essential for raising and lowering indices of tensor fields
+#' correctly when using non-flat coordinates.
+#'
+#' @param metric
+#'  A `nxn` matrix / array representing the covariant metric tensor components.
+#'  The components are usually expressions as character strings formed from
+#'  coordinates, since numeric values can only represent constant tensor fields.
+#'
+#' @param metric_inv
+#'  A `nxn` matrix / array representing the contraviant metric tensor components,
+#'  i.e. the inverse matrix of the covariant metric tensor component matrix.
+#'
+#' @param coords
+#'  A character vector of `n` coordinate names that are used in the component
+#'  expressions. This information is essential
+#'  for forming symbolic derivatives.
+#'
+#' @seealso Wikipedia: [Metric tensor](https://en.wikipedia.org/wiki/Metric_tensor)
+#' @concept metric_tensors
+#' @family metric tensors
+#'
+#' @export
 metric_field <- function(metric, metric_inv, coords) {
   stopifnot(is.array(metric))
   stopifnot(is.character(coords))

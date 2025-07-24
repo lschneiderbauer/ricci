@@ -18,7 +18,7 @@
 #'
 #' d(3)(i, j, +k, +l)
 #' @export
-#' @concept tensor_instance
+#' @concept tensor_symbols
 #' @family tensor symbols
 d <- function(n) {
   function(...) {
@@ -59,7 +59,7 @@ d <- function(n) {
 #' e(i, j, k)
 #' @seealso Wikipedia: [Levi-Civita symbol](https://en.wikipedia.org/wiki/Levi-Civita_symbol)
 #' @export
-#' @concept tensor_instance
+#' @concept tensor_symbols
 #' @family tensor symbols
 e <- function(...) {
   i <- .(...)
@@ -90,7 +90,7 @@ e <- function(...) {
 #' g_mink(4)
 #' g_mink(4) %_% .(+i, +j)
 #' @export
-#' @concept tensor_instance
+#' @concept metric_tensors
 #' @family metric tensors
 g_mink <- function(n, coords = paste0("x", 1:n - 1)) {
   metric_field(
@@ -124,7 +124,7 @@ g_mink <- function(n, coords = paste0("x", 1:n - 1)) {
 #' g_eucl_cart(3)
 #' g_eucl_cart(3) %_% .(+i, +j)
 #' @export
-#' @concept tensor_instance
+#' @concept metric_tensors
 #' @family metric tensors
 #' @rdname g_eucl
 g_eucl_cart <- function(n, coords = paste0("x", 1:n)) {
