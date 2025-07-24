@@ -49,8 +49,8 @@ and only if the index structure agrees and all components are equal.
 }
 
 \examples{
-a <- array(1:4, c(2,2))
-b <- array(3 + 1:4, c(2,2))
+a <- array(1:4, c(2, 2))
+b <- array(3 + 1:4, c(2, 2))
 
 # addition
 a \%_\% .(i, j) + b \%_\% .(j, i)

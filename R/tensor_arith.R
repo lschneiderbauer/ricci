@@ -36,8 +36,8 @@
 #' @return A resulting labeled array in case of `+`, `-`, `*`, `/`.
 #'  `TRUE` or `FALSE` in case of `==`.
 #' @examples
-#' a <- array(1:4, c(2,2))
-#' b <- array(3 + 1:4, c(2,2))
+#' a <- array(1:4, c(2, 2))
+#' b <- array(3 + 1:4, c(2, 2))
 #'
 #' # addition
 #' a %_% .(i, j) + b %_% .(j, i)
