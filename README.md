@@ -18,7 +18,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 The goal of {ricci} is to provide a *compact*[^1] R interface for
 performing [tensor
 calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is
-achieved by labeling (upper and lower) index slots of R’s `array` and
+achieved by allowing (upper and lower) index labeling of R’s `array` and
 making use of Ricci calculus conventions to *implicitly* trigger
 contractions and diagonal subsetting. Explicit tensor operations, such
 as addition, subtraction, multiplication of tensors via the standard

@@ -7,7 +7,7 @@ Authors@R:
       role = c("aut", "cre", "cph"),
       comment = c(ORCID = "0000-0002-0975-6803"))
 Description: Provides a compact R interface for performing tensor calculations.
-    This is achieved by adding (upper and lower) index slot labeling to R’s
+    This is achieved by allowing (upper and lower) index labeling of R’s
     array and making use of Ricci calculus conventions.
 License: GPL (>= 3)
 Encoding: UTF-8
