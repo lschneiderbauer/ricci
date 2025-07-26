@@ -1,78 +1,3 @@
-#' Kronecker delta
-#'
-#' Provides a labeled generalized Kronecker delta. In the special
-#' case of two labels this represents simply the identity matrix.
-#' Note that the first half of the tensor labels need to be lowered,
-#' while the second half needs upper indices. Otherwise an error is thrown.
-#'
-#' @param n The dimension.
-#' @return
-#'  A function that expects index labels (see [.()]) and returns a
-#'  labeled tensor. The underlying data will differs depending on
-#'  the number of labels provided.
-#'
-#' @seealso Underlying implementation: [calculus::delta()]
-#' @seealso Wikipedia: [Generalized Kronecker delta](https://en.wikipedia.org/wiki/Kronecker_delta#generalized_Kronecker_delta)
-#' @examples
-#' d(3)(i, +j)
-#'
-#' d(3)(i, j, +k, +l)
-#' @export
-#' @concept tensor_symbols
-#' @family tensor symbols
-d <- function(n) {
-  function(...) {
-    i <- .(...)
-    order <- length(i$i)
-
-    stopifnot(order %% 2 == 0)
-    p <- order %/% 2
-
-    # we require the first half of the indices to be lower,
-    # the other half to be upper
-    stopifnot(all(i$p[1:p] == "-"))
-    stopifnot(all(i$p[p + 1:p] == "+"))
-
-    tensor(
-      calculus::delta(n = n, p = order %/% 2),
-      i$i,
-      i$p
-    )
-  }
-}
-
-#' Levi-Civita epsilon
-#'
-#' Provides a labeled Levi-Civita epsilon (pseudo) tensor.
-#' The indices are required to be lowered. Otherwise an error is thrown.
-#'
-#' @inheritParams .
-#' @return
-#'  A labeled tensor object.
-#'  The underlying data will differs depending on
-#'  the number of labels provided.
-#'
-#' @seealso Underlying implementation: [calculus::epsilon()]
-#' @examples
-#' e(i, j)
-#'
-#' e(i, j, k)
-#' @seealso Wikipedia: [Levi-Civita symbol](https://en.wikipedia.org/wiki/Levi-Civita_symbol)
-#' @export
-#' @concept tensor_symbols
-#' @family tensor symbols
-e <- function(...) {
-  i <- .(...)
-
-  stopifnot(all(i$p == "-"))
-
-  tensor(
-    calculus::epsilon(length(i$i)),
-    i$i,
-    i$p
-  )
-}
-
 #' Minkowski metric tensor
 #'
 #' Provides the covariant metric tensor in `n` dimensions in
@@ -183,4 +108,103 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
     mat_inv,
     coords = coords
   )
+}
+
+# used indices
+globalVariables(c("i", "j", "k", "l", "i2", "s"))
+
+#' Christoffel symbols
+#'
+#' Provides the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}} with
+#' respect to the Levi Civita connection for a given metric tensor.
+#'
+#' The Christoffel symbols are a rank 3 array of numbers.
+#'
+#' @param g
+#'  A covariant metric tensor, a "metric_field" object. See [metric_field()]
+#'  to create a new metric tensor, or use predefined metrics,
+#'  e.g. [g_eucl_cart()].
+#' @return
+#'  Returns the Christoffel symbols of the first kind \eqn{\Gamma_{ijk}}
+#'  as rank 3 [array()].
+#'
+#' @examples
+#' christoffel(g_eucl_sph(3))
+#' @seealso Wikipedia: [Christoffel symbols](https://en.wikipedia.org/wiki/Christoffel_symbols])
+#' @export
+#' @concept geom_tensors
+#' @family geometric tensors
+christoffel <- function(g) {
+  stopifnot(inherits(g, "metric_field"))
+
+  coords <- metric_coords(g)
+
+  der <- calculus::derivative(g, coords)
+  ((der %_% .(i, k, l) + der %_% .(i, l, k) - der %_% .(k, l, i)) / 2) |>
+    as_a(i, k, l)
+}
+
+#' Riemann curvature tensor
+#'
+#' Provides the covariant Riemann curvature tensor \eqn{R_{ijkl}}.
+#'
+#' @inheritParams christoffel
+#' @return
+#'  Returns the covariant Riemann curvature tensor \eqn{R_{ijkl}}
+#'  as rank 4 [array()].
+#'
+#' @examples
+#' riemann(g_eucl_sph(3))
+#' @seealso Wikipedia: [Riemann curvature tensor](https://en.wikipedia.org/wiki/Riemann_curvature_tensor)
+#' @export
+#' @concept geom_tensors
+#' @family geometric tensors
+riemann <- function(g) {
+  stopifnot(inherits(g, "metric_field"))
+
+  coords <- metric_coords(g)
+  chr <- (christoffel(g) %_% .(i, j, l) * g %_% .(+i, +k)) |> as_a(+k, j, l)
+
+  ((pd(chr %_% .(+i, j, k), coords, "l", "-", g) +
+    chr %_% .(+i, l, s) * chr %_% .(+s, j, k)) * g %_% .(i, i2)) |>
+    asym(j, l) |>
+    as_a(i2, k, j, l)
+}
+
+#' Ricci curvature tensor
+#'
+#' Provides the covariant Ricci curvature tensor \eqn{R_{ij}=R^{s}_{i s j}}.
+#'
+#' @inheritParams christoffel
+#' @return
+#'  Returns the covariant Ricci curvature tensor \eqn{R_{ij}}
+#'  as rank 2 [array()].
+#'
+#' @examples
+#' ricci(g_eucl_sph(3))
+#' @seealso Wikipedia: [Ricci curvature tensor](https://en.wikipedia.org/wiki/Riemann_curvature_tensor#Ricci_curvature)
+#' @export
+#' @concept geom_tensors
+#' @family geometric tensors
+ricci <- function(g) {
+  (riemann(g) %_% .(i, j, k, l) * g %_% .(+i, +k)) |>
+    as_a(j, l)
+}
+
+#' Ricci scalar
+#'
+#' Provides the Ricci scalar \eqn{R}.
+#'
+#' @inheritParams christoffel
+#' @return
+#'  Returns the Ricci scalar \eqn{R} as single number/expression.
+#'
+#' @examples
+#' ricci_sc(g_eucl_sph(3))
+#' @seealso Wikipedia: [Ricci scalar](https://en.wikipedia.org/wiki/Scalar_curvature)
+#' @export
+#' @concept geom_tensors
+#' @family geometric tensors
+ricci_sc <- function(g) {
+  (ricci(g) %_% .(i, j) * g %_% .(+i, +j)) |> as_a()
 }
