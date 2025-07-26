@@ -56,17 +56,44 @@ test_that("tensor multiplication without summation works", {
 
 test_that("tensor multiplication with scalar works", {
   arr <- array(1:(2 * 3), c(2, 3))
-  arr_mul <- arr %_% .(i, j) * 3
-  arr_mul2 <- 3 * arr %_% .(i, j)
 
   expect_tensor_equal(
-    arr_mul,
-    (array(1:(2 * 3), c(2, 3)) * 3) %_% .(i, j)
+    arr %_% .(i, j) * 3,
+    (arr * 3) %_% .(i, j)
   )
 
   expect_tensor_equal(
-    arr_mul2,
-    (array(1:(2 * 3), c(2, 3)) * 3) %_% .(i, j)
+    3 * arr %_% .(i, j),
+    (arr * 3) %_% .(i, j)
+  )
+
+  arr_sym <- array(rep("a", 6), c(2, 3))
+
+  expect_tensor_equal(
+    at(arr_sym %_% .(i, j) * 3, a = 1),
+    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), a = 1)
+  )
+
+  expect_tensor_equal(
+    at(3 * arr_sym %_% .(i, j), a = 1),
+    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), a = 1)
+  )
+})
+
+
+test_that("tensor division by scalar works", {
+  arr <- array(1:(2 * 3), c(2, 3))
+
+  expect_tensor_equal(
+    arr %_% .(i, j) / 3,
+    (arr / 3) %_% .(i, j)
+  )
+
+  arr_sym <- array(rep("a", 6), c(2, 3))
+
+  expect_tensor_equal(
+    (arr_sym %_% .(i, j) / 3) |> at(a = 1),
+    (calculus::`%div%`(arr_sym, 3) |> at(a = 1)) %_% .(i, j)
   )
 })
 

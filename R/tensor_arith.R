@@ -197,14 +197,14 @@ tensor_mul <- function(x, y,
 
   if (is_scalar(x)) {
     new_tensor(
-      as.vector(x) * as.array(y),
+      calculus::`%prod%`(as.vector(x), as.array(y)),
       index_names = tensor_index_names(y),
       index_positions = tensor_index_positions(y),
       reduced = tensor_is_reduced(y)
     )
   } else if (is_scalar(y)) {
     new_tensor(
-      as.vector(y) * as.array(x),
+      calculus::`%prod%`(as.vector(y), as.array(x)),
       index_names = tensor_index_names(x),
       index_positions = tensor_index_positions(x),
       reduced = tensor_is_reduced(x)
