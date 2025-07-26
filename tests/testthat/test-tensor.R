@@ -1,3 +1,9 @@
+test_that("creating scalar works", {
+  expect_true(
+    is_scalar(tensor(3))
+  )
+})
+
 test_that("tensor contraction works for rank four", {
   arr <- array(1:(2^2 * 3^2), c(3, 2, 3, 2))
   arr_contr <- as.array(arr %_% .(j, i, k, +i))

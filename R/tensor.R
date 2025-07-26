@@ -55,15 +55,16 @@ tensor_is_reduced <- function(x) {
 #' @importFrom cli cli_abort
 tensor <- function(a, index_names, index_positions) {
   a <- as.array(a)
-  stopifnot(is.character(index_names))
-  stopifnot(is.character(index_positions))
-  stopifnot(length(index_names) == length(index_positions))
 
   # check if we have a scalar
   # in this case just return a number
-  if (length(dim(a)) == 1 && length(a) == 1 && is.null(index_names)) {
-    return(new_tensor(a, character(), character()))
+  if (length(dim(a)) == 1 && length(a) == 1 && missing(index_names)) {
+    return(new_tensor(a, character(), logical(), reduced = TRUE))
   }
+
+  stopifnot(is.character(index_names))
+  stopifnot(is.character(index_positions))
+  stopifnot(length(index_names) == length(index_positions))
 
   if (length(index_names) != length(dim(a))) {
     cli_abort(
