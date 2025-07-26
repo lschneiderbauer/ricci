@@ -392,9 +392,10 @@ at.array <- function(x, ...) {
 at.tensor <- function(x, ...) {
   coords <- unlist(rlang::list2(...))
 
-  tensor(
+  new_tensor(
     at(as.array(x), ...),
     tensor_index_names(x),
-    tensor_index_positions(x)
+    tensor_index_positions(x),
+    reduced = tensor_is_reduced(x)
   )
 }
