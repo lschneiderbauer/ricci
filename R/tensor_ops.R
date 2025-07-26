@@ -219,16 +219,17 @@ tensor_raise <- function(x, ind_from, g,
     ginv <- metric_inv(g)
   }
 
+  dummy <- tensor_new_dummy_index_name(x)
+
   Reduce(
     function(tens, i) {
-      tginv <- new_tensor(ginv, c(i, "?"), c(TRUE, TRUE))
+      tginv <- new_tensor(ginv, c(i, dummy), c(TRUE, TRUE))
 
       # check that g has the right dimensions
       tensor_validate_index_dim(x, tginv, arg_x, arg_g, call)
-
       tensor_subst(
         tens * tginv,
-        new_tensor_indices(i = "?", p = "+"),
+        new_tensor_indices(i = dummy, p = "+"),
         new_tensor_indices(i = i, p = "+")
       )
     },

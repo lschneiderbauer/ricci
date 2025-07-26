@@ -41,6 +41,17 @@ tensor_is_reduced <- function(x) {
   attr(x, "reduced")
 }
 
+# generate a new unique dummy index
+tensor_new_dummy_index_name <- function(x) {
+  names <- tensor_index_names(x)
+
+  if (length(names) == 0) {
+    "dummy"
+  } else {
+    paste0(names[which.max(nchar(names))], "dummy")
+  }
+}
+
 
 #' @param index_names
 #'  A character vector of index names / labels.
