@@ -4,16 +4,59 @@
 \alias{covd}
 \title{Covariant Derivative}
 \usage{
-covd(x, new_ind, g = NULL, act_on = all())
+covd(x, i, act_on = NULL, g = NULL)
+}
+\arguments{
+\item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}. \code{covd()} only
+handles symbolic derivatives, i.e. the tensor components are required to be
+\code{\link[=character]{character()}}-valued and consist of mathematical expressions in terms of
+coordinates identical to the coordinates used by \code{g}.}
+
+\item{i}{An index slot label specification created with \code{\link[=.]{.()}}. The number of
+indices specify the number of covariant derivatives taken in the same
+order. Each covariant derivative adds one index each with the specified
+names. After the covariant derivatives are calculated, implicit contraction
+rules are applied (in case of reoccurring index label names).}
+
+\item{act_on}{An optional index slot label specification created with \code{\link[=.]{.()}} that
+specifies on which indices the covariant derivative should act on.
+This might
+be useful if not all tensor factors are elements of the tangent space of
+the underlying manifold. If not provided the covariant derivative acts on
+all indices. If no indices are selected explicitly (with \code{\link[=.]{.()}}),
+the covariant derivative acts like it would on a scalar.}
+
+\item{g}{A covariant metric tensor, a "metric_field" object. See \code{\link[=metric_field]{metric_field()}}
+to create a new metric tensor, or use predefined metrics,
+e.g. \code{\link[=g_eucl_cart]{g_eucl_cart()}}.}
+}
+\value{
+The covariant derivative: a new labeled array with one or more additional
+indices (depending on \code{i}).
 }
 \description{
-Calculates the covariant derivative
+Calculates the (symbolic) covariant derivative
 \eqn{\nabla_\rho a_{\mu_{1} \mu_{2} ...}^{\nu_{1}\nu_{2}...}} with respect
-to the Levi Civita connection of any tensor field.
-The covariant derivative is a generalization of the directional derivative
-that is independent of the coordinate system in use.
+to the Levi Civita connection of any (symbolic) tensor field.
 The result is a new tensor of one rank higher than
 the original tensor rank.
+}
+\details{
+Note that symbolic derivatives are not always completely trustworthy.
+They usually ignore subtle issues like undefined expressions at certain
+points. The example \eqn{\nabla_a \nabla^a r^{-1}} from below is telling:
+The symbolic derivative
+evaluates to zero identically, although strictly speaking the derivative
+is not defined at \eqn{r = 0}.
+}
+\examples{
+# gradient of "sin(sqrt(x1^2+x2^2+x3^2))" in 3-dimensional euclidean space
+covd("sin(x1)", .(k), g = g_eucl_cart(3))
+
+# laplace operator
+covd("sin(x1)", .(-k, +k), g = g_eucl_cart(3))
+covd("1/r", .(-k, +k), g = g_eucl_sph(3))
+
 }
 \seealso{
 Wikipedia: \href{https://en.wikipedia.org/wiki/Covariant_derivative}{Covariant Derivative}
