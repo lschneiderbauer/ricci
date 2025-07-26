@@ -13,10 +13,14 @@ reference:
 - title: "Tensor symbols"
   contents:
   - has_concept("tensor_symbols")
-- title: "Metrics tensor fields"
+- title: "Tensor fields"
+- subtitle: "Covariant derivative"
+  contents:
+  - covd
+- subtitle: "Metrics tensor fields"
   contents:
   - has_concept("metric_tensors")
-- title: "Geometric tensor fields"
+- subtitle: "Geometric tensor fields"
   contents:
   - has_concept("geom_tensors")
 - title: "Testthat expectation"
