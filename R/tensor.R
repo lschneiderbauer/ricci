@@ -382,27 +382,11 @@ as_a <- function(x, ...) {
 }
 
 
-#' @export
-all.equal.tensor <- function(target, current, ...) {
-  if (!tensor_alignable(target, current)) {
-    all.equal(as.array(target), as.array(current), ...)
-  } else {
-    all.equal(
-      as.array(target),
-      as.array(tensor_align(current, target)),
-      ...
-    )
-  }
-}
-
-
-
 tensor_alignable <- function(x, y) {
   setequal(tensor_index_names(x), tensor_index_names(y)) &&
     all(tensor_index_positions(x)[tensor_index_names(y)] == tensor_index_positions(y)) &&
     all(tensor_dim(x, tensor_index_names(x)) == tensor_dim(y, tensor_index_names(x)))
 }
-
 
 
 # aligns y dimensions to x
