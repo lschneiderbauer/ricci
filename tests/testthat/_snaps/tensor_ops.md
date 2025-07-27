@@ -11,12 +11,12 @@
 ---
 
     Code
-      r(arr %_% .(i), i, g = g_mink(2))
+      r(arr %_% .(i), i, g = g_mink_cart(2))
     Condition
       Error in `r()`:
       ! Tensor index dimensions do not agree.
       x Tensor index `i` has dimension 4 in `arr %_% .(i)`.
-      x Tensor index `i` has dimension 2 in `g_mink(2)`.
+      x Tensor index `i` has dimension 2 in `g_mink_cart(2)`.
       i Operation can only be carried out with two tensors having identical index dimensions.
 
 # substituting labels works
