@@ -20,13 +20,15 @@ performing [tensor
 calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is
 achieved by allowing (upper and lower) index labeling of R’s `array` and
 making use of Ricci calculus conventions to *implicitly* trigger
-contractions and diagonal subsetting. Explicit tensor operations, such
-as addition, subtraction, multiplication of tensors via the standard
-operators (`*`, `+`, `-`), raising and lowering indices, taking
-symmetric or antisymmetric tensor parts, as well as the Kronecker
-product are available. Common tensors like the Kronecker delta, Levi
-Civita epsilon, and certain metric tensors are provided. An effort was
-made to provide the user with meaningful error messages.
+**contractions** and diagonal subsetting. Explicit tensor operations,
+such as **addition, subtraction and multiplication of tensors** via the
+standard operators (`*`, `+`, `-`, `/`, `==`), r**aising and lowering
+indices**, taking **symmetric** or **antisymmetric tensor parts**, as
+well as the **Kronecker product** are available. Common tensors like the
+Kronecker delta, Levi Civita epsilon, and certain metric tensors are
+provided. The **covariant derivative** of any tensor field w.r.t to any
+metric tensor can be evaluated. An effort was made to provide the user
+with meaningful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and provides
@@ -67,7 +69,7 @@ a <- array(1:(2^3), dim = c(2, 2, 2))
 # create labeled array (tensor)
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l
@@ -84,13 +86,14 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l
   subst(l -> j) |> # rename index and trigger diagonal subsetting
   as_a(j) # we unlabel the tensor with index order (j)
-#> [1] "a1^2+a6^2-(a5^2+a2^2)" "a3^2+a8^2-(a7^2+a4^2)"
+#> [1] "((a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1) + (a1) * (((a1) * -1) * -1) + (a2) * (((a2) * 1) * -1) + (a5) * (((a5) * -1) * 1) + (a6) * (((a6) * 1) * 1)) / 2"
+#> [2] "((a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1) + (a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1)) / 2"
 ```
 
 For more details, see `vignette("ricci", package = "ricci")`.

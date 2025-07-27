@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of {ricci} is to provide a *compact*[^1] R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by allowing (upper and lower) index labeling of R’s `array` and making use of Ricci calculus conventions to *implicitly* trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, subtraction, multiplication of tensors via the standard operators (`*`, `+`, `-`), raising and lowering indices, taking symmetric or antisymmetric tensor parts, as well as the Kronecker product are available. Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided. An effort was made to provide the user with meaningful error messages.
+The goal of {ricci} is to provide a *compact*[^1] R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by allowing (upper and lower) index labeling of R’s `array` and making use of Ricci calculus conventions to *implicitly* trigger **contractions** and diagonal subsetting. Explicit tensor operations, such as **addition, subtraction and multiplication of tensors** via the standard operators (`*`, `+`, `-`, `/`, `==`), r**aising and lowering indices**, taking **symmetric** or **antisymmetric tensor parts**, as well as the **Kronecker product** are available. Common tensors like the Kronecker delta, Levi Civita epsilon, and certain metric tensors are provided. The **covariant derivative** of any tensor field w.r.t to any metric tensor can be evaluated. An effort was made to provide the user with meaningful error messages.
 
 [^1]: By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.
 
@@ -52,7 +52,7 @@ a <- array(1:(2^3), dim = c(2, 2, 2))
 # create labeled array (tensor)
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l
@@ -68,7 +68,7 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
 (a %_% .(i, j, k) * 
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l
