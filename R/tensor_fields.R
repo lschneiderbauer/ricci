@@ -158,6 +158,67 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
   )
 }
 
+#' Metric tensor of sphere
+#'
+#' Provides the metric tensor of the sphere \eqn{S^n} with radius 1.
+#'
+#' @details
+#' `g_sph()` returns a symbolic tensor field in generalized spherical
+#' coordinates \eqn{{\phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
+#' As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
+#' careful around those points.
+#'
+#' @param n The dimension of the metric tensor.
+#' @param coords
+#'  A character vector of coordinate names. The length needs
+#'  to match the tensor dimensions.
+#' @return
+#'  The covariant metric tensor as array imputed with coordinate names.
+#'
+#' @seealso Wikipedia: [Sphere](https://en.wikipedia.org/wiki/Sphere)
+#' @examples
+#' g_sph(3)
+#' g_sph(3) %_% .(+i, +j)
+#' @export
+#' @concept metric_tensors
+#' @family metric tensors
+g_sph <- function(n, coords = paste0("ph", 1:n)) {
+  # construct matrix
+  mat_diag <-
+    vapply(
+      1:n,
+      function(k) {
+        if (k - 1 < 1) {
+          return("1")
+        }
+
+        Reduce(
+          calculus::`%prod%`,
+          vapply(
+            1:(k - 1),
+            function(m) {
+              paste0("sin(", coords[[m]], ")^2")
+            },
+            FUN.VALUE = ""
+          )
+        )
+      },
+      FUN.VALUE = ""
+    )
+
+  mat <- array("0", c(n, n))
+  diag(mat) <- mat_diag
+
+  mat_inv <- mat
+  diag(mat_inv) <- calculus::`%div%`("1", diag(mat_inv))
+
+  metric_field(
+    mat,
+    mat_inv,
+    coords = coords
+  )
+}
+
 # used indices
 globalVariables(c("i", "j", "k", "l", "i2", "s"))
 

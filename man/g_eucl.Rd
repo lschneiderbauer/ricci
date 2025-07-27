@@ -39,6 +39,7 @@ Wikipedia: \href{https://en.wikipedia.org/wiki/Metric_tensor#Euclidean_metric}{E
 
 Other metric tensors: 
 \code{\link{g_mink_cart}()},
+\code{\link{g_sph}()},
 \code{\link{metric_field}()}
 }
 \concept{metric tensors}

@@ -35,6 +35,7 @@ Wikipedia \href{https://en.wikipedia.org/wiki/Minkowski_space#Minkowski_metric}{
 
 Other metric tensors: 
 \code{\link{g_eucl_cart}()},
+\code{\link{g_sph}()},
 \code{\link{metric_field}()}
 }
 \concept{metric tensors}
