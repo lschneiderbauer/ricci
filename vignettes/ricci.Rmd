@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 A key point about specifying the index labels is that we can make use of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus) conventions and pack a bunch of different operations into one operator (`*`). There is no separate "inner product", "outer product", "dot product", "Kronecker product" nor "element-wise product". All products are represented by a single product `*`. The arrangement of the indices determines what product is carried out, as is in the spirit of [Ricci calculus](https://en.wikipedia.org/wiki/Ricci_calculus).
 
 In this package we are using the terms "labeled array" and "tensor" synonymously. While in literature the word "tensor" is sometimes used to specifically refer to a "tensor field" we do not make that identification, and a tensor can exist without an underlying differential manifold.
-To model tensor *fields* one can make use of "symbolic" `array`s, i.e. arrays that do not contain numerical values, but strings that contain mathematical expressions (like `"sin(x)"` for $sin(x)$, where `x` can be interpreted as a manifold coordinate). (TODO: see tensor field vignette)
+To model tensor *fields* one can make use of "symbolic" `array`s, i.e. arrays that do not contain numerical values, but strings that contain mathematical expressions (like `"sin(x)"` for $sin(x)$, where `x` can be interpreted as a manifold coordinate), see `vignette("tensor_fields", package = "ricci")` for more information.
 
 A typical workflow when working with {ricci} is
 
