@@ -256,15 +256,27 @@ adiag <- function(x, dims_diag) {
 }
 
 asimplify <- function(a) {
+  if (isTRUE(getOption("ricci.simplify")) && !rlang::is_installed("Ryacas")) {
+    cli::cli_warn(
+      c(
+        "Option \"ricci.simplify\" is set to `TRUE`, but {{Ryacas}} is not installed.",
+        i = "Install {{Ryacas}} to get simplification support, e.g. via
+            {.run install.packages(\"Ryacas\")}."
+      ),
+      .frequency = "regularly",
+      .frequency_id = "ryacas"
+    )
+  }
+
   if (is.character(a) && rlang::is_installed("Ryacas") &&
-      isTRUE(getOption("ricci.simplify"))) {
+    isTRUE(getOption("ricci.simplify"))) {
     array(
       Ryacas::as_y(a) |>
         # gsub("sqrt", "Sqrt", x = _) |>
         Ryacas::y_fn("Simplify") |>
         Ryacas::yac_str() |>
         Ryacas::as_r(),
-        # gsub("Sqrt", "sqrt", x = _),
+      # gsub("Sqrt", "sqrt", x = _),
       dim(a)
     )
   } else {
