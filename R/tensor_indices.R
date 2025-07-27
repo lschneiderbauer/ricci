@@ -44,6 +44,11 @@
   tensor(a, i$i, i$p)
 }
 
+#' @export
+`%_%.default` <- function(a, i) {
+  tensor(as.array(a), i$i, i$p)
+}
+
 #' Index slot label specification
 #'
 #' This function creates a index slot label specification. Any R symbol

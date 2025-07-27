@@ -4,6 +4,18 @@ test_that("creating scalar works", {
   )
 })
 
+test_that("creating vector works", {
+  expect_tensor_equal(
+    c(1, 2, 3) %_% .(i),
+    as.array(c(1, 2, 3)) %_% .(i)
+  )
+
+  expect_tensor_equal(
+    c("1", "2", "3") %_% .(i),
+    as.array(c("1", "2", "3")) %_% .(i)
+  )
+})
+
 test_that("tensor contraction works for rank four", {
   arr <- array(1:(2^2 * 3^2), c(3, 2, 3, 2))
   arr_contr <- as.array(arr %_% .(j, i, k, +i))
