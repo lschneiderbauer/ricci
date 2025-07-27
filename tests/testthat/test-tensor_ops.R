@@ -32,7 +32,7 @@ test_that("raising tensor works", {
   )
 
   expect_equal(
-    arr %_% .(i) |> r(i, g = g_mink(4)) |> as_a(+i),
+    arr %_% .(i) |> r(i, g = g_mink_cart(4)) |> as_a(+i),
     as.array(c(-1, 2, 3, 4))
   )
 
@@ -51,7 +51,7 @@ test_that("raising tensor works", {
   )
 
   expect_snapshot(
-    arr %_% .(i) |> r(i, g = g_mink(2)),
+    arr %_% .(i) |> r(i, g = g_mink_cart(2)),
     error = TRUE
   )
 })
@@ -65,7 +65,7 @@ test_that("lowering tensor works", {
   )
 
   expect_equal(
-    arr %_% .(+i) |> l(+i, g = g_mink(4)) |> as_a(i),
+    arr %_% .(+i) |> l(+i, g = g_mink_cart(4)) |> as_a(i),
     as.array(c(-1, 2, 3, 4))
   )
 

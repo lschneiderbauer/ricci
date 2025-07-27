@@ -34,6 +34,18 @@ g_mink_cart <- function(n, coords = paste0("x", 1:n - 1)) {
 #' g_mink_sph(4) %_% .(+i, +j)
 #' @rdname g_mink
 g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
+  if (n == 1) {
+    return(
+      return(
+        metric_field(
+          array(-1, 1),
+          array(-1, 1),
+          coords = "t"
+        )
+      )
+    )
+  }
+
   g_sph <- g_eucl_sph(n - 1, coords = coords[-1])
 
   mat <- matrix(0, n, n)
@@ -43,6 +55,10 @@ g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
   mat_inv <- matrix(0, n, n)
   mat_inv[2:n, 2:n] <- metric_inv(g_sph)
   mat_inv[1,1] <- "-1"
+
+  if (n == 2) {
+    coords <- c("t", "r")
+  }
 
   metric_field(
     mat, mat_inv, coords
@@ -90,6 +106,16 @@ g_eucl_cart <- function(n, coords = paste0("x", 1:n)) {
 #' g_eucl_sph(3) %_% .(+i, +j)
 #' @rdname g_eucl
 g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
+  if (n == 1) {
+    return(
+      metric_field(
+        array(1, 1),
+        array(1, 1),
+        coords = "r"
+      )
+    )
+  }
+
   # construct matrix
   mat_diag <-
     c(
@@ -164,7 +190,7 @@ christoffel <- function(g) {
   coords <- metric_coords(g)
 
   der <- calculus::derivative(g, coords)
-  ((der %_% .(i, k, l) + der %_% .(i, l, k) - der %_% .(k, l, i)) / 2) |>
+  ((der %_% .(i, k, l) + der %_% .(i, l, k) - der %_% .(k, l, i)) / 2L) |>
     as_a(i, k, l)
 }
 
