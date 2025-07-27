@@ -25,6 +25,10 @@ the original tensor rank."></head><body>
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/ricci.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/tensor_fields.html">Tensor Fields</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/lschneiderbauer/ricci/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -118,10 +122,10 @@ is not defined at \(r = 0\).</p>
 <span class="r-in"><span><span class="co"># laplace operator</span></span></span>
 <span class="r-in"><span><span class="fu">covd</span><span class="op">(</span><span class="st">"sin(x1)"</span>, <span class="fu"><a href="dot-.html">.</a></span><span class="op">(</span><span class="op">-</span><span class="va">k</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="g_eucl.html">g_eucl_cart</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Scalar&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "-sin(x1)"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(-sin(x1)) * 1"</span>
 <span class="r-in"><span><span class="fu">covd</span><span class="op">(</span><span class="st">"1/r"</span>, <span class="fu"><a href="dot-.html">.</a></span><span class="op">(</span><span class="op">-</span><span class="va">k</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;Scalar&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2/r^3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "(2 * r/(r^2)^2) * (1) + ((-1 * ((( - (2 * r)) / 2) * (1))) * (-(1/r^2))) * ((1) / (r^2)) + ((-1 * ((( - (2 * r * (sin(ph1)^2))) / 2) * (1))) * (-(1/r^2))) * ((1) / ((r^2) * (sin(ph1)^2)))"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
