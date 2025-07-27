@@ -138,7 +138,7 @@ combined with other tensors via multiplication or addition.</p>
 <p>Repeated index labels with opposite position are implicitly
 contracted.</p>
 <p><span class="math display">
-b_j=a_{i\;k}^{\;i}
+b_k=a_{i\;k}^{\;i}
 </span></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
