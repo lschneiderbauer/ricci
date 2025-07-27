@@ -112,7 +112,10 @@ covd <- function(x, i, act_on = NULL, g = NULL) {
         tensor_index_positions(x)
       )
   } else {
-    tensor_validate_index_matching(x, act_on)
+    tensor_validate_index_matching(
+      x, act_on,
+      arg = rlang::caller_arg(act_on)
+    )
   }
 
   chr <-
@@ -150,7 +153,7 @@ covd <- function(x, i, act_on = NULL, g = NULL) {
                     new_tensor_indices(i = dummy, p = "+")
                   )
               } else {
-                (-1) * tensor(chr, c(dummy, index_name, new_ind_dummy), c("+", "-", "-")) *
+                - tensor(chr, c(dummy, index_name, new_ind_dummy), c("+", "-", "-")) *
                   tensor_subst(
                     x,
                     new_tensor_indices(i = index_name, p = "-"),
@@ -171,6 +174,14 @@ covd <- function(x, i, act_on = NULL, g = NULL) {
           },
           act_on$i,
           init = partiald
+        )
+
+      # add the new tensor indices to act_on (so we act on it the
+      # next iteration)
+      act_on <<-
+        new_tensor_indices(
+          c(act_on$i, new_ind_name),
+          c(act_on$p, new_ind_pos)
         )
 
       tensor_reduce(res)
