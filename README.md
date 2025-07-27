@@ -22,13 +22,14 @@ achieved by allowing (upper and lower) index labeling of R’s `array` and
 making use of Ricci calculus conventions to *implicitly* trigger
 **contractions** and diagonal subsetting. Explicit tensor operations,
 such as **addition, subtraction and multiplication of tensors** via the
-standard operators (`*`, `+`, `-`, `/`, `==`), r**aising and lowering
+standard operators (`*`, `+`, `-`, `/`, `==`), **raising and lowering
 indices**, taking **symmetric** or **antisymmetric tensor parts**, as
 well as the **Kronecker product** are available. Common tensors like the
-Kronecker delta, Levi Civita epsilon, and certain metric tensors are
-provided. The **covariant derivative** of any tensor field w.r.t to any
-metric tensor can be evaluated. An effort was made to provide the user
-with meaningful error messages.
+Kronecker delta, Levi Civita epsilon, certain metric tensors, the
+Christoffel symbols, the Riemann as well as Ricci tensors are provided.
+The **covariant derivative** of tensor fields w.r.t to any metric tensor
+can be evaluated. An effort was made to provide the user with meaningful
+error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and provides
@@ -96,7 +97,9 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 #> [2] "((a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1) + (a3) * (((a3) * -1) * -1) + (a4) * (((a4) * 1) * -1) + (a7) * (((a7) * -1) * 1) + (a8) * (((a8) * 1) * 1)) / 2"
 ```
 
-For more details, see `vignette("ricci", package = "ricci")`.
+For more details, see `vignette("ricci", package = "ricci")`. For more
+information about how to use tensor fields and the covariant derivative,
+see `vignette("tensor_fields", package = "ricci")`.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">

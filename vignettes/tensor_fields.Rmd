@@ -71,10 +71,11 @@ We can also chain multiple covariant derivatives in any way we'd like. A well kn
 
 ```{r}
 # on scalar field
-"1/r" |> covd(.(k, +k), g = g)
+"1/r" |> covd(.(k, +k), g = g_mink_sph(4))
 
 # on a vector field
-A %_% .(i) |> covd(.(k, +k), g = g)
+A %_% .(i) |> covd(.(k, +k), g = g_mink_sph(4))
+
 ```
 
 One property of the metric tensor is that the (Levi Civita) covariant derivative of the metric tensor vanishes. We can test this easily:
