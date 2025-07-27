@@ -94,25 +94,6 @@ Ops.tensor <- function(e1, e2) {
   }
 }
 
-asimplify <- function(a, timeout = 10) {
-  if (is.character(a) && rlang::is_installed("Ryacas")) {
-    array(
-      vapply(
-        a,
-        function(x) {
-          Ryacas::yac_symbol(x) |>
-          Ryacas::simplify(timeout = timeout) |>
-          Ryacas::yac_str()
-        },
-        FUN.VALUE = ""
-      ),
-      dim(a) %||% length(a)
-    )
-  } else {
-    a
-  }
-}
-
 tensor_eq <- function(x, y,
                       arg1 = rlang::caller_arg(x),
                       arg2 = rlang::caller_arg(y),
@@ -137,8 +118,7 @@ tensor_add <- function(x, y,
   tensor_validate_alignability(x, y, arg1, arg2, call)
 
   new_tensor(
-    calculus::`%sum%`(as.array(x), as.array(tensor_align(y, x))) |>
-      asimplify(),
+    calculus::`%sum%`(as.array(x), as.array(tensor_align(y, x))),
     index_names = tensor_index_names(x),
     index_positions = tensor_index_positions(x),
     # the result is also reduced by definition
@@ -161,8 +141,7 @@ tensor_diff <- function(x, y,
   tensor_validate_alignability(x, y, arg1, arg2, call)
 
   new_tensor(
-    calculus::`%diff%`(as.array(x), as.array(tensor_align(y, x))) |>
-      asimplify(),
+    calculus::`%diff%`(as.array(x), as.array(tensor_align(y, x))),
     index_names = tensor_index_names(x),
     index_positions = tensor_index_positions(x),
     # the result is also reduced by definition
@@ -189,8 +168,7 @@ tensor_div <- function(x, y,
   }
 
   new_tensor(
-    calculus::`%div%`(as.array(x), as.array(y)) |>
-      asimplify(),
+    calculus::`%div%`(as.array(x), as.array(y)),
     index_names = tensor_index_names(x),
     index_positions = tensor_index_positions(x),
     # the result is also reduced by definition
@@ -276,8 +254,7 @@ tensor_mul <- function(x, y,
         calculus::index(y) <- y_ind_einst
 
         new_tensor(
-          as.array(calculus::einstein(as.array(x), as.array(y))) |>
-            asimplify(),
+          as.array(calculus::einstein(as.array(x), as.array(y))),
           index_names =
             c(
               x_ind[setdiff(names(x_ind), common_indices[einsteinable])],

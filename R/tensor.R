@@ -1,4 +1,5 @@
-new_tensor <- function(x, index_names, index_positions, reduced = FALSE) {
+new_tensor <- function(x, index_names, index_positions,
+                       reduced = FALSE, simplified = FALSE) {
   stopifnot(is.array(x))
   stopifnot(is.character(index_names))
   stopifnot(is.logical(index_positions))
@@ -15,6 +16,7 @@ new_tensor <- function(x, index_names, index_positions, reduced = FALSE) {
     # TRUE = "up", FALSE = "down
     index_positions = index_positions,
     reduced = reduced,
+    simplified = simplified,
     class = "tensor"
   )
 }
@@ -173,6 +175,24 @@ tensor_rank <- function(x) {
   length(dim(x))
 }
 
+tensor_is_simplified <- function(x) {
+  attr(x, "simplified")
+}
+
+tensor_simplify <- function(x) {
+  if (!tensor_is_simplified(x)) {
+    new_tensor(
+      asimplify(x),
+      tensor_index_names(x),
+      tensor_index_positions(x),
+      tensor_is_reduced(x),
+      simplified = TRUE
+    )
+  } else {
+    x
+  }
+}
+
 # picks out "diagonal" indices of an array
 # and creates a new array, whose elements
 # are a subset of the original array
@@ -225,6 +245,25 @@ adiag <- function(x, dims_diag) {
       # reestablish original order
       order(rank(new_dim_order[-seq_along(dims_diag)[-1]]))
     )
+}
+
+asimplify <- function(a, timeout = 20) {
+  if (is.character(a) && rlang::is_installed("Ryacas")) {
+    array(
+      vapply(
+        a,
+        function(x) {
+          Ryacas::yac_symbol(x) |>
+            Ryacas::simplify(timeout = timeout) |>
+            Ryacas::yac_str()
+        },
+        FUN.VALUE = ""
+      ),
+      dim(a) %||% length(a)
+    )
+  } else {
+    a
+  }
 }
 
 
@@ -300,6 +339,7 @@ as.array.tensor <- function(x, index_order = NULL, ...,
   attr(x, "index_names") <- NULL
   attr(x, "index_positions") <- NULL
   attr(x, "reduced") <- NULL
+  attr(x, "simplified") <- NULL
 
   x
 }
