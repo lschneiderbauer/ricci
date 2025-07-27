@@ -250,16 +250,13 @@ adiag <- function(x, dims_diag) {
 asimplify <- function(a, timeout = 20) {
   if (is.character(a) && rlang::is_installed("Ryacas")) {
     array(
-      vapply(
-        a,
-        function(x) {
-          Ryacas::yac_symbol(x) |>
-            Ryacas::simplify(timeout = timeout) |>
-            Ryacas::yac_str()
-        },
-        FUN.VALUE = ""
-      ),
-      dim(a) %||% length(a)
+      Ryacas::as_y(a) |>
+        # gsub("sqrt", "Sqrt", x = _) |>
+        Ryacas::y_fn("Simplify") |>
+        Ryacas::yac_str() |>
+        Ryacas::as_r(),
+        # gsub("Sqrt", "sqrt", x = _),
+      dim(a)
     )
   } else {
     a
