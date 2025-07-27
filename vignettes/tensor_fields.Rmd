@@ -1,0 +1,86 @@
+---
+title: "Tensor Fields"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tensor Fields}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+{ricci} has limited support for [tensor fields](https://en.wikipedia.org/wiki/Tensor_field). Non-constant tensor fields in {ricci} are modeled by `array()`s whose elements are character strings, each string containing a mathematical expression (which are interpreted as functions of manifold coordinates).
+
+This approach implies that only subset of all tensor fields can be modeled:
+
+-   Only mathematical expressions that are understood by R are allowed.
+
+-   If derivatives are involved only expressions where R's `deriv()` knows the derivative of are allowed.
+
+-   Not all tensor fields can be expressed in closed-form expressions to begin with.
+
+Nevertheless, the subset of tensor fields that {ricci} does currently support can still be nontrivial and we still consider this feature useful to this extent.
+
+### Covariant derivative
+
+The main usage of tensor fields in {ricci} is to calculate covariant derivatives, i.e. to make use of the function `covd()`. Similar to the product operator `*` which unifies products by making use of the index structure, `covd()` unifies various differential operators, like e.g. the "gradient", "divergence", "curl", the "Hessian" and the "Laplacian", in any dimension on any (pseudo-) Riemannian manifold and in any coordinate system.
+
+`covd()` requires two main ingredients: a tensor field it can act upon, and a metric tensor field. This tensor field and the metric tensor are thought to exist on the same manifold and they are required to be specified in the same coordinate system.
+
+#### Examples
+
+{ricci} already provides a couple of standard metric tensors, the standard Euclidean metric tensor $g$ in Cartesian coordinates $(x_1,x_2,x_3)$ is simply the identity matrix, while in spherical coordinates $(r, \phi_1, \phi_2)$ the metric tensor appears more complicated:
+
+```{r setup}
+library(ricci)
+
+g_eucl_cart(3)
+
+g_eucl_sph(3)
+```
+
+Equipped with such metrics, we can for example pick a simple tensor field, namely a scalar function $f(r, \phi_1, \phi_2) = r^{-1}$, and calculate our first gradient:
+
+```{r}
+"1/r" |> covd(.(k), g = g_eucl_sph(3))
+```
+
+The argument `.(k)` is nothing special but simply defines a name for the new rank of the array.
+
+The Hessian could be computed in similar fashion:
+
+```{r}
+"1/r" |> covd(.(k, l), g = g_eucl_sph(3))
+```
+
+The operation above can be set into the context of electrodynamics where $f$ is an electrostatic potential, and its gradient is the electric field. For the same electrostatic potential we can very simply calculate the electromagnetic tensor too after forming the electromagnetic potential $A_\mu$:
+
+```{r}
+# electromagnetic potential
+A <- c("1/r", "0", "0", "0")
+
+A %_% .(m) |> covd(.(n), g = g_mink_sph(4)) |> asym(m, n)
+```
+
+We can also chain multiple covariant derivatives in any way we'd like. A well known second-order differential operator, the Laplacian $\Delta = \nabla_k \nabla^k$ can easily be written down:
+
+```{r}
+# on scalar field
+"1/r" |> covd(.(k, +k), g = g)
+
+# on a vector field
+A %_% .(i) |> covd(.(k, +k), g = g)
+```
+
+One property of the metric tensor is that the (Levi Civita) covariant derivative of the metric tensor vanishes. We can test this easily:
+
+```{r}
+g <- g_eucl_sph(3)
+
+g %_% .(i, j) |> covd(.(k), g = g) |> as_a(i, j, k)
+```
