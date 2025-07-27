@@ -180,8 +180,21 @@ test_that("convert tensor to array errs if index does not fit", {
   )
 })
 
+test_that("creating a tensor errs when number index does not match", {
+  arr <- array(1:(2^2), c(2, 2))
+
+  expect_snapshot(
+    arr %_% .(i, j, k),
+    error = TRUE
+  )
+})
+
 test_that("print() does not err", {
   expect_output(
     print(array(1) %_% .(i))
+  )
+
+  expect_output(
+    print(tensor("x"))
   )
 })

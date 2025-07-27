@@ -50,6 +50,8 @@ evaluates to zero identically, although strictly speaking the derivative
 is not defined at \eqn{r = 0}.
 }
 \examples{
+options(ricci.simplify = TRUE)
+
 # gradient of "sin(sqrt(x1^2+x2^2+x3^2))" in 3-dimensional euclidean space
 covd("sin(x1)", .(k), g = g_eucl_cart(3))
 

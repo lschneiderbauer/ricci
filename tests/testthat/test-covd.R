@@ -69,4 +69,28 @@ test_that("covariant derivative of any metric tensor must vanish", {
     der(g_mink_sph(3)),
     0
   )
+
+  der_up <- function(g) {
+    g %_% .(+i, +j) |>
+      covd(.(k), g = g) |>
+      # simplify() |>
+      as.array() |>
+      as.numeric() |>
+      unique()
+  }
+
+  expect_equal(
+    der_up(g_eucl_sph(3)),
+    0
+  )
+
+  expect_equal(
+    der_up(g_eucl_cart(3)),
+    0
+  )
+
+  expect_equal(
+    der_up(g_mink_sph(3)),
+    0
+  )
 })

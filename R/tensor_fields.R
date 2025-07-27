@@ -38,8 +38,8 @@ g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
     return(
       return(
         metric_field(
-          array(-1, 1),
-          array(-1, 1),
+          array(-1, c(1, 1)),
+          array(-1, c(1, 1)),
           coords = "t"
         )
       )
@@ -50,11 +50,11 @@ g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
 
   mat <- matrix(0, n, n)
   mat[2:n, 2:n] <- g_sph
-  mat[1,1] <- "-1"
+  mat[1, 1] <- "-1"
 
   mat_inv <- matrix(0, n, n)
   mat_inv[2:n, 2:n] <- metric_inv(g_sph)
-  mat_inv[1,1] <- "-1"
+  mat_inv[1, 1] <- "-1"
 
   if (n == 2) {
     coords <- c("t", "r")
@@ -249,6 +249,12 @@ christoffel <- function(g) {
   coords <- metric_coords(g)
 
   der <- calculus::derivative(g, coords)
+
+  # special case: g = 1x1 matrix
+  if (all(dim(g) == c(1, 1))) {
+    dim(der) <- c(1, 1, 1)
+  }
+
   ((der %_% .(i, k, l) + der %_% .(i, l, k) - der %_% .(k, l, i)) / 2L) |>
     as_a(i, k, l)
 }
@@ -276,8 +282,8 @@ riemann <- function(g) {
 
   ((pd(chr %_% .(+i, j, k), coords, "l", "-", g) +
     chr %_% .(+i, l, s) * chr %_% .(+s, j, k)) * g %_% .(i, i2)) |>
-    asym(j, l) |>
-    as_a(i2, k, j, l)
+    asym(j, l) * 2 |> # asym divides by two
+    as_a(i2, k, l, j)
 }
 
 #' Ricci curvature tensor

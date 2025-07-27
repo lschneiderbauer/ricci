@@ -28,3 +28,13 @@
       x Index `i` missing.
       i Operation requires the explicit selection of all indices.
 
+# creating a tensor errs when number index does not match
+
+    Code
+      arr %_% .(i, j, k)
+    Condition
+      Error in `arr %_% .(i, j, k)`:
+      ! The number of provided indices do not match the array dimensions.
+      x 3 indices provided for a rank 2 tensor.
+      i The number of indices needs to match the rank of argument `a`.
+

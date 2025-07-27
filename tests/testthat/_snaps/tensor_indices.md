@@ -4,8 +4,8 @@
       array(1) %_% "test"
     Condition
       Error in `array(1) %_% "test"`:
-      ! Second argument of `%_%()` is not an index specification.
-      i Indices need to be specified with `ricci::.()`.
+      ! Second argument `i` is not specified correctly.
+      i Use `.()` to specify an index set.
 
 ---
 

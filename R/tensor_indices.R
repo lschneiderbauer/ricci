@@ -30,8 +30,8 @@
   if (!inherits(i, "tensor_indices")) {
     cli_abort(
       c(
-        "Second argument of {.fun %_%} is not an index specification.",
-        i = "Indices need to be specified with {.fun ricci::.}."
+        "Second argument {.arg i} is not specified correctly.",
+        i = "Use {.fun .} to specify an index set."
       )
     )
   }

@@ -262,10 +262,6 @@ tensor_lower <- function(x, ind_from, g,
     g <- diag(1, n, n)
   }
 
-  if (is.function(g)) {
-    g <- g()
-  }
-
   Reduce(
     function(tens, i) {
       tg <- new_tensor(g, c(i, "?"), c(FALSE, FALSE))

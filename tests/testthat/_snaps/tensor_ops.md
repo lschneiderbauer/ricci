@@ -1,3 +1,13 @@
+# tensor kronecker product works
+
+    Code
+      kron(arr %_% .(i, +j, k), l <- .(i, +j))
+    Condition
+      Error in `kron()`:
+      ! In `...`: indices with different positions cannot be combined.
+      x Indices `i` and `j` have different positions.
+      i Make sure you combine only indices of the same position.
+
 # raising tensor works
 
     Code
@@ -38,4 +48,18 @@
       ! Argument `...` contains invalid index.
       x Index `k` not present in <Labeled Array> [2x2] .(-i, -j).
       i Make sure you only select indices that match the tensor indices.
+
+# sym/asym warnings
+
+    Code
+      sym(arr %_% .(i, j), i)
+    Condition
+      Warning in `sym()`:
+      Symmetrization over a single index has no effect.
+      i You might want to consider to remove this call.
+    Output
+      <Labeled Array> [2x2] .(-i, -j)
+           [,1] [,2]
+      [1,]    1    3
+      [2,]    2    4
 

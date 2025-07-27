@@ -31,3 +31,13 @@
       x Tensor rank of `e2` is 1.
       i Operation can only be carried out with two tensors of same rank.
 
+---
+
+    Code
+      arr %_% .(i, j) + arr %_% .(+i, j)
+    Condition
+      Error in `` `+`() ``:
+      ! Tensor index positions do not agree.
+      x Tensor index `i` appears with different positions in `e1` and `e2`.
+      i Operation can only be carried out with two tensors having identical index positions.
+

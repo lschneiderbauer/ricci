@@ -168,7 +168,7 @@ tensor_div <- function(x, y,
   }
 
   new_tensor(
-    calculus::`%div%`(as.array(x), as.array(y)),
+    array(calculus::`%div%`(as.array(x), as.array(y)), dim(x)),
     index_names = tensor_index_names(x),
     index_positions = tensor_index_positions(x),
     # the result is also reduced by definition

@@ -9,14 +9,16 @@ pd <- function(x, coords, new_index_name, new_index_position, g) {
   # i.e. the array after taking the derivative has dim c(1, n), where it
   # simply should have dim c(n)
   if (is_scalar(x)) {
-    dim(der) <- tail(dim(der), n = 1)
+    new_dim <- length(coords)
+  } else {
+    new_dim <- c(dim(x), length(coords))
   }
 
   dummy <- tensor_new_dummy_index_name(x)
 
   low <-
     new_tensor(
-      der,
+      array(der, new_dim),
       index_names = c(tensor_index_names(x), dummy),
       index_positions = c(tensor_index_positions(x), FALSE)
     )
@@ -80,6 +82,8 @@ pd <- function(x, coords, new_index_name, new_index_position, g) {
 #'  indices (depending on `i`).
 #'
 #' @examples
+#' options(ricci.simplify = TRUE)
+#'
 #' # gradient of "sin(sqrt(x1^2+x2^2+x3^2))" in 3-dimensional euclidean space
 #' covd("sin(x1)", .(k), g = g_eucl_cart(3))
 #'

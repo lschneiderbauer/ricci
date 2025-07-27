@@ -95,6 +95,21 @@ test_that("tensor division by scalar works", {
     (arr_sym %_% .(i, j) / 3) |> at(a = 1),
     (calculus::`%div%`(arr_sym, 3) |> at(a = 1)) %_% .(i, j)
   )
+
+  arr_sing <- array(1, c(1, 1))
+  expect_tensor_equal(
+    arr_sing %_% .(i, j) / 2,
+    (arr_sing / 2) %_% .(i, j)
+  )
+})
+
+test_that("tensor division by other tensor works", {
+  arr <- array(1:(2 * 3), c(2, 3))
+
+  expect_tensor_equal(
+    arr %_% .(i, j) / arr %_% .(i, j),
+    array(rep(1, 6), c(2, 3)) %_% .(i, j)
+  )
 })
 
 test_that("tensor multiplication yields correct errors", {
@@ -124,6 +139,11 @@ test_that("tensor addition works", {
   arr2 <- array(1:4, 4)
   expect_snapshot(
     arr %_% .(i, j) + arr2 %_% .(i),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i, j) + arr %_% .(+i, j),
     error = TRUE
   )
 })

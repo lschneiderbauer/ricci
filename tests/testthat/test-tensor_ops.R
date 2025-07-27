@@ -11,6 +11,11 @@ test_that("tensor kronecker product works", {
     arr %_% .(i, j, k) |> kron(.(i, j) -> l),
     array(1:(2^3), c(4, 2)) %_% .(l, k)
   )
+
+  expect_snapshot(
+    arr %_% .(i, +j, k) |> kron(.(i, +j) -> l),
+    error = TRUE
+  )
 })
 
 test_that("kronecker commutes with contraction", {
@@ -184,6 +189,14 @@ test_that("tensor = sym + antisym (two indices)", {
     (tens |> sym(i, j)) +
       (tens |> asym(i, j)),
     tens
+  )
+})
+
+test_that("sym/asym warnings", {
+  arr <- array(1:4, c(2, 2))
+
+  expect_snapshot(
+    arr %_% .(i, j) |> sym(i)
   )
 })
 
