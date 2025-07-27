@@ -1,7 +1,9 @@
 #' Minkowski metric tensor
 #'
-#' Provides the covariant metric tensor in `n` dimensions in
+#' `g_mink_cart()` provides the covariant metric tensor in `n` dimensions in
 #' Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
+#' `g_mink_sph()` provides the same tensor where the spatial part uses spherical
+#' coordinates.
 #'
 #' @param n The dimension of the metric tensor.
 #' @param coords
@@ -17,11 +19,33 @@
 #' @export
 #' @concept metric_tensors
 #' @family metric tensors
-g_mink <- function(n, coords = paste0("x", 1:n - 1)) {
+#' @rdname g_mink
+g_mink_cart <- function(n, coords = paste0("x", 1:n - 1)) {
   metric_field(
     diag(c(-1, rep(1, n - 1)), n, n),
     diag(c(-1, rep(1, n - 1)), n, n),
     coords = paste0("x", 1:n - 1)
+  )
+}
+
+#' @export
+#' @examples
+#' g_mink_sph(4)
+#' g_mink_sph(4) %_% .(+i, +j)
+#' @rdname g_mink
+g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
+  g_sph <- g_eucl_sph(n - 1, coords = coords[-1])
+
+  mat <- matrix(0, n, n)
+  mat[2:n, 2:n] <- g_sph
+  mat[1,1] <- "-1"
+
+  mat_inv <- matrix(0, n, n)
+  mat_inv[2:n, 2:n] <- metric_inv(g_sph)
+  mat_inv[1,1] <- "-1"
+
+  metric_field(
+    mat, mat_inv, coords
   )
 }
 

@@ -31,7 +31,7 @@ Wikipedia: \href{https://en.wikipedia.org/wiki/Metric_tensor}{Metric tensor}
 
 Other metric tensors: 
 \code{\link{g_eucl_cart}()},
-\code{\link{g_mink}()}
+\code{\link{g_mink_cart}()}
 }
 \concept{metric tensors}
 \concept{metric_tensors}
