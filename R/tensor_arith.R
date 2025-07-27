@@ -74,14 +74,24 @@ Ops.tensor <- function(e1, e2) {
   # "&", "|", "!"
   # "==", "!=", "<", "<=", ">=", ">"
 
-  switch(.Generic,
-    "+" = call(tensor_add, "+"),
-    "-" = call(tensor_diff, "-"),
-    "*" = call(tensor_mul, "*"),
-    "/" = call(tensor_div, "/"),
-    "==" = call(tensor_eq, "=="),
-    NextMethod()
-  )
+
+  if (missing(e2)) { # check for unary operators
+    switch(
+      .Generic,
+      "+" = e1,
+      "-" = (-1L) * e1,
+      NextMethod()
+    )
+  } else {
+    switch(.Generic,
+      "+" = call(tensor_add, "+"),
+      "-" = call(tensor_diff, "-"),
+      "*" = call(tensor_mul, "*"),
+      "/" = call(tensor_div, "/"),
+      "==" = call(tensor_eq, "=="),
+      NextMethod()
+    )
+  }
 }
 
 asimplify <- function(a, timeout = 10) {

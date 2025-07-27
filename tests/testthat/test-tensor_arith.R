@@ -148,3 +148,17 @@ test_that("tensor addition with reordering works", {
     array(1:4 + c(1L, 3L, 2L, 4L), c(2, 2)) %_% .(i, j)
   )
 })
+
+test_that("tensor with unary operator works", {
+  arr <- array(1:(2^2), c(2, 2))
+
+  expect_tensor_equal(
+    -(arr %_% .(i, j)),
+    (-arr) %_% .(i, j)
+  )
+
+  expect_tensor_equal(
+    +(arr %_% .(i, j)),
+    (+arr) %_% .(i, j)
+  )
+})
