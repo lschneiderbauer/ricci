@@ -193,6 +193,14 @@ tensor_simplify <- function(x) {
   }
 }
 
+# Simplify symbolic expressions
+#
+# TODO: requires package, etc.
+#
+# simplify <- function(x) {
+#   tensor_simplify(x)
+# }
+
 # picks out "diagonal" indices of an array
 # and creates a new array, whose elements
 # are a subset of the original array
@@ -247,8 +255,9 @@ adiag <- function(x, dims_diag) {
     )
 }
 
-asimplify <- function(a, timeout = 20) {
-  if (is.character(a) && rlang::is_installed("Ryacas")) {
+asimplify <- function(a) {
+  if (is.character(a) && rlang::is_installed("Ryacas") &&
+      isTRUE(getOption("ricci.simplify"))) {
     array(
       Ryacas::as_y(a) |>
         # gsub("sqrt", "Sqrt", x = _) |>

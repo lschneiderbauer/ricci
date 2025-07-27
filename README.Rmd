@@ -63,6 +63,11 @@ a <- array(1:(2^3), dim = c(2, 2, 2))
 The same instructions work for a symbolic array:
 
 ```{r example_symb}
+
+# enable optional simplfying procedures
+# (takes a toll on performance)
+options(ricci.simplify = TRUE)
+
 # symbolic data
 a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
@@ -77,3 +82,4 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 ```
 
 For more details, see `vignette("ricci", package = "ricci")`. For more information about how to use tensor fields and the covariant derivative, see `vignette("tensor_fields", package = "ricci")`.
+

@@ -39,6 +39,10 @@ The main usage of tensor fields in {ricci} is to calculate covariant derivatives
 ```{r setup}
 library(ricci)
 
+# enable optional simplfying procedures
+# (takes a toll on performance)
+options(ricci.simplify = TRUE)
+
 g_eucl_cart(3)
 
 g_eucl_sph(3)
@@ -85,3 +89,4 @@ g <- g_eucl_sph(3)
 
 g %_% .(i, j) |> covd(.(k), g = g) |> as_a(i, j, k)
 ```
+

@@ -84,10 +84,10 @@ Ops.tensor <- function(e1, e2) {
     )
   } else {
     switch(.Generic,
-      "+" = call(tensor_add, "+"),
-      "-" = call(tensor_diff, "-"),
-      "*" = call(tensor_mul, "*"),
-      "/" = call(tensor_div, "/"),
+      "+" = call(tensor_simplify %c% tensor_add, "+"),
+      "-" = call(tensor_simplify %c% tensor_diff, "-"),
+      "*" = call(tensor_simplify %c% tensor_mul, "*"),
+      "/" = call(tensor_simplify %c% tensor_div, "/"),
       "==" = call(tensor_eq, "=="),
       NextMethod()
     )

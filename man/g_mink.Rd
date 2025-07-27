@@ -25,8 +25,8 @@ Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
 coordinates.
 }
 \examples{
-g_mink(4)
-g_mink(4) \%_\% .(+i, +j)
+g_mink_cart(4)
+g_mink_cart(4) \%_\% .(+i, +j)
 g_mink_sph(4)
 g_mink_sph(4) \%_\% .(+i, +j)
 }

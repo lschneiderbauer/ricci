@@ -14,8 +14,8 @@
 #'
 #' @seealso Wikipedia [Minkowski metric tensor](https://en.wikipedia.org/wiki/Minkowski_space#Minkowski_metric)
 #' @examples
-#' g_mink(4)
-#' g_mink(4) %_% .(+i, +j)
+#' g_mink_cart(4)
+#' g_mink_cart(4) %_% .(+i, +j)
 #' @export
 #' @concept metric_tensors
 #' @family metric tensors
