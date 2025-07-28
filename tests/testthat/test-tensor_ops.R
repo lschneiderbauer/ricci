@@ -45,7 +45,7 @@ test_that("raising tensor works", {
     arr %_% .(i) |>
       r(i, g = g_eucl_sph(4)) |>
       as_a(+i) |>
-      at(r = 1, ph1 = pi/2, ph2 = pi/2),
+      at(c(r = 1, ph1 = pi / 2, ph2 = pi / 2)),
     arr
   )
 
@@ -200,3 +200,14 @@ test_that("sym/asym warnings", {
   )
 })
 
+test_that("`at` works correctly", {
+  expect_equal(
+    array(c("a1", "a2", "a3", "a4"), c(2, 2)) |> at(c(a1 = 1, a2 = 2, a3 = 3, a4 = 4)),
+    array(c(1, 2, 3, 4), c(2, 2))
+  )
+
+  expect_snapshot(
+    tensor("f(x)*y") |> at(c(x = 0)),
+    error = TRUE
+  )
+})

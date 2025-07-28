@@ -89,4 +89,3 @@ g <- g_eucl_sph(3)
 
 g %_% .(i, j) |> covd(.(k), g = g) |> as_a(i, j, k)
 ```
-

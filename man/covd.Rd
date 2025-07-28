@@ -4,7 +4,7 @@
 \alias{covd}
 \title{Covariant Derivative}
 \usage{
-covd(x, i, act_on = NULL, g = NULL)
+covd(x, i, g, act_on = NULL)
 }
 \arguments{
 \item{x}{A labeled tensor object, created by \code{\link{\%_\%}} or \code{\link[=tensor]{tensor()}}. \code{covd()} only
@@ -18,6 +18,10 @@ order. Each covariant derivative adds one index each with the specified
 names. After the covariant derivatives are calculated, implicit contraction
 rules are applied (in case of reoccurring index label names).}
 
+\item{g}{A covariant metric tensor, a "metric_field" object. See \code{\link[=metric_field]{metric_field()}}
+to create a new metric tensor, or use predefined metrics,
+e.g. \code{\link[=g_eucl_cart]{g_eucl_cart()}}.}
+
 \item{act_on}{An optional index slot label specification created with \code{\link[=.]{.()}} that
 specifies on which indices the covariant derivative should act on.
 This might
@@ -25,10 +29,6 @@ be useful if not all tensor factors are elements of the tangent space of
 the underlying manifold. If not provided the covariant derivative acts on
 all indices. If no indices are selected explicitly (with \code{\link[=.]{.()}}),
 the covariant derivative acts like it would on a scalar.}
-
-\item{g}{A covariant metric tensor, a "metric_field" object. See \code{\link[=metric_field]{metric_field()}}
-to create a new metric tensor, or use predefined metrics,
-e.g. \code{\link[=g_eucl_cart]{g_eucl_cart()}}.}
 }
 \value{
 The covariant derivative: a new labeled array with one or more additional

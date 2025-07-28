@@ -454,3 +454,68 @@ pos_inv <- function(pos) {
   pos[pos == "++"] <- "-"
   pos
 }
+
+
+at <- function(x, at) {
+  UseMethod("at")
+}
+
+#' Evaluate a symbolic array
+#'
+#' Evaluates a symbolic array at a particular point in parameter space.
+#' Partial evaluation is not allowed, all symbols need to be accounted
+#' for. The result is a numeric array.
+#'
+#' @param x A symbolic [array()] or a [tensor()].
+#' @param vars
+#'  A named vector with parameter-value assignments.
+#'  Each named entry represents a substitution of a symbol with the given value.
+#' @return A numeric [array()] or [tensor()].
+#' @examples
+#' g_sph(3) |> at(ph1 = 0, ph2 = 0)
+#' @export
+#' @rdname at
+#' @concept tensor_ops
+at.array <- function(x, vars) {
+  rlang::try_fetch(
+    calculus::evaluate(x, vars),
+    error = function(cnd) {
+      symbols_required <-
+        unique(unlist(lapply(
+          rlang::parse_exprs(as.character(x)),
+          ast_extr_symbols
+        )))
+
+      symbols_specified <- names(vars)
+
+      symbols_in_environment <-
+        symbols_required[
+          vapply(symbols_required, exists, FUN.VALUE = FALSE)
+        ]
+
+      symbols_not_defined <-
+        symbols_required |>
+        setdiff(symbols_specified) |>
+        setdiff(symbols_in_environment)
+
+      cli_abort(
+        c(
+          "Not all symbols are specified.",
+          x = "Symbol{?s} {.code {symbols_not_defined}} not defined."
+        ),
+        parent = cnd
+      )
+    }
+  )
+}
+
+#' @export
+#' @rdname at
+at.tensor <- function(x, vars) {
+  new_tensor(
+    at(as.array(x), vars),
+    tensor_index_names(x),
+    tensor_index_positions(x),
+    reduced = tensor_is_reduced(x)
+  )
+}

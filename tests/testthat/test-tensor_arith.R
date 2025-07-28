@@ -70,13 +70,13 @@ test_that("tensor multiplication with scalar works", {
   arr_sym <- array(rep("a", 6), c(2, 3))
 
   expect_tensor_equal(
-    at(arr_sym %_% .(i, j) * 3, a = 1),
-    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), a = 1)
+    at(arr_sym %_% .(i, j) * 3, c(a = 1)),
+    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), c(a = 1))
   )
 
   expect_tensor_equal(
-    at(3 * arr_sym %_% .(i, j), a = 1),
-    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), a = 1)
+    at(3 * arr_sym %_% .(i, j), c(a = 1)),
+    at(calculus::`%prod%`(arr_sym, 3) %_% .(i, j), c(a = 1))
   )
 })
 
@@ -92,8 +92,8 @@ test_that("tensor division by scalar works", {
   arr_sym <- array(rep("a", 6), c(2, 3))
 
   expect_tensor_equal(
-    (arr_sym %_% .(i, j) / 3) |> at(a = 1),
-    (calculus::`%div%`(arr_sym, 3) |> at(a = 1)) %_% .(i, j)
+    (arr_sym %_% .(i, j) / 3) |> at(c(a = 1)),
+    (calculus::`%div%`(arr_sym, 3) |> at(c(a = 1))) %_% .(i, j)
   )
 
   arr_sing <- array(1, c(1, 1))

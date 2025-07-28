@@ -63,3 +63,14 @@
       [1,]    1    3
       [2,]    2    4
 
+# `at` works correctly
+
+    Code
+      at(tensor("f(x)*y"), c(x = 0))
+    Condition
+      Error in `at()`:
+      ! Not all symbols are specified.
+      x Symbols `f` and `y` not defined.
+      Caused by error in `f()`:
+      ! could not find function "f"
+

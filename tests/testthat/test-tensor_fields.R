@@ -56,7 +56,8 @@ test_that("ricci scalar works", {
   )
 
   expect_equal(
-    as.numeric(ricci_sc(g_sph(2)) |> at(ph1 = 0.3, ph2 = 0.4)),
+    as.numeric(ricci_sc(g_sph(2)) |>
+      at(c(ph1 = 0.3, ph2 = 0.4))),
     2
   )
 })

@@ -55,6 +55,17 @@ ast_extr_ind <- function(x,
   )
 }
 
+ast_extr_symbols <- function(x) {
+  switch_expr(x,
+    symbol = as.character(x),
+    constant = "",
+    call = lapply(x, ast_extr_symbols),
+    pairlist = lapply(x, ast_extr_symbols)
+  ) |>
+    unlist() |>
+    unique()
+}
+
 
 switch_expr <- function(x, ...) {
   switch(expr_type(x),
