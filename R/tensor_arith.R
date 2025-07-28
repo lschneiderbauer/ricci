@@ -58,7 +58,7 @@
 #' a %_% .(i, j) == a %_% .(k, j)
 #' }
 #' @export
-#' @concept tensor_ops
+#' @concept arith
 #' @family tensor operations
 Ops.tensor <- function(e1, e2) {
   call <- function(fun, name) {

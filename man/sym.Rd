@@ -35,5 +35,5 @@ Other tensor operations:
 \code{\link{r}()},
 \code{\link{subst}()}
 }
+\concept{sym}
 \concept{tensor operations}
-\concept{tensor_ops}

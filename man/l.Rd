@@ -37,5 +37,5 @@ Other tensor operations:
 \code{\link{subst}()},
 \code{\link{sym}()}
 }
+\concept{index}
 \concept{tensor operations}
-\concept{tensor_ops}

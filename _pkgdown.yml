@@ -8,11 +8,18 @@ reference:
   contents:
   - has_concept("tensor")
 - title: "Tensor operations"
+- subtitle: "Index manipulation"
   contents:
-  - has_concept("tensor_ops")
-- title: "Tensor symbols"
+  - has_concept("index")
+- subtitle: "Tensor arithmetic"
   contents:
-  - has_concept("tensor_symbols")
+  - has_concept("arith")
+- subtitle: "Symmetric and antisymmetric part"
+  contents:
+  - has_concept("sym")
+- subtitle: "Symbolic evaluation"
+  contents:
+  - has_concept("eval")
 - title: "Tensor fields"
 - subtitle: "Covariant derivative"
   contents:
@@ -23,6 +30,9 @@ reference:
 - subtitle: "Geometric tensor fields"
   contents:
   - has_concept("geom_tensors")
+- subtitle: "Special tensors / symbols"
+  contents:
+  - has_concept("tensor_symbols")
 - title: "Testthat expectation"
   contents:
   - expect_tensor_equal

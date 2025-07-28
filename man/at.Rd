@@ -26,4 +26,4 @@ for. The result is a numeric array.
 \examples{
 g_sph(3) |> at(ph1 = 0, ph2 = 0)
 }
-\concept{tensor_ops}
+\concept{eval}

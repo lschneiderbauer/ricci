@@ -18,7 +18,7 @@
 #' @return A modified tensor object.
 #'
 #' @export
-#' @concept tensor_ops
+#' @concept index
 #' @family tensor operations
 r <- function(x, ..., g = NULL) {
   tensor_raise(x, .(...), g,
@@ -40,7 +40,7 @@ r <- function(x, ..., g = NULL) {
 #' @inheritParams r
 #' @return A modified tensor object.
 #' @export
-#' @concept tensor_ops
+#' @concept index
 #' @family tensor operations
 l <- function(x, ..., g = NULL) {
   tensor_lower(x, .(...), g,
@@ -63,7 +63,7 @@ l <- function(x, ..., g = NULL) {
 #' @return A modified tensor object.
 #'
 #' @export
-#' @concept tensor_ops
+#' @concept index
 #' @family tensor operations
 subst <- function(x, ...) {
   tensor_indices <- Map(ast_subst, rlang::exprs(...))
@@ -99,7 +99,7 @@ subst <- function(x, ...) {
 #' a %_% .(i, j) |> sym(i, j)
 #' @export
 #' @seealso Wikipedia: [Ricci calculus - Symmetric and antisymmetric parts](https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts)
-#' @concept tensor_ops
+#' @concept sym
 #' @family tensor operations
 sym <- function(x, ...) {
   tensor_sym(x, .(...)) |>
@@ -122,7 +122,7 @@ sym <- function(x, ...) {
 #' a %_% .(i, j) |> asym(i, j)
 #' @export
 #' @seealso Wikipedia: [Ricci calculus - Symmetric and antisymmetric parts](https://en.wikipedia.org/wiki/Ricci_calculus#Symmetric_and_antisymmetric_parts)
-#' @concept tensor_ops
+#' @concept sym
 #' @family tensor operations
 asym <- function(x, ...) {
   tensor_asym(x, .(...), arg = "...") |>
@@ -147,7 +147,7 @@ asym <- function(x, ...) {
 #' a %_% .(i, j, k) |> kron(.(i, j) -> l)
 #' @export
 #' @seealso Wikipedia: [Kronecker Product](https://en.wikipedia.org/wiki/Kronecker_product)
-#' @concept tensor_ops
+#' @concept arith
 #' @family tensor operations
 kron <- function(x, ...) {
   exprs <- rlang::exprs(...)
@@ -475,7 +475,7 @@ at <- function(x, at) {
 #' g_sph(3) |> at(ph1 = 0, ph2 = 0)
 #' @export
 #' @rdname at
-#' @concept tensor_ops
+#' @concept eval
 at.array <- function(x, vars) {
   rlang::try_fetch(
     calculus::evaluate(x, vars),

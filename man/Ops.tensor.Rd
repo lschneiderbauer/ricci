@@ -80,5 +80,5 @@ Other tensor operations:
 \code{\link{subst}()},
 \code{\link{sym}()}
 }
+\concept{arith}
 \concept{tensor operations}
-\concept{tensor_ops}
