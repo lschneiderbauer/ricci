@@ -32,6 +32,16 @@ test_that("creating g_eucl works", {
   )
 })
 
+test_that("creating g_ss works", {
+  expect_snapshot(
+    g_ss(3)
+  )
+
+  expect_error(
+    g_ss(2)
+  )
+})
+
 test_that("christoffel works for metric being 1x1 matrix", {
   expect_equal(
     as.numeric(christoffel(g_eucl_cart(1))),

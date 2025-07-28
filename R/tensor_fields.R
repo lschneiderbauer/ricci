@@ -117,33 +117,7 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
   }
 
   # construct matrix
-  mat_diag <-
-    c(
-      "1",
-      vapply(
-        1:(n - 1),
-        function(k) {
-          if (k - 1 < 1) {
-            return(paste0(coords[[1]], "^2"))
-          }
-
-          calculus::`%prod%`(
-            paste0(coords[[1]], "^2"),
-            Reduce(
-              calculus::`%prod%`,
-              vapply(
-                1:(k - 1),
-                function(m) {
-                  paste0("sin(", coords[[m + 1]], ")^2")
-                },
-                FUN.VALUE = ""
-              )
-            )
-          )
-        },
-        FUN.VALUE = ""
-      )
-    )
+  mat_diag <- c("1", paste0("r^2*", sph_diag(n - 1, coords[-1])))
 
   mat <- array("0", c(n, n))
   diag(mat) <- mat_diag
@@ -158,7 +132,7 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
   )
 }
 
-#' Metric tensor of sphere
+#' Metric tensor of the sphere
 #'
 #' Provides the metric tensor of the sphere \eqn{S^n} with radius 1.
 #'
@@ -184,27 +158,7 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
 #' @family metric tensors
 g_sph <- function(n, coords = paste0("ph", 1:n)) {
   # construct matrix
-  mat_diag <-
-    vapply(
-      1:n,
-      function(k) {
-        if (k - 1 < 1) {
-          return("1")
-        }
-
-        Reduce(
-          calculus::`%prod%`,
-          vapply(
-            1:(k - 1),
-            function(m) {
-              paste0("sin(", coords[[m]], ")^2")
-            },
-            FUN.VALUE = ""
-          )
-        )
-      },
-      FUN.VALUE = ""
-    )
+  mat_diag <- sph_diag(n, coords)
 
   mat <- array("0", c(n, n))
   diag(mat) <- mat_diag
@@ -216,6 +170,71 @@ g_sph <- function(n, coords = paste0("ph", 1:n)) {
     mat,
     mat_inv,
     coords = coords
+  )
+}
+
+#' Schwarzschild metric tensor
+#'
+#' Provides the metric tensor of the Einstein equation's Schwarzschild solution
+#' in Schwarzschild coordinates where the Schwarzschild radius is set to 1.
+#'
+#' @details
+#' Note that Schwarzschild coordinates become singular at the Schwarzschild
+#' radius (event horizon) \eqn{r=r_s=2GM/c^2=1} and the \eqn{r=0}.
+#'
+#' @param n The dimension of the metric tensor.
+#' @param coords
+#'  A character vector of coordinate names. The length needs
+#'  to match the tensor dimensions.
+#' @return
+#'  The covariant metric tensor as array imputed with coordinate names.
+#'
+#' @seealso Wikipedia: [Schwarzschild metric](https://en.wikipedia.org/wiki/Schwarzschild_metric)
+#' @examples
+#' g_ss(4)
+#' g_ss(4) %_% .(+i, +j)
+#' @export
+#' @concept metric_tensors
+#' @family metric tensors
+g_ss <- function(n, coords = c("t", "r", paste0("ph", 1:(n-2)))) {
+  stopifnot(n >= 3)
+
+  # construct matrix
+  mat_diag <- paste0("r^2*", sph_diag(n - 2, tail(coords, -2)))
+
+  mat <- array("0", c(n, n))
+  diag(mat) <- c("-(1-1/r)", "1/(1-1/r)", mat_diag)
+
+  mat_inv <- mat
+  diag(mat_inv) <- calculus::`%div%`("1", diag(mat_inv))
+
+  metric_field(
+    mat,
+    mat_inv,
+    coords = coords
+  )
+}
+
+sph_diag <- function(n, coords) {
+  vapply(
+    1:n,
+    function(k) {
+      if (k - 1 < 1) {
+        return("1")
+      }
+
+      Reduce(
+        calculus::`%prod%`,
+        vapply(
+          1:(k - 1),
+          function(m) {
+            paste0("sin(", coords[[m]], ")^2")
+          },
+          FUN.VALUE = ""
+        )
+      )
+    },
+    FUN.VALUE = ""
   )
 }
 
