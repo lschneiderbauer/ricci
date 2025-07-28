@@ -17,11 +17,12 @@ The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
 Provides the metric tensor of the Einstein equation's Schwarzschild solution
-in Schwarzschild coordinates where the Schwarzschild radius is set to 1.
+in Schwarzschild coordinates where the Schwarzschild radius \eqn{r_s} is set to 1.
+\deqn{ds^2 = - \left(1-\frac{r_s}{r}\right) dt^2 + \left(1-\frac{r_s}{r}\right)^{-1} dr^r + r^2 d\Omega^2}
 }
 \details{
 Note that Schwarzschild coordinates become singular at the Schwarzschild
-radius (event horizon) \eqn{r=r_s=2GM/c^2=1} and the \eqn{r=0}.
+radius (event horizon) \eqn{r=r_s=1} and at \eqn{r=0}.
 }
 \examples{
 g_ss(4)

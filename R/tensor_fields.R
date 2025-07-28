@@ -2,8 +2,10 @@
 #'
 #' `g_mink_cart()` provides the covariant metric tensor in `n` dimensions in
 #' Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
+#' \deqn{ds^2=-dx_0^2+\sum_{i=1}^{n-1} dx_i^2}
 #' `g_mink_sph()` provides the same tensor where the spatial part uses spherical
 #' coordinates.
+#' \deqn{ds^2=-dt^2 + dr^2 + r^2 d\Omega^2}
 #'
 #' @param n The dimension of the metric tensor.
 #' @param coords
@@ -69,11 +71,13 @@ g_mink_sph <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
 #' Euclidean metric tensor
 #'
 #' Provides the Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
-#'
-#' @details
 #' `g_eucl_cart()` returns a numeric (constant) tensor in Cartesian coordinates,
+#' \deqn{ds^2=\sum_{i=1}^n dx_i^2}
 #' while `g_eucl_sph()` returns a symbolic tensor field in generalized spherical
 #' coordinates \eqn{{r, \phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
+#' \deqn{ds^2=dr^2 + r^2 d\Omega^2}
+#'
+#' @details
 #' As usual, spherical coordinates are degenerate at \eqn{r = 0} and \eqn{\phi_l = 0}, so be
 #' careful around those points.
 #'
@@ -135,10 +139,11 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
 #' Metric tensor of the sphere
 #'
 #' Provides the metric tensor of the sphere \eqn{S^n} with radius 1.
-#'
-#' @details
 #' `g_sph()` returns a symbolic tensor field in generalized spherical
 #' coordinates \eqn{{\phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
+#' \deqn{d\Omega^2= d\phi_1^2 + \sum_{i=1}^{n-1} \prod_{m=1}^{i-1} sin(\phi_m)^2 d\phi_i^2}
+#'
+#' @details
 #' As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
 #' careful around those points.
 #'
@@ -176,11 +181,12 @@ g_sph <- function(n, coords = paste0("ph", 1:n)) {
 #' Schwarzschild metric tensor
 #'
 #' Provides the metric tensor of the Einstein equation's Schwarzschild solution
-#' in Schwarzschild coordinates where the Schwarzschild radius is set to 1.
+#' in Schwarzschild coordinates where the Schwarzschild radius \eqn{r_s} is set to 1.
+#' \deqn{ds^2 = - \left(1-\frac{r_s}{r}\right) dt^2 + \left(1-\frac{r_s}{r}\right)^{-1} dr^r + r^2 d\Omega^2}
 #'
 #' @details
 #' Note that Schwarzschild coordinates become singular at the Schwarzschild
-#' radius (event horizon) \eqn{r=r_s=2GM/c^2=1} and the \eqn{r=0}.
+#' radius (event horizon) \eqn{r=r_s=1} and at \eqn{r=0}.
 #'
 #' @param n The dimension of the metric tensor.
 #' @param coords

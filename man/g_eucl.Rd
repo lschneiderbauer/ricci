@@ -20,11 +20,13 @@ The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
 Provides the Euclidean metric tensor of \eqn{\mathbb{E}^n}{E^n}.
-}
-\details{
 \code{g_eucl_cart()} returns a numeric (constant) tensor in Cartesian coordinates,
+\deqn{ds^2=\sum_{i=1}^n dx_i^2}
 while \code{g_eucl_sph()} returns a symbolic tensor field in generalized spherical
 coordinates \eqn{{r, \phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
+\deqn{ds^2=dr^2 + r^2 d\Omega^2}
+}
+\details{
 As usual, spherical coordinates are degenerate at \eqn{r = 0} and \eqn{\phi_l = 0}, so be
 careful around those points.
 }

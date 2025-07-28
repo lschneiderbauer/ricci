@@ -17,10 +17,11 @@ The covariant metric tensor as array imputed with coordinate names.
 }
 \description{
 Provides the metric tensor of the sphere \eqn{S^n} with radius 1.
-}
-\details{
 \code{g_sph()} returns a symbolic tensor field in generalized spherical
 coordinates \eqn{{\phi_1, \phi_2, ..., \phi_{n-1}}}{{r, `ph1`, `ph2`, ..., `ph(n-2)`}}.
+\deqn{d\Omega^2= d\phi_1^2 + \sum_{i=1}^{n-1} \prod_{m=1}^{i-1} sin(\phi_m)^2 d\phi_i^2}
+}
+\details{
 As usual, spherical coordinates are degenerate at \eqn{\phi_l = 0}, so be
 careful around those points.
 }

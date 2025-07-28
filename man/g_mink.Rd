@@ -21,8 +21,10 @@ The covariant metric tensor as array imputed with coordinate names.
 \description{
 \code{g_mink_cart()} provides the covariant metric tensor in \code{n} dimensions in
 Cartesian coordinates with signature \eqn{(-1, 1, 1, ...)}{`c(-1, 1, 1, ...)`}.
+\deqn{ds^2=-dx_0^2+\sum_{i=1}^{n-1} dx_i^2}
 \code{g_mink_sph()} provides the same tensor where the spatial part uses spherical
 coordinates.
+\deqn{ds^2=-dt^2 + dr^2 + r^2 d\Omega^2}
 }
 \examples{
 g_mink_cart(4)
