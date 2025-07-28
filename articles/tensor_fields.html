@@ -122,10 +122,10 @@ more complicated:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Covariant metric tensor field&gt; (r, ph1, ph2)</span></span>
-<span><span class="co">#&gt;      [,1] [,2]  [,3]                  </span></span>
-<span><span class="co">#&gt; [1,] "1"  "0"   "0"                   </span></span>
-<span><span class="co">#&gt; [2,] "0"  "r^2" "0"                   </span></span>
-<span><span class="co">#&gt; [3,] "0"  "0"   "(r^2) * (sin(ph1)^2)"</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1] [,2]    [,3]            </span></span>
+<span><span class="co">#&gt; [1,] "1"  "0"     "0"             </span></span>
+<span><span class="co">#&gt; [2,] "0"  "r^2*1" "0"             </span></span>
+<span><span class="co">#&gt; [3,] "0"  "0"     "r^2*sin(ph1)^2"</span></span></code></pre></div>
 <p>Equipped with such metrics, we can for example pick a simple tensor
 field, namely a scalar function <span class="math inline">f(r, \phi_1,
 \phi_2) = r^{-1}</span>, and calculate our first gradient:</p>
