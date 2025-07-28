@@ -122,7 +122,7 @@ tensor_validate_alignability <- function(x, y,
 
     tensor_validate_index_dim(x, y, arg1, arg2, call)
 
-    stop("error, but no error description provided. Please open a bug.")
+    stop("Unkown error. Please open a bug report with a reproducible example.")
   }
 }
 

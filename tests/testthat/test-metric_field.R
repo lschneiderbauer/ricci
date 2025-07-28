@@ -22,4 +22,19 @@ test_that("validation works", {
     metric_field(array("a(", c(1, 1)), array("a", c(1, 1)), "a"),
     error = TRUE
   )
+
+  expect_snapshot(
+    metric_field(array(1:6, c(2, 3)), array(1:6, c(2, 3)), "a"),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    metric_field(array("a(", c(1, 1)), array("a", c(1, 1)), 3),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    metric_field(array("a(", c(1, 1)), array("a", c(1, 1)), c("a", "b")),
+    error = TRUE
+  )
 })

@@ -40,3 +40,29 @@
       1: a(
          ^
 
+---
+
+    Code
+      metric_field(array(1:6, c(2, 3)), array(1:6, c(2, 3)), "a")
+    Condition
+      Error in `metric_field()`:
+      ! Argument `metric` is not a valid array.
+      i A quadratic (n by n) matrix/array is required.
+
+---
+
+    Code
+      metric_field(array("a(", c(1, 1)), array("a", c(1, 1)), 3)
+    Condition
+      Error in `metric_field()`:
+      ! Argument `coords` is no character vector.
+
+---
+
+    Code
+      metric_field(array("a(", c(1, 1)), array("a", c(1, 1)), c("a", "b"))
+    Condition
+      Error in `metric_field()`:
+      ! Dimension and length of `metric` and `coords` are incompatible.
+      i The length of `coords` needs to match the array dimension of `metric`.
+
