@@ -109,8 +109,8 @@ g_eucl_sph <- function(n, coords = c("r", paste0("ph", 1:(n - 1)))) {
   if (n == 1) {
     return(
       metric_field(
-        array(1, 1),
-        array(1, 1),
+        array(1, c(1, 1)),
+        array(1, c(1, 1)),
         coords = "r"
       )
     )

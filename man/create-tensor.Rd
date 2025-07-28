@@ -5,7 +5,7 @@
 \alias{\%_\%}
 \title{Create a labeled array (tensor)}
 \usage{
-tensor(a, index_names, index_positions)
+tensor(a, index_names, index_positions, call = NULL)
 
 a \%_\% i
 }
@@ -19,6 +19,8 @@ a \%_\% i
 values "+" and "-", for "upper" and "lower" position respectively.
 The length of \code{index_positions} needs to agree with the length of
 \code{index_names}.}
+
+\item{call}{For internal use only.}
 
 \item{i}{An index slot label specification created with \code{\link[=.]{.()}}.}
 }

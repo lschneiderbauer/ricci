@@ -38,21 +38,16 @@ new_metric_field <- function(metric, coords, metric_inv) {
 #'
 #' @export
 metric_field <- function(metric, metric_inv, coords) {
-  stopifnot(is.array(metric))
-  stopifnot(is.character(coords))
-  stopifnot(unique(dim(metric)) == length(coords))
+  rlang::check_required(metric)
+  rlang::check_required(metric_inv)
+  rlang::check_required(coords)
 
-  # check if we can evaluate that
-  calculus::evaluate(
-    metric,
-    setNames(
-      rep.int(0, length(coords)),
-      coords
-    )
-  )
+  validate_metric_field(metric, metric_inv, coords)
 
   new_metric_field(metric, coords, metric_inv)
 }
+
+
 
 metric_coords <- function(metric) {
   stopifnot(inherits(metric, "metric_field"))

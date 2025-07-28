@@ -41,12 +41,12 @@
 
 #' @export
 `%_%.array` <- function(a, i) {
-  tensor(a, i$i, i$p)
+  tensor(a, i$i, i$p, call = rlang::current_env())
 }
 
 #' @export
 `%_%.default` <- function(a, i) {
-  tensor(as.array(a), i$i, i$p)
+  tensor(as.array(a), i$i, i$p, call = rlang::current_env())
 }
 
 #' Index slot label specification

@@ -62,18 +62,31 @@ tensor_new_dummy_index_name <- function(x) {
 #'  values "+" and "-", for "upper" and "lower" position respectively.
 #'  The length of `index_positions` needs to agree with the length of
 #'  `index_names`.
+#' @param call For internal use only.
 #' @export
 #' @rdname create-tensor
 #' @concept tensor
 #' @importFrom cli cli_abort
-tensor <- function(a, index_names, index_positions) {
+tensor <- function(a, index_names, index_positions, call = NULL) {
+  rlang::check_required(a)
   a <- as.array(a)
+
+  if (is.null(call)) {
+    call <- rlang::current_env()
+  }
+
+  if (is.character(a)) {
+    validate_expressions(a, call = call)
+  }
 
   # check if we have a scalar
   # in this case just return a number
   if (length(dim(a)) == 1 && length(a) == 1 && missing(index_names)) {
     return(new_tensor(a, character(), logical(), reduced = TRUE))
   }
+
+  rlang::check_required(index_names)
+  rlang::check_required(index_positions)
 
   stopifnot(is.character(index_names))
   stopifnot(is.character(index_positions))
@@ -82,19 +95,19 @@ tensor <- function(a, index_names, index_positions) {
   if (length(index_names) != length(dim(a))) {
     cli_abort(
       c(
-        "The number of provided indices do not match the array dimensions.",
+        "The number of provided indices do not match the array rank",
         x = "{length(index_names)} indices provided for a
-              rank {length(dim(a))} tensor.",
-        i = "The number of indices needs to match the rank of
+              rank {length(dim(a))} array",
+        i = "The number of indices needs to match the array rank of
               argument {.arg a}."
       ),
-      call = rlang::caller_env()
+      call = call
     )
   }
 
   tensor_reduce(
     new_tensor(a, index_names, index_positions == "+"),
-    call = rlang::caller_env()
+    call = call
   )
 }
 

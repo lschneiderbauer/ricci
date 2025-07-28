@@ -208,3 +208,121 @@ validate_metric_tensor_indices <-
       )
     }
   }
+
+#' @importFrom cli cli_abort
+validate_expressions <- function(exprs, arg = rlang::caller_arg(exprs),
+                                 call = rlang::caller_env()) {
+  rlang::try_fetch(
+    rlang::parse_exprs(exprs),
+    error = function(cnd) {
+      cli_abort(
+        c(
+          "Invalid expression.",
+          i = "Argument {.arg {arg}} needs to contain valid R expressions."
+        ),
+        parent = cnd,
+        call = call
+      )
+    }
+  )
+}
+
+validate_coord_expressions <- function(exprs, coords,
+                                       arg_exprs = rlang::caller_arg(exprs),
+                                       arg_coords = rlang::caller_arg(coords),
+                                       call = rlang::caller_env()) {
+  # check if we can evaluate that
+  rlang::try_fetch(
+    calculus::evaluate(
+      exprs,
+      setNames(
+        rep.int(0, length(coords)),
+        coords
+      )
+    ),
+    error = function(cnd) {
+      cli_abort(
+        c(
+          "Expression in {.arg {arg_exprs}} is not solely a function of coordinates
+          sepcified in {.arg {arg_coords}}.",
+          i = "The expression in {.arg {arg_exprs}} can only depend on coordinates,
+            not on other parameters. When evaluted at a point (specified by
+            coorindates) the expression needs to yield a number."
+        ),
+        call = call,
+        parent = cnd
+      )
+    }
+  )
+}
+
+
+#' @importFrom cli cli_abort
+validate_metric_field <- function(metric, metric_inv, coords,
+                                  arg_metric = rlang::caller_arg(metric),
+                                  arg_metric_inv = rlang::caller_arg(metric_inv),
+                                  arg_coords = rlang::caller_arg(coords),
+                                  call = rlang::caller_env()) {
+  if (!is.array(metric) || length(dim(metric)) != 2 ||
+    length(unique(dim(metric))) != 1) {
+    cli_abort(
+      c(
+        "Argument {.arg {arg_metric}} is not a valid array.",
+        i = "A quadratic (n by n) matrix/array is required."
+      ),
+      call = call
+    )
+  }
+
+  if (!is.array(metric_inv) || length(dim(metric_inv)) != 2 ||
+    length(unique(dim(metric_inv))) != 1) {
+    cli_abort(
+      c(
+        "Argument {.arg {arg_metric_inv}} is not a valid array.",
+        i = "A quadratic (n by n) matrix/array is required."
+      ),
+      call = call
+    )
+  }
+
+  if (any(dim(metric) != dim(metric_inv))) {
+    cli_abort(
+      c(
+        "Matrix dimensions of {.arg {arg_metric}} does not match matrix
+        dimensions of {.arg {arg_metric_inv}}.",
+        i = "{.arg {arg_metric_inv}} needs to be the inverse matrix
+            of {.arg {arg_metric}}."
+      ),
+      call = call
+    )
+  }
+
+  if (!is.character(coords)) {
+    cli_abort(
+      "Argument {.arg {arg_coords}} is no character vector.",
+      call = call
+    )
+  }
+
+
+  if (!any(unique(dim(metric)) == length(coords))) {
+    cli_abort(
+      c(
+        "Dimension and length of {.arg {arg_metric}} and {.arg {arg_coords}}
+        are incompatible.",
+        i = "The length of {.arg {arg_coords}} needs to match the array dimension
+            of {.arg {arg_metric}}."
+      ),
+      call = call
+    )
+  }
+
+  if (is.character(metric)) {
+    validate_expressions(metric, call = call)
+    validate_coord_expressions(metric, coords, call = call)
+  }
+  if (is.character(metric_inv)) {
+    validate_expressions(metric_inv, call = call)
+    validate_coord_expressions(metric_inv, coords, call = call)
+  }
+}

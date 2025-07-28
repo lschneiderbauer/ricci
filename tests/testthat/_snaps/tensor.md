@@ -34,7 +34,7 @@
       arr %_% .(i, j, k)
     Condition
       Error in `arr %_% .(i, j, k)`:
-      ! The number of provided indices do not match the array dimensions.
-      x 3 indices provided for a rank 2 tensor.
-      i The number of indices needs to match the rank of argument `a`.
+      ! The number of provided indices do not match the array rank
+      x 3 indices provided for a rank 2 array
+      i The number of indices needs to match the array rank of argument `a`.
 
