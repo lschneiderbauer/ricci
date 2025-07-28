@@ -8,6 +8,26 @@
       x Indices `i` and `j` have different positions.
       i Make sure you combine only indices of the same position.
 
+---
+
+    Code
+      kron(arr %_% .(i, j, k), l(m) <- .(i, j))
+    Condition
+      Error in `.()`:
+      ! Invalid expression in `...`.
+      x Expression `l(m)` cannot be parsed.
+      i A valid expressions is of the form {[+|-]<label1>, [+|-]<label2>, ...}.
+
+---
+
+    Code
+      kron(arr %_% .(i, j, k), i <- .(i, j), j)
+    Condition
+      Error in `kron()`:
+      ! Invalid expression in `...`.
+      x Expression `j` cannot be parsed.
+      i A valid expressions is of the form {.([+|-]<label1>, [+|-]<label2>, ...) -> [+|-]<label3>}.
+
 # raising tensor works
 
     Code
@@ -48,6 +68,16 @@
       ! Argument `...` contains invalid index.
       x Index `k` not present in <Labeled Array> [2x2] .(-i, -j).
       i Make sure you only select indices that match the tensor indices.
+
+---
+
+    Code
+      subst(arr %_% .(i, j), error)
+    Condition
+      Error in `subst()`:
+      ! Invalid expression in `...`.
+      x Expression `error` cannot be parsed.
+      i A valid expressions is of the form {[+|-]<label1> -> [+|-]<label2>, ...}.
 
 # sym/asym warnings
 

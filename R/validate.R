@@ -158,14 +158,14 @@ tensor_validate_index_dim <- function(x, y,
 
 #' @importFrom cli cli_abort
 stop_invalid_expr <- function(expr,
+                              info = info,
                               arg = rlang::caller_arg(expr),
                               call = rlang::caller_env()) {
   cli_abort(
     c(
       "Invalid expression in {.arg {arg}}.",
       x = "Expression {.code {format(expr)}} cannot be parsed.",
-      i = "A valid expressions is of the form
-            {{[+|-]<label1>, [+|-]<label2>, ...}}"
+      i = info
     ),
     call = call
   )

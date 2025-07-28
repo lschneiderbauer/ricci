@@ -15,5 +15,5 @@
       Error in `.()`:
       ! Invalid expression in `...`.
       x Expression `f(y)` cannot be parsed.
-      i A valid expressions is of the form {[+|-]<label1>, [+|-]<label2>, ...}
+      i A valid expressions is of the form {[+|-]<label1>, [+|-]<label2>, ...}.
 

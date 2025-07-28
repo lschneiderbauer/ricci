@@ -16,6 +16,16 @@ test_that("tensor kronecker product works", {
     arr %_% .(i, +j, k) |> kron(.(i, +j) -> l),
     error = TRUE
   )
+
+  expect_snapshot(
+    arr %_% .(i, j, k) |> kron(.(i, j) -> l(m)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i, j, k) |> kron(.(i, j) -> i, j),
+    error = TRUE
+  )
 })
 
 test_that("kronecker commutes with contraction", {
@@ -100,6 +110,11 @@ test_that("substituting labels works", {
 
   expect_snapshot(
     arr %_% .(i, j) |> subst(k -> l),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i, j) |> subst(error),
     error = TRUE
   )
 })

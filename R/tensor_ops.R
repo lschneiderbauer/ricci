@@ -66,7 +66,12 @@ l <- function(x, ..., g = NULL) {
 #' @concept index
 #' @family tensor operations
 subst <- function(x, ...) {
-  tensor_indices <- Map(ast_subst, rlang::exprs(...))
+  call <- rlang::current_env()
+  tensor_indices <-
+    Map(
+      \(x) ast_subst(x, "...", call = call),
+      rlang::exprs(...)
+    )
 
   ind_from <-
     new_tensor_indices(
@@ -152,9 +157,11 @@ asym <- function(x, ...) {
 kron <- function(x, ...) {
   exprs <- rlang::exprs(...)
 
+  call <- rlang::current_env()
+
   Reduce(
     function(tens, expr) {
-      l <- ast_kr(expr)
+      l <- ast_kr(expr, arg = "...", call = call)
 
       tensor_kron(
         tens, l$ind_from, l$ind_to,
