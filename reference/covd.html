@@ -55,7 +55,7 @@ the original tensor rank.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covd</span><span class="op">(</span><span class="va">x</span>, <span class="va">i</span>, act_on <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">covd</span><span class="op">(</span><span class="va">x</span>, <span class="va">i</span>, <span class="va">g</span>, act_on <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,6 +77,12 @@ names. After the covariant derivatives are calculated, implicit contraction
 rules are applied (in case of reoccurring index label names).</p></dd>
 
 
+<dt id="arg-g">g<a class="anchor" aria-label="anchor" href="#arg-g"></a></dt>
+<dd><p>A covariant metric tensor, a "metric_field" object. See <code><a href="metric_field.html">metric_field()</a></code>
+to create a new metric tensor, or use predefined metrics,
+e.g. <code><a href="g_eucl.html">g_eucl_cart()</a></code>.</p></dd>
+
+
 <dt id="arg-act-on">act_on<a class="anchor" aria-label="anchor" href="#arg-act-on"></a></dt>
 <dd><p>An optional index slot label specification created with <code><a href="dot-.html">.()</a></code> that
 specifies on which indices the covariant derivative should act on.
@@ -85,12 +91,6 @@ be useful if not all tensor factors are elements of the tangent space of
 the underlying manifold. If not provided the covariant derivative acts on
 all indices. If no indices are selected explicitly (with <code><a href="dot-.html">.()</a></code>),
 the covariant derivative acts like it would on a scalar.</p></dd>
-
-
-<dt id="arg-g">g<a class="anchor" aria-label="anchor" href="#arg-g"></a></dt>
-<dd><p>A covariant metric tensor, a "metric_field" object. See <code><a href="metric_field.html">metric_field()</a></code>
-to create a new metric tensor, or use predefined metrics,
-e.g. <code><a href="g_eucl.html">g_eucl_cart()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
