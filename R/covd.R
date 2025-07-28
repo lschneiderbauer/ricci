@@ -93,21 +93,16 @@ pd <- function(x, coords, new_index_name, new_index_position, g) {
 #'
 #' @seealso Wikipedia: [Covariant Derivative](https://en.wikipedia.org/wiki/Covariant_derivative)
 #' @export
-covd <- function(x, i, act_on = NULL, g = NULL) {
+covd <- function(x, i, g, act_on = NULL) {
   if (is_scalar(x)) {
     # allow numbers as well
     x <- tensor(x)
   }
   stopifnot(inherits(x, "tensor"))
+  stopifnot(inherits(g, "metric_field"))
   # x needs to be a labeled array / tensor (not an array)
   # because we need to know which indices are lowered and
   # which are upped
-
-  if (is.null(g)) {
-    # TODO get rid of: assume homogeneous dimensions
-    n <- unique(dim(x))
-    g <- g_eucl_cart(n)
-  }
 
   if (is.null(act_on)) {
     act_on <-
@@ -116,10 +111,7 @@ covd <- function(x, i, act_on = NULL, g = NULL) {
         tensor_index_positions(x)
       )
   } else {
-    tensor_validate_index_matching(
-      x, act_on,
-      arg = rlang::caller_arg(act_on)
-    )
+    tensor_validate_index_matching(x, act_on)
   }
 
   chr <-
@@ -129,7 +121,19 @@ covd <- function(x, i, act_on = NULL, g = NULL) {
 
   coords <- metric_coords(g)
 
-  # TODO: check that dimension matches
+  # check that dimension match number of coordinates
+  if (any(tensor_dim(x, act_on$i) != length(coords))) {
+    faulty_index_names <- act_on$i[tensor_dim(x, act_on$i) != length(coords)]
+    cli_abort(c(
+      "Incorrect tensor dimension.",
+      "x" = "Indices {faulty_index_names} need to match the dimensions of
+                the metric tensor.",
+      "i" = "Dimension of metric tensor: {.val {length(coords)}}",
+      "i" = "Dimension of {faulty_index_names}:
+              {.val {tensor_dim(x, faulty_index_names)}}",
+      " " = "Do you need to use the argument {.arg act_on}?"
+    ))
+  }
 
   Reduce(
     function(x, l) {

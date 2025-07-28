@@ -40,6 +40,20 @@ test_that("covd: act_on argument is working", {
   )
 })
 
+test_that("covd input validation works", {
+  arr = array(1:9, c(3, 3))
+
+  expect_snapshot(
+    arr %_% .(i, j) |> covd(.(k), g = g_eucl_cart(2)),
+    error = TRUE
+  )
+
+  expect_snapshot(
+    arr %_% .(i, j) |> covd(.(k), g = g_eucl_cart(2), act_on = .(l)),
+    error = TRUE
+  )
+})
+
 test_that("covariant derivative of any metric tensor must vanish", {
   skip_if_not_installed("withr")
   skip_if_not_installed("Ryacas")
