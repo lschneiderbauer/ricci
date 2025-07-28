@@ -46,7 +46,7 @@ expect_tensor_equal <- function(object, expected, ...) {
     sprintf(
       "%s (`actual`) not equal to %s (`expected`).\n\n%s",
       act$lab, exp$lab,
-      paste0(comp, collapse = "\n\n" )
+      paste0(comp, collapse = "\n\n")
     ),
     trace_env = rlang::caller_env()
   )

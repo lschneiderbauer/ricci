@@ -68,9 +68,9 @@ library(ricci)
 a <- array(1:(2^3), dim = c(2, 2, 2))
 
 # create labeled array (tensor)
-(a %_% .(i, j, k) * 
+(a %_% .(i, j, k) *
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |>
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l
@@ -82,7 +82,6 @@ a <- array(1:(2^3), dim = c(2, 2, 2))
 The same instructions work for a symbolic array:
 
 ``` r
-
 # enable optional simplfying procedures
 # (takes a toll on performance)
 options(ricci.simplify = TRUE)
@@ -90,9 +89,9 @@ options(ricci.simplify = TRUE)
 # symbolic data
 a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
 
-(a %_% .(i, j, k) * 
+(a %_% .(i, j, k) *
   # mutliply with a labeled array (tensor) and raise index i and k
-  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |> 
+  a %_% .(i, l, k) |> r(i, k, g = g_mink_cart(2))) |>
   # * -i and +i as well as -k and +k dimension are implictely contracted
   # the result is a tensor of rank 2
   sym(j, l) |> # symmetrize over i and l

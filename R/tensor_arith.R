@@ -76,8 +76,7 @@ Ops.tensor <- function(e1, e2) {
 
 
   if (missing(e2)) { # check for unary operators
-    switch(
-      .Generic,
+    switch(.Generic,
       "+" = e1,
       "-" = (-1L) * e1,
       NextMethod()

@@ -161,7 +161,7 @@ covd <- function(x, i, g, act_on = NULL) {
                     new_tensor_indices(i = dummy, p = "+")
                   )
               } else {
-                - tensor(chr, c(dummy, index_name, new_ind_dummy), c("+", "-", "-")) *
+                -tensor(chr, c(dummy, index_name, new_ind_dummy), c("+", "-", "-")) *
                   tensor_subst(
                     x,
                     new_tensor_indices(i = index_name, p = "-"),

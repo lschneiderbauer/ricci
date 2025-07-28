@@ -68,7 +68,9 @@ The operation above can be set into the context of electrodynamics where $f$ is 
 # electromagnetic potential
 A <- c("1/r", "0", "0", "0")
 
-A %_% .(m) |> covd(.(n), g = g_mink_sph(4)) |> asym(m, n)
+A %_% .(m) |>
+  covd(.(n), g = g_mink_sph(4)) |>
+  asym(m, n)
 ```
 
 We can also chain multiple covariant derivatives in any way we'd like. A well known second-order differential operator, the Laplacian $\Delta = \nabla_k \nabla^k$ can easily be written down:
@@ -79,7 +81,6 @@ We can also chain multiple covariant derivatives in any way we'd like. A well kn
 
 # on a vector field
 A %_% .(i) |> covd(.(k, +k), g = g_mink_sph(4))
-
 ```
 
 One property of the metric tensor is that the (Levi Civita) covariant derivative of the metric tensor vanishes. We can test this easily:
@@ -87,5 +88,7 @@ One property of the metric tensor is that the (Levi Civita) covariant derivative
 ```{r}
 g <- g_eucl_sph(3)
 
-g %_% .(i, j) |> covd(.(k), g = g) |> as_a(i, j, k)
+g %_% .(i, j) |>
+  covd(.(k), g = g) |>
+  as_a(i, j, k)
 ```

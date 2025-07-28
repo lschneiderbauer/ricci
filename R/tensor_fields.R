@@ -283,7 +283,7 @@ riemann <- function(g) {
   ((pd(chr %_% .(+i, j, k), coords, "l", "-", g) +
     chr %_% .(+i, l, s) * chr %_% .(+s, j, k)) * g %_% .(i, i2)) |>
     asym(j, l) * 2 |> # asym divides by two
-    as_a(i2, k, l, j)
+      as_a(i2, k, l, j)
 }
 
 #' Ricci curvature tensor

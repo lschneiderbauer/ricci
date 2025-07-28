@@ -34,7 +34,7 @@ A typical workflow when working with {ricci} is
 ```{r setup}
 library(ricci)
 
-a <- array(1:(2^3), dim = c(2,2,2))
+a <- array(1:(2^3), dim = c(2, 2, 2))
 ```
 
 We can use the array `a` to create a labeled array (tensor) with lower index labels i, j, and k:
@@ -138,7 +138,7 @@ g
 A Kronecker product is simply a tensor product whose underlying vector space basis is relabeled. In the present context this is realized by combining multiple index labels into one. The associated dimension to the new label is then simply the product of the dimensions associated to the old index labels respectively.
 
 ```{r}
-(a %_% .(i, j, k) * a %_% .(l, m, n)) |> 
+(a %_% .(i, j, k) * a %_% .(l, m, n)) |>
   kron(.(i, l) -> r, .(j, m) -> p, .(k, n) -> q)
 ```
 
