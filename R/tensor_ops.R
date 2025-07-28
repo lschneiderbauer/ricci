@@ -462,15 +462,10 @@ pos_inv <- function(pos) {
   pos
 }
 
-
-at <- function(x, at) {
-  UseMethod("at")
-}
-
 #' Evaluate a symbolic array
 #'
 #' Evaluates a symbolic array at a particular point in parameter space.
-#' Partial evaluation is not allowed, all symbols need to be accounted
+#' Partial evaluation is not allowed, all variables/symbols need to be accounted
 #' for. The result is a numeric array.
 #'
 #' @param x A symbolic [array()] or a [tensor()].
@@ -479,7 +474,15 @@ at <- function(x, at) {
 #'  Each named entry represents a substitution of a symbol with the given value.
 #' @return A numeric [array()] or [tensor()].
 #' @examples
-#' g_sph(3) |> at(ph1 = 0, ph2 = 0)
+#' g_sph(3) |> at(c(ph1 = 0, ph2 = 0))
+#' @export
+#' @rdname at
+#' @concept eval
+at <- function(x, vars) {
+  UseMethod("at")
+}
+
+
 #' @export
 #' @rdname at
 #' @concept eval
