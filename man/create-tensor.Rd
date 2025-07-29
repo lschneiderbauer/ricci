@@ -43,3 +43,4 @@ a <- array(1:4, dim = c(2, 2))
 a \%_\% .(i, j)
 }
 \concept{tensor}
+\concept{tensor_create}

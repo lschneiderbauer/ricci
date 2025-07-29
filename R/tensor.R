@@ -70,7 +70,7 @@ tensor_new_dummy_index_name <- function(x, n = 1) {
 #' @param call For internal use only.
 #' @export
 #' @rdname create-tensor
-#' @concept tensor
+#' @concept tensor_create
 #' @importFrom cli cli_abort
 tensor <- function(a, index_names, index_positions, call = NULL) {
   rlang::check_required(a)
@@ -420,7 +420,7 @@ print.tensor <- function(x, ...) {
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as.array(.(k))
 #' @export
-#' @concept tensor
+#' @concept tensor_dest
 as.array.tensor <- function(x, index_order = NULL, ...,
                             arg = "index_order",
                             call = rlang::caller_env()) {
@@ -470,7 +470,7 @@ as.array.tensor <- function(x, index_order = NULL, ...,
 #' @export
 #' @seealso The same functionality is implemented in [as.array.tensor()]
 #'  but with standard evaluation.
-#' @concept tensor
+#' @concept tensor_dest
 as_a <- function(x, ...) {
   as.array(x, .(...), arg = "...")
 }

@@ -34,4 +34,4 @@ array(1:8, dim = c(2, 2, 2)) \%_\% .(i, +i, k) |> as_a(k)
 The same functionality is implemented in \code{\link[=as.array.tensor]{as.array.tensor()}}
 but with standard evaluation.
 }
-\concept{tensor}
+\concept{tensor_dest}

@@ -73,7 +73,7 @@
 #' # one lower and upper index
 #' .(i, +j)
 #' @export
-#' @concept tensor
+#' @concept tensor_create
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 

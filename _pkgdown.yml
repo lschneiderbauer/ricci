@@ -4,10 +4,21 @@ template:
   math-rendering: katex
 
 reference:
-- title: "Label and unlabel tensors"
+- title: "Label and unlabel arrays"
+  desc: >
+    Adding index names enables the usage of Ricci calculus rules,
+    while unlabeling restores the usual R array.
+- subtitle: Label arrays
   contents:
-  - has_concept("tensor")
+  - has_concept("tensor_create")
+- subtitle: Unlabel arrays
+  contents:
+  - has_concept("tensor_dest")
 - title: "Tensor operations"
+  desc: >
+    Working with labeled arrays allows to consicely specify
+    various tensor operations who all take given index structures
+    into account and act accordingly.
 - subtitle: "Index manipulation"
   contents:
   - has_concept("index")
@@ -21,6 +32,9 @@ reference:
   contents:
   - has_concept("eval")
 - title: "Tensor fields"
+  desc: >
+    Tensor fields can be modeled by symbolic tensors, i.e. tensors
+    that contain mathematical expressions instead of numerical values.
 - subtitle: "Covariant derivative"
   contents:
   - covd
@@ -34,5 +48,8 @@ reference:
   contents:
   - has_concept("tensor_symbols")
 - title: "Testthat expectation"
+  desc: >
+    A simple testthat helper that allows to check for
+    tensor equality.
   contents:
   - expect_tensor_equal
