@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Tensor Fields • ricci</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
@@ -56,8 +61,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Tensor Fields</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Tensor Fields</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lschneiderbauer/ricci/blob/main/vignettes/tensor_fields.Rmd" class="external-link"><code>vignettes/tensor_fields.Rmd</code></a></small>
@@ -139,10 +143,14 @@ a name for the new rank of the array.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="st">"1/r"</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/covd.html">covd</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="va">l</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="../reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [3x3] .(-k, -l)</span></span>
-<span><span class="co">#&gt;      [,1]    [,2]     [,3]             </span></span>
-<span><span class="co">#&gt; [1,] "2/r^3" "0"      "0"              </span></span>
-<span><span class="co">#&gt; [2,] "0"     "(-1)/r" "0"              </span></span>
-<span><span class="co">#&gt; [3,] "0"     "0"      "(-sin(ph1)^2)/r"</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1]            [,2]                                            </span></span>
+<span><span class="co">#&gt; [1,] "2 * r/(r^2)^2" "0"                                             </span></span>
+<span><span class="co">#&gt; [2,] "0"             "(-1 * ((( - (2 * r)) / 2) * (1))) * (-(1/r^2))"</span></span>
+<span><span class="co">#&gt; [3,] "0"             "0"                                             </span></span>
+<span><span class="co">#&gt;      [,3]                                                         </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                          </span></span>
+<span><span class="co">#&gt; [2,] "0"                                                          </span></span>
+<span><span class="co">#&gt; [3,] "(-1 * ((( - (2 * r * sin(ph1)^2)) / 2) * (1))) * (-(1/r^2))"</span></span></code></pre></div>
 <p>The operation above can be set into the context of electrodynamics
 where <span class="math inline">f</span> is an electrostatic potential,
 and its gradient is the electric field. For the same electrostatic
@@ -156,11 +164,11 @@ after forming the electromagnetic potential <span class="math inline">A_\mu</spa
 <span>  <span class="fu"><a href="../reference/covd.html">covd</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="../reference/g_mink.html">g_mink_sph</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/asym.html">asym</a></span><span class="op">(</span><span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [4x4] .(-m, -n)</span></span>
-<span><span class="co">#&gt;      [,1]        [,2]           [,3] [,4]</span></span>
-<span><span class="co">#&gt; [1,] "0"         "(-1)/(2*r^2)" "0"  "0" </span></span>
-<span><span class="co">#&gt; [2,] "1/(2*r^2)" "0"            "0"  "0" </span></span>
-<span><span class="co">#&gt; [3,] "0"         "0"            "0"  "0" </span></span>
-<span><span class="co">#&gt; [4,] "0"         "0"            "0"  "0"</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1]                    [,2]                   [,3] [,4]</span></span>
+<span><span class="co">#&gt; [1,] "0"                     "(1 * (-(1/r^2))) / 2" "0"  "0" </span></span>
+<span><span class="co">#&gt; [2,] "(-1 * (-(1/r^2))) / 2" "0"                    "0"  "0" </span></span>
+<span><span class="co">#&gt; [3,] "0"                     "0"                    "0"  "0" </span></span>
+<span><span class="co">#&gt; [4,] "0"                     "0"                    "0"  "0"</span></span></code></pre></div>
 <p>We can also chain multiple covariant derivatives in any way we’d
 like. A well known second-order differential operator, the Laplacian
 <span class="math inline">\Delta = \nabla_k \nabla^k</span> can easily
@@ -169,12 +177,15 @@ be written down:</p>
 <code class="sourceCode R"><span><span class="co"># on scalar field</span></span>
 <span><span class="st">"1/r"</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/covd.html">covd</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="../reference/g_mink.html">g_mink_sph</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
-<span><span class="co">#&gt; [1] "0"</span></span>
+<span><span class="co">#&gt; [1] "(2 * r/(r^2)^2) * (1) + ((-1 * ((( - (2 * r)) / 2) * (1))) * (-(1/r^2))) * ((1) / (r^2*1)) + ((-1 * ((( - (2 * r * sin(ph1)^2)) / 2) * (1))) * (-(1/r^2))) * ((1) / (r^2*sin(ph1)^2))"</span></span>
 <span></span>
 <span><span class="co"># on a vector field</span></span>
 <span><span class="va">A</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/covd.html">covd</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="../reference/g_mink.html">g_mink_sph</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [4] .(-i)</span></span>
-<span><span class="co">#&gt; [1] "0" "0" "0" "0"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "(2 * r/(r^2)^2) * (1) + ((-1 * ((( - (2 * r)) / 2) * (1))) * (-(1/r^2))) * ((1) / (r^2*1)) + ((-1 * ((( - (2 * r * sin(ph1)^2)) / 2) * (1))) * (-(1/r^2))) * ((1) / (r^2*sin(ph1)^2))"</span></span>
+<span><span class="co">#&gt; [2] "0"                                                                                                                                                                                    </span></span>
+<span><span class="co">#&gt; [3] "0"                                                                                                                                                                                    </span></span>
+<span><span class="co">#&gt; [4] "0"</span></span></code></pre></div>
 <p>One property of the metric tensor is that the (Levi Civita) covariant
 derivative of the metric tensor vanishes. We can test this easily:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -185,24 +196,48 @@ derivative of the metric tensor vanishes. We can test this easily:</p>
 <span>  <span class="fu"><a href="../reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [2,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [3,] "0"  "0"  "0" </span></span>
+<span><span class="co">#&gt;      [,1]</span></span>
+<span><span class="co">#&gt; [1,] "0" </span></span>
+<span><span class="co">#&gt; [2,] "0" </span></span>
+<span><span class="co">#&gt; [3,] "0" </span></span>
+<span><span class="co">#&gt;      [,2]                                                                                                                 </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                                                  </span></span>
+<span><span class="co">#&gt; [2,] "2 * r + (-1 * ((((2 * r)) / 2) * ((1) / (r^2*1)))) * (r^2*1) + (-1 * ((((2 * r)) / 2) * ((1) / (r^2*1)))) * (r^2*1)"</span></span>
+<span><span class="co">#&gt; [3,] "0"                                                                                                                  </span></span>
+<span><span class="co">#&gt;      [,3]                                                                                                                                                                                            </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                                                                                                                             </span></span>
+<span><span class="co">#&gt; [2,] "0"                                                                                                                                                                                             </span></span>
+<span><span class="co">#&gt; [3,] "2 * r * sin(ph1)^2 + (-1 * ((((2 * r * sin(ph1)^2)) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2) + (-1 * ((((2 * r * sin(ph1)^2)) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2)"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; , , 2</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [2,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [3,] "0"  "0"  "0" </span></span>
+<span><span class="co">#&gt;      [,1]                                                                                            </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                             </span></span>
+<span><span class="co">#&gt; [2,] "(-1 * ((( - (2 * r)) / 2) * (1))) * (1) + (-1 * ((((2 * r)) / 2) * ((1) / (r^2*1)))) * (r^2*1)"</span></span>
+<span><span class="co">#&gt; [3,] "0"                                                                                             </span></span>
+<span><span class="co">#&gt;      [,2]                                                                                            </span></span>
+<span><span class="co">#&gt; [1,] "(-1 * ((((2 * r)) / 2) * ((1) / (r^2*1)))) * (r^2*1) + (-1 * ((( - (2 * r)) / 2) * (1))) * (1)"</span></span>
+<span><span class="co">#&gt; [2,] "0"                                                                                             </span></span>
+<span><span class="co">#&gt; [3,] "0"                                                                                             </span></span>
+<span><span class="co">#&gt;      [,3]                                                                                                                                                                                                                                         </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                                                                                                                                                                          </span></span>
+<span><span class="co">#&gt; [2,] "0"                                                                                                                                                                                                                                          </span></span>
+<span><span class="co">#&gt; [3,] "r^2 * (2 * (cos(ph1) * sin(ph1))) + (-1 * ((((r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2) + (-1 * ((((r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2)"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; , , 3</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [2,] "0"  "0"  "0" </span></span>
-<span><span class="co">#&gt; [3,] "0"  "0"  "0"</span></span></code></pre></div>
+<span><span class="co">#&gt;      [,1]                                                                                                                                        </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                                                                         </span></span>
+<span><span class="co">#&gt; [2,] "0"                                                                                                                                         </span></span>
+<span><span class="co">#&gt; [3,] "(-1 * ((( - (2 * r * sin(ph1)^2)) / 2) * (1))) * (1) + (-1 * ((((2 * r * sin(ph1)^2)) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2)"</span></span>
+<span><span class="co">#&gt;      [,2]                                                                                                                                                                                      </span></span>
+<span><span class="co">#&gt; [1,] "0"                                                                                                                                                                                       </span></span>
+<span><span class="co">#&gt; [2,] "0"                                                                                                                                                                                       </span></span>
+<span><span class="co">#&gt; [3,] "(-1 * ((( - (r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*1)))) * (r^2*1) + (-1 * ((((r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2)"</span></span>
+<span><span class="co">#&gt;      [,3]                                                                                                                                                                                      </span></span>
+<span><span class="co">#&gt; [1,] "(-1 * ((((2 * r * sin(ph1)^2)) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2) + (-1 * ((( - (2 * r * sin(ph1)^2)) / 2) * (1))) * (1)"                                              </span></span>
+<span><span class="co">#&gt; [2,] "(-1 * ((((r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*sin(ph1)^2)))) * (r^2*sin(ph1)^2) + (-1 * ((( - (r^2 * (2 * (cos(ph1) * sin(ph1))))) / 2) * ((1) / (r^2*1)))) * (r^2*1)"</span></span>
+<span><span class="co">#&gt; [3,] "0"</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
