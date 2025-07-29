@@ -198,7 +198,7 @@ tensor_is_simplified <- function(x) {
 }
 
 tensor_simplify <- function(x, force = FALSE) {
-  if (!tensor_is_simplified(x)) {
+  if (!tensor_is_simplified(x) || force) {
     a <- asimplify(x, force)
 
     new_tensor(
@@ -236,6 +236,38 @@ tensor_simplify <- function(x, force = FALSE) {
 #' @export
 #' @concept eval
 simplify <- function(x) {
+  # yacas has the strange behavior that "simplify" does
+  # not seem to be idempotent, i.e. another application
+  # of "simplify" simplifies even further ...
+  # an expression that reproduces that:
+  # g <- g_eucl_sph(3)
+  # a <- c(0, 1, 0)
+  #
+  # (a %_% .(+k) |> covd(.(+j), g = g) *
+  #     e(i,j,k) |> r(i, g = g))
+
+  # let's try to apply as many times as we reach a
+  # stable point
+  # .. really annoying performance wise,
+  # but since this is an explicit call, we try to live with it
+
+  fixpoint <- FALSE
+  res <- simplify1(x)
+
+  while(!fixpoint) {
+    res2 <- simplify1(res)
+
+    if (all(res == res2)) {
+      fixpoint <- TRUE
+    } else {
+      res <- res2
+    }
+  }
+
+  res
+}
+
+simplify1 <- function(x) {
   if (inherits(x, "tensor")) {
     tensor_simplify(x, force = TRUE)
   } else {
