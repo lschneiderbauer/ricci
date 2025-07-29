@@ -41,7 +41,13 @@ expressions are optionally simplified when the
 
 ## Installation
 
-You can install the development version of ricci from
+You can install the latest CRAN release of ricci with:
+
+``` r
+install.packages("ricci")
+```
+
+Alternatively, you can install the development version of ricci from
 [GitHub](https://github.com/) with:
 
 ``` r
