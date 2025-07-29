@@ -337,7 +337,8 @@ asimplify <- function(a, force = FALSE) {
   if (isTRUE(getOption("ricci.auto_simplify")) && !rlang::is_installed("Ryacas")) {
     cli::cli_warn(
       c(
-        "Option \"ricci.auto_simplify\" is set to `TRUE`, but {{Ryacas}} is not installed.",
+        "Option \"ricci.auto_simplify\" is set to `TRUE`, but the required
+        package Ryacas is not installed.",
         i = "Install {{Ryacas}} to get simplification support, e.g. via
             {.run install.packages(\"Ryacas\")}."
       ),
