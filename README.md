@@ -27,16 +27,16 @@ indices**, taking **symmetric** or **antisymmetric tensor parts**, as
 well as the **Kronecker product** are available. Common tensors like the
 Kronecker delta, Levi Civita epsilon, certain metric tensors, the
 Christoffel symbols, the Riemann as well as Ricci tensors are provided.
-The **covariant derivative** of tensor fields w.r.t to any metric tensor
-can be evaluated. An effort was made to provide the user with meaningful
-error messages.
+The **covariant derivative** of tensor fields with respect to any metric
+tensor can be evaluated. An effort was made to provide the user with
+meaningful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and provides
 an alternative interface to a subset of its functionality. Notably,
 {[calculus](https://calculus.eguidotti.com/)} also supports symbolic
 calculations which also enables {ricci} to do the same. Symbolic
-expressions are optionally (and transparently) simplified when the
+expressions are optionally simplified when the
 [Ryacas](https://r-cas.github.io/ryacas/) package is installed.
 
 ## Installation
@@ -98,6 +98,48 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
   subst(l -> j) |> # rename index and trigger diagonal subsetting
   as_a(j) # we unlabel the tensor with index order (j)
 #> [1] "a1^2+a6^2-(a5^2+a2^2)" "a3^2+a8^2-(a7^2+a4^2)"
+```
+
+Another main feature is the covariant derivative of symbolic arrays. The
+following examples calculate the Hessian matrix as well as the Laplacian
+of the scalar function $\sin(r)$ in spherical coordinates in three
+dimensions.
+
+$$D_{ik} = \nabla_i \nabla_k \sin(r)$$
+
+``` r
+covd("sin(r)", .(i, k), g = g_eucl_sph(3)) |>
+  simplify()
+#> <Labeled Array> [3x3] .(-i, -k)
+#>      [,1]      [,2]       [,3]                 
+#> [1,] "-sin(r)" "0"        "0"                  
+#> [2,] "0"       "r*cos(r)" "0"                  
+#> [3,] "0"       "0"        "r*sin(ph1)^2*cos(r)"
+```
+
+$$\Delta \sin(r) = \nabla_i \nabla^i \sin(r)$$
+
+``` r
+covd("sin(r)", .(i, +i), g = g_eucl_sph(3)) |>
+  simplify()
+#> <Scalar>
+#> [1] "(2*cos(r)-r*sin(r))/r"
+```
+
+The covariant derivative can not only be taken from scalars, but general
+indexed tensors, as the following example shows.
+
+$$\left(\nabla \times a\right)^i = \epsilon^{i}_{\;jk} \nabla^j a^k$$
+
+``` r
+g <- g_eucl_sph(3)
+a <- c(0, 1, 0)
+
+(a %_% .(+k) |> covd(.(+j), g = g) *
+  e(i, j, k) |> r(i, g = g)) |>
+  simplify()
+#> <Labeled Array> [3] .(+i)
+#> [1] "0"                  "0"                  "2/(r^3*sin(ph1)^2)"
 ```
 
 For more details, see `vignette("ricci", package = "ricci")`. For more

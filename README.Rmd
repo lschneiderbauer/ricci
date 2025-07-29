@@ -22,11 +22,11 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of {ricci} is to provide a *compact*[^1] R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by allowing (upper and lower) index labeling of R’s `array` and making use of Ricci calculus conventions to *implicitly* trigger **contractions** and diagonal subsetting. Explicit tensor operations, such as **addition, subtraction and multiplication of tensors** via the standard operators (`*`, `+`, `-`, `/`, `==`), **raising and lowering indices**, taking **symmetric** or **antisymmetric tensor parts**, as well as the **Kronecker product** are available. Common tensors like the Kronecker delta, Levi Civita epsilon, certain metric tensors, the Christoffel symbols, the Riemann as well as Ricci tensors are provided. The **covariant derivative** of tensor fields w.r.t to any metric tensor can be evaluated. An effort was made to provide the user with meaningful error messages.
+The goal of {ricci} is to provide a *compact*[^1] R interface for performing [tensor calculations](https://en.wikipedia.org/wiki/Ricci_calculus). This is achieved by allowing (upper and lower) index labeling of R’s `array` and making use of Ricci calculus conventions to *implicitly* trigger **contractions** and diagonal subsetting. Explicit tensor operations, such as **addition, subtraction and multiplication of tensors** via the standard operators (`*`, `+`, `-`, `/`, `==`), **raising and lowering indices**, taking **symmetric** or **antisymmetric tensor parts**, as well as the **Kronecker product** are available. Common tensors like the Kronecker delta, Levi Civita epsilon, certain metric tensors, the Christoffel symbols, the Riemann as well as Ricci tensors are provided. The **covariant derivative** of tensor fields with respect to any metric tensor can be evaluated. An effort was made to provide the user with meaningful error messages.
 
 [^1]: By compact interface, we mean an interface that is concise and non-verbose. The author is of the opinion that the less we need to write in order to express an intent, the less likely are we to make mistakes.
 
-{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and provides an alternative interface to a subset of its functionality. Notably, {[calculus](https://calculus.eguidotti.com/)} also supports symbolic calculations which also enables {ricci} to do the same. Symbolic expressions are optionally (and transparently) simplified when the [Ryacas](https://r-cas.github.io/ryacas/) package is installed.
+{ricci} uses the [calculus](https://calculus.eguidotti.com/) package [@guidotti2022] behind the scenes to perform calculations and provides an alternative interface to a subset of its functionality. Notably, {[calculus](https://calculus.eguidotti.com/)} also supports symbolic calculations which also enables {ricci} to do the same. Symbolic expressions are optionally  simplified when the [Ryacas](https://r-cas.github.io/ryacas/) package is installed.
 
 ## Installation
 
@@ -78,6 +78,33 @@ a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
   sym(j, l) |> # symmetrize over i and l
   subst(l -> j) |> # rename index and trigger diagonal subsetting
   as_a(j) # we unlabel the tensor with index order (j)
+```
+
+Another main feature is the covariant derivative of symbolic arrays. The following examples calculate the Hessian matrix as well as the Laplacian of the scalar function $\sin(r)$ in spherical coordinates in three dimensions.
+
+$$D_{ik} = \nabla_i \nabla_k \sin(r)$$
+
+```{r covd}
+covd("sin(r)", .(i, k), g = g_eucl_sph(3)) |>
+  simplify()
+```
+
+$$\Delta \sin(r) = \nabla_i \nabla^i \sin(r)$$
+```{r covd2}
+covd("sin(r)", .(i, +i), g = g_eucl_sph(3)) |>
+  simplify()
+```
+
+The covariant derivative can not only be taken from scalars, but general indexed tensors, as the following example shows.
+
+$$\left(\nabla \times a\right)^i = \epsilon^{i}_{\;jk} \nabla^j a^k$$
+```{r covd3}
+g <- g_eucl_sph(3)
+a <- c(0, 1, 0)
+
+(a %_% .(+k) |> covd(.(+j), g = g) *
+  e(i, j, k) |> r(i, g = g)) |>
+  simplify()
 ```
 
 For more details, see `vignette("ricci", package = "ricci")`. For more information about how to use tensor fields and the covariant derivative, see `vignette("tensor_fields", package = "ricci")`.
