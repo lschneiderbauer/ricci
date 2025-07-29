@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ricci
+# ricci <a href="https://lschneiderbauer.github.io/ricci/"><img src="man/figures/logo.svg" align="right" height="139" alt="ricci website" /></a>
 
 <!-- badges: start -->
 
