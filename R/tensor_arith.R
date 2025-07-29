@@ -248,7 +248,8 @@ tensor_mul <- function(x, y,
         untouched_indices_y <- setdiff(names(y_ind), common_indices[einsteinable])
         dummy_index_names <-
           new_unique_index(c(x_ind, y_ind),
-                           n = length(untouched_indices_x) + length(untouched_indices_y))
+            n = length(untouched_indices_x) + length(untouched_indices_y)
+          )
         x_ind_einst[untouched_indices_x] <-
           dummy_index_names[seq_along(untouched_indices_x)]
 

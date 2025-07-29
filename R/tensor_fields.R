@@ -202,7 +202,7 @@ g_sph <- function(n, coords = paste0("ph", 1:n)) {
 #' @export
 #' @concept metric_tensors
 #' @family metric tensors
-g_ss <- function(n, coords = c("t", "r", paste0("ph", 1:(n-2)))) {
+g_ss <- function(n, coords = c("t", "r", paste0("ph", 1:(n - 2)))) {
   stopifnot(n >= 3)
 
   # construct matrix

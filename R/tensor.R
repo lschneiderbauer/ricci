@@ -254,7 +254,7 @@ simplify <- function(x) {
   fixpoint <- FALSE
   res <- simplify1(x)
 
-  while(!fixpoint) {
+  while (!fixpoint) {
     res2 <- simplify1(res)
 
     if (all(res == res2)) {

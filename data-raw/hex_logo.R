@@ -29,4 +29,3 @@ sticker(
   package = "",
   filename = "ricci.svg"
 )
-
