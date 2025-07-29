@@ -264,7 +264,7 @@ globalVariables(c("i", "j", "k", "l", "i2", "s"))
 #'
 #' @examples
 #' christoffel(g_eucl_sph(3))
-#' @seealso Wikipedia: [Christoffel symbols](https://en.wikipedia.org/wiki/Christoffel_symbols])
+#' @seealso Wikipedia: [Christoffel symbols](https://en.wikipedia.org/wiki/Christoffel_symbols)
 #' @export
 #' @concept geom_tensors
 #' @family geometric tensors

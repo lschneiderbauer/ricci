@@ -26,7 +26,7 @@ The Christoffel symbols are a rank 3 array of numbers.
 christoffel(g_eucl_sph(3))
 }
 \seealso{
-Wikipedia: \href{https://en.wikipedia.org/wiki/Christoffel_symbols]}{Christoffel symbols}
+Wikipedia: \href{https://en.wikipedia.org/wiki/Christoffel_symbols}{Christoffel symbols}
 
 Other geometric tensors: 
 \code{\link{ricci}()},
