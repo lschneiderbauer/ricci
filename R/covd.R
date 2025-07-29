@@ -146,8 +146,9 @@ covd <- function(x, i, g, act_on = NULL) {
       # for each lower index one - chr term
       pos <- tensor_index_positions(x)
 
-      dummy <- tensor_new_dummy_index_name(x)
-      new_ind_dummy <- paste0(dummy, "2")
+      dummy <- tensor_new_dummy_index_name(x, n = 2)
+      new_ind_dummy <- dummy[[2]]
+      dummy <- dummy[[1]]
 
       res <-
         Reduce(

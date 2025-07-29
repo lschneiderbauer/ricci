@@ -44,14 +44,19 @@ tensor_is_reduced <- function(x) {
 }
 
 # generate a new unique dummy index
-tensor_new_dummy_index_name <- function(x) {
-  names <- tensor_index_names(x)
-
-  if (length(names) == 0) {
-    "dummy"
-  } else {
-    paste0(names[which.max(nchar(names))], "dummy")
+new_unique_index <- function(index_names, n = 1) {
+  if (length(index_names) == 0) {
+    return(paste0("d_", 1:n))
   }
+  paste0(
+    "d",
+    paste0(rep("_", max(nchar(index_names))), collapse = ""),
+    1:n
+  )
+}
+
+tensor_new_dummy_index_name <- function(x, n = 1) {
+  new_unique_index(tensor_index_names(x), n)
 }
 
 

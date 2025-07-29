@@ -243,11 +243,17 @@ tensor_mul <- function(x, y,
         x_ind_einst <- x_ind
         y_ind_einst <- y_ind
 
-        # change other indix names to not trigger calculation
-        x_ind_einst[setdiff(names(x_ind), common_indices[einsteinable])] <-
-          paste0(x_ind_einst[setdiff(names(x_ind), common_indices[einsteinable])], "1")
-        y_ind_einst[setdiff(names(y_ind), common_indices[einsteinable])] <-
-          paste0(y_ind_einst[setdiff(names(y_ind), common_indices[einsteinable])], "2")
+        # change other index names to not trigger calculation
+        untouched_indices_x <- setdiff(names(x_ind), common_indices[einsteinable])
+        untouched_indices_y <- setdiff(names(y_ind), common_indices[einsteinable])
+        dummy_index_names <-
+          new_unique_index(c(x_ind, y_ind),
+                           n = length(untouched_indices_x) + length(untouched_indices_y))
+        x_ind_einst[untouched_indices_x] <-
+          dummy_index_names[seq_along(untouched_indices_x)]
+
+        y_ind_einst[untouched_indices_y] <-
+          dummy_index_names[length(untouched_indices_x) + seq_along(untouched_indices_y)]
 
         calculus::index(x) <- x_ind_einst
         calculus::index(y) <- y_ind_einst
