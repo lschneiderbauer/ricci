@@ -8,6 +8,16 @@
       x Index `j` is lowered while it should be raised.
       i The generalized Kronecker delta requires the first half of indices to be lowered, and the second half to be raised. If other index structures are required, lower/raise them explicitely using a metric tensor, e.g. via `?ricci::r()`, or `?ricci::l()`.
 
+---
+
+    Code
+      d(3)(i, j, k)
+    Condition
+      Error:
+      ! Wrong number of indices.
+      x Number of indices: 3.
+      i The Kronecker delta only accepts an even number of indices.
+
 # creating e works
 
     Code

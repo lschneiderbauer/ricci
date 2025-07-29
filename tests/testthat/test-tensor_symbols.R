@@ -8,6 +8,11 @@ test_that("creating d works", {
     d(3)(i, j),
     error = TRUE
   )
+
+  expect_snapshot(
+    d(3)(i, j, k),
+    error = TRUE
+  )
 })
 
 test_that("creating e works", {

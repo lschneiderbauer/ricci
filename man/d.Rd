@@ -17,6 +17,7 @@ the number of labels provided.
 \description{
 Provides a labeled generalized Kronecker delta. In the special
 case of two labels this represents simply the identity matrix.
+The Kronecker delta always has an even number of indices.
 Note that the first half of the tensor labels need to be lowered,
 while the second half needs upper indices. Otherwise an error is thrown.
 }

@@ -2,6 +2,7 @@
 #'
 #' Provides a labeled generalized Kronecker delta. In the special
 #' case of two labels this represents simply the identity matrix.
+#' The Kronecker delta always has an even number of indices.
 #' Note that the first half of the tensor labels need to be lowered,
 #' while the second half needs upper indices. Otherwise an error is thrown.
 #'
@@ -26,7 +27,15 @@ d <- function(n) {
     i <- .(...)
     order <- length(i$i)
 
-    stopifnot(order %% 2 == 0)
+    if (order %% 2 != 0) {
+      cli_abort(
+        c(
+          "Wrong number of indices.",
+          x = "Number of indices: {length(i$i)}.",
+          i = "The Kronecker delta only accepts an even number of indices."
+        )
+      )
+    }
     p <- order %/% 2
 
     # we require the first half of the indices to be lower,
