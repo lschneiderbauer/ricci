@@ -21,6 +21,7 @@
 #' @concept tensor_symbols
 #' @family tensor symbols
 d <- function(n) {
+  call <- rlang::current_call()
   function(...) {
     i <- .(...)
     order <- length(i$i)
@@ -30,8 +31,15 @@ d <- function(n) {
 
     # we require the first half of the indices to be lower,
     # the other half to be upper
-    stopifnot(all(i$p[1:p] == "-"))
-    stopifnot(all(i$p[p + 1:p] == "+"))
+    validate_index_position(
+      i, c(rep("-", p), rep("+", p)),
+      arg = "...",
+      info = "The generalized Kronecker delta requires the first half of
+            indices to be lowered, and the second half to be raised.
+            If other index structures are required, lower/raise them explicitely
+            using a metric tensor, e.g. via {.help ricci::r}, or {.help ricci::l}.",
+      call = call
+    )
 
     tensor(
       calculus::delta(n = n, p = order %/% 2),
@@ -64,7 +72,13 @@ d <- function(n) {
 e <- function(...) {
   i <- .(...)
 
-  stopifnot(all(i$p == "-"))
+  validate_index_position(
+    i, "-",
+    arg = "...",
+    info = "The Levi-Civita epsilon can only have lower indices.
+            If raised indices are required, raise them explicitely
+            using a metric tensor, e.g. via {.help ricci::r}."
+  )
 
   tensor(
     calculus::epsilon(length(i$i)),

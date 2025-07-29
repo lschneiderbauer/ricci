@@ -4,8 +4,9 @@ test_that("creating d works", {
     diag(1, 3, 3) %_% .(i, +j)
   )
 
-  expect_error(
-    d(3)(i, j)
+  expect_snapshot(
+    d(3)(i, j),
+    error = TRUE
   )
 })
 
@@ -15,7 +16,8 @@ test_that("creating e works", {
     array(c(0, -1, 1, 0), dim = c(2, 2)) %_% .(i, j)
   )
 
-  expect_error(
-    e(+i, j)
+  expect_snapshot(
+    e(+i, j),
+    error = TRUE
   )
 })

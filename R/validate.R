@@ -181,13 +181,22 @@ validate_index_position <-
 
     if (!all(ind$p == pos)) {
       affected_ind <- ind$i[ind$p != pos]
+      if (length(pos) > 1) {
+        affected_pos <- pos[ind$p != pos]
+      } else {
+        affected_pos <- pos
+      }
+
       incorrect_state <-
-        ifelse(pos == "+", "lowered", "raised")
+        ifelse(affected_pos == "+", "lowered", "raised")
+      correct_state <-
+        ifelse(affected_pos == "-", "lowered", "raised")
 
       cli_abort(
         c(
           "Argument {.arg {arg}} constains index with invalid position.",
-          x = "Index {.code {affected_ind}} {?is/are} {incorrect_state}.",
+          x = "Index {.code {affected_ind}} {?is/are} {incorrect_state}
+               while {?it/they} should be {correct_state}.",
           i = info
         ),
         call = call
