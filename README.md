@@ -127,9 +127,10 @@ covd("sin(r)", .(i, +i), g = g_eucl_sph(3)) |>
 ```
 
 The covariant derivative can not only be taken from scalars, but general
-indexed tensors, as the following example shows.
+indexed tensors, as the following example, involving the curl of $a$,
+shows.
 
-$$\left(\nabla \times a\right)^i = \epsilon^{i}_{\;jk} \nabla^j a^k$$
+$$\left(\nabla \times a\right)^i = \varepsilon^{i}_{\;jk} \nabla^j a^k$$
 
 ``` r
 g <- g_eucl_sph(3)
