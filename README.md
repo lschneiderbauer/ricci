@@ -84,7 +84,7 @@ The same instructions work for a symbolic array:
 ``` r
 # enable optional simplfying procedures
 # (takes a toll on performance)
-options(ricci.simplify = TRUE)
+options(ricci.auto_simplify = TRUE)
 
 # symbolic data
 a <- array(paste0("a", 1:(2^3)), dim = c(2, 2, 2))
