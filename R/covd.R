@@ -82,7 +82,7 @@ pd <- function(x, coords, new_index_name, new_index_position, g) {
 #'  indices (depending on `i`).
 #'
 #' @examples
-#' options(ricci.simplify = TRUE)
+#' options(ricci.auto_simplify = TRUE)
 #'
 #' # gradient of "sin(sqrt(x1^2+x2^2+x3^2))" in 3-dimensional euclidean space
 #' covd("sin(x1)", .(k), g = g_eucl_cart(3))

@@ -41,7 +41,7 @@ library(ricci)
 
 # enable optional simplfying procedures
 # (takes a toll on performance)
-options(ricci.simplify = TRUE)
+options(ricci.auto_simplify = TRUE)
 
 g_eucl_cart(3)
 
