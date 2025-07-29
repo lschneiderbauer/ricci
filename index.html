@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Ricci Calculus for R • ricci</title>
+<title>Ricci Calculus • ricci</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -16,9 +16,9 @@
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Ricci Calculus for R">
-<meta name="description" content="Provides a compact R interface for performing tensor calculations. This is achieved by allowing (upper and lower) index labeling of R’s array and making use of Ricci calculus conventions.">
-<meta property="og:description" content="Provides a compact R interface for performing tensor calculations. This is achieved by allowing (upper and lower) index labeling of R’s array and making use of Ricci calculus conventions.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Ricci Calculus">
+<meta name="description" content="Provides a compact R interface for performing tensor calculations. This is achieved by allowing (upper and lower) index labeling of arrays and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, subtraction and multiplication of tensors via the standard operators, raising and lowering indices, taking symmetric or antisymmetric tensor parts, as well as the Kronecker product are available. Common tensors like the Kronecker delta Levi Civita epsilon, certain metric tensors, the Christoffel symbols, the Riemann as well as Ricci tensors are provided. The covariant derivative of tensor fields with respect to any metric tensor can be evaluated. An effort was made to provide the user with meaningful error messages.">
+<meta property="og:description" content="Provides a compact R interface for performing tensor calculations. This is achieved by allowing (upper and lower) index labeling of arrays and making use of Ricci calculus conventions to implicitly trigger contractions and diagonal subsetting. Explicit tensor operations, such as addition, subtraction and multiplication of tensors via the standard operators, raising and lowering indices, taking symmetric or antisymmetric tensor parts, as well as the Kronecker product are available. Common tensors like the Kronecker delta Levi Civita epsilon, certain metric tensors, the Christoffel symbols, the Riemann as well as Ricci tensors are provided. The covariant derivative of tensor fields with respect to any metric tensor can be evaluated. An effort was made to provide the user with meaningful error messages.">
 <meta property="og:image" content="https://lschneiderbauer.github.io/ricci/logo.svg">
 </head>
 <body>
@@ -46,6 +46,7 @@
 <li><a class="dropdown-item" href="articles/tensor_fields.html">Tensor Fields</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -73,8 +74,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of ricci from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the latest CRAN release of ricci with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ricci"</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, you can install the development version of ricci from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"lschneiderbauer/ricci"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -83,7 +87,7 @@
 </h2>
 <p>The central object is R’s <code>array</code>. Adding index slot labels allows us to perform common tensor operations implicitly. After the desired calculations have been carried out we can remove the labels to obtain an ordinary <code>array</code>.</p>
 <p>The following (admittedly very artificial) example shows how to express the contraction of two tensors, and subsequent symmetrization and diagonal subsetting. For demonstration purposes we use an arbitrary array of rank 3.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lschneiderbauer/ricci" class="external-link">ricci</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># numeric data</span></span>
@@ -100,7 +104,7 @@
 <span>  <span class="fu"><a href="reference/as_a.html">as_a</a></span><span class="op">(</span><span class="va">j</span><span class="op">)</span> <span class="co"># we unlabel the tensor with index order (j)</span></span>
 <span><span class="co">#&gt; [1] 8 8</span></span></code></pre></div>
 <p>The same instructions work for a symbolic array:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># enable optional simplfying procedures</span></span>
 <span><span class="co"># (takes a toll on performance)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>ricci.auto_simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -119,7 +123,7 @@
 <span><span class="co">#&gt; [1] "a1^2+a6^2-(a5^2+a2^2)" "a3^2+a8^2-(a7^2+a4^2)"</span></span></code></pre></div>
 <p>Another main feature is the covariant derivative of symbolic arrays. The following examples calculate the Hessian matrix as well as the Laplacian of the scalar function <span class="math inline">\sin(r)</span> in spherical coordinates in three dimensions.</p>
 <p><span class="math display">D_{ik} = \nabla_i \nabla_k \sin(r)</span></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/covd.html">covd</a></span><span class="op">(</span><span class="st">"sin(r)"</span>, <span class="fu"><a href="reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [3x3] .(-i, -k)</span></span>
@@ -128,14 +132,14 @@
 <span><span class="co">#&gt; [2,] "0"       "r*cos(r)" "0"                  </span></span>
 <span><span class="co">#&gt; [3,] "0"       "0"        "r*sin(ph1)^2*cos(r)"</span></span></code></pre></div>
 <p><span class="math display">\Delta \sin(r) = \nabla_i \nabla^i \sin(r)</span></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/covd.html">covd</a></span><span class="op">(</span><span class="st">"sin(r)"</span>, <span class="fu"><a href="reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
 <span><span class="co">#&gt; [1] "(2*cos(r)-r*sin(r))/r"</span></span></code></pre></div>
 <p>The covariant derivative can not only be taken from scalars, but general indexed tensors, as the following example, involving the curl of <span class="math inline">a</span>, shows.</p>
 <p><span class="math display">\left(\nabla \times a\right)^i = \varepsilon^{i}_{\;jk} \nabla^j a^k</span></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
