@@ -35,8 +35,37 @@
     </div>
 
     <div class="section level2">
-      <h2 id="label-and-unlabel-tensors">Label and unlabel tensors<a class="anchor" aria-label="anchor" href="#label-and-unlabel-tensors"></a></h2>
+      <h2 id="label-and-unlabel-arrays">Label and unlabel arrays<a class="anchor" aria-label="anchor" href="#label-and-unlabel-arrays"></a></h2>
 
+      <div class="section-desc"><p>Adding index names enables the usage of Ricci calculus rules, while unlabeling restores the usual R array.</p></div>
+
+
+    </div><div class="section level2">
+
+      <h3 id="label-arrays">Label arrays<a class="anchor" aria-label="anchor" href="#label-arrays"></a></h3>
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="create-tensor.html">tensor()</a></code> <code><a href="create-tensor.html">`%_%`</a></code>
+
+        </dt>
+        <dd>Create a labeled array (tensor)</dd>
+      </dl><dl><dt>
+
+          <code><a href="dot-.html">.()</a></code>
+
+        </dt>
+        <dd>Index slot label specification</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="unlabel-arrays">Unlabel arrays<a class="anchor" aria-label="anchor" href="#unlabel-arrays"></a></h3>
 
 
 
@@ -57,22 +86,10 @@
 
         </dt>
         <dd>Strip array labels</dd>
-      </dl><dl><dt>
-
-          <code><a href="create-tensor.html">tensor()</a></code> <code><a href="create-tensor.html">`%_%`</a></code>
-
-        </dt>
-        <dd>Create a labeled array (tensor)</dd>
-      </dl><dl><dt>
-
-          <code><a href="dot-.html">.()</a></code>
-
-        </dt>
-        <dd>Index slot label specification</dd>
       </dl></div><div class="section level2">
       <h2 id="tensor-operations">Tensor operations<a class="anchor" aria-label="anchor" href="#tensor-operations"></a></h2>
 
-
+      <div class="section-desc"><p>Working with labeled arrays allows to consicely specify various tensor operations who all take given index structures into account and act accordingly.</p></div>
 
 
     </div><div class="section level2">
@@ -176,7 +193,7 @@
       </dl></div><div class="section level2">
       <h2 id="tensor-fields">Tensor fields<a class="anchor" aria-label="anchor" href="#tensor-fields"></a></h2>
 
-
+      <div class="section-desc"><p>Tensor fields can be modeled by symbolic tensors, i.e. tensors that contain mathematical expressions instead of numerical values.</p></div>
 
 
     </div><div class="section level2">
@@ -298,7 +315,7 @@
       </dl></div><div class="section level2">
       <h2 id="testthat-expectation">Testthat expectation<a class="anchor" aria-label="anchor" href="#testthat-expectation"></a></h2>
 
-
+      <div class="section-desc"><p>A simple testthat helper that allows to check for tensor equality.</p></div>
 
 
     </div><div class="section level2">
