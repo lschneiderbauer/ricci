@@ -50,24 +50,20 @@ test_that("christoffel works for metric being 1x1 matrix", {
 })
 
 test_that("ricci scalar works", {
-  skip_if_not_installed("withr")
   skip_if_not_installed("Ryacas")
 
-  withr::local_options(ricci.simplify = TRUE)
-
   expect_equal(
-    as.numeric(ricci_sc(g_eucl_cart(3))),
+    as.numeric(simplify(ricci_sc(g_eucl_cart(3)))),
     0
   )
 
   expect_equal(
-    as.numeric(ricci_sc(g_eucl_sph(3))),
+    as.numeric(simplify(ricci_sc(g_eucl_sph(3)))),
     0
   )
 
   expect_equal(
-    as.numeric(ricci_sc(g_sph(2)) |>
-      at(c(ph1 = 0.3, ph2 = 0.4))),
+    as.numeric(simplify(simplify(ricci_sc(g_sph(2))))),
     2
   )
 })

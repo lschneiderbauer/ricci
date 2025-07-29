@@ -192,27 +192,51 @@ tensor_is_simplified <- function(x) {
   attr(x, "simplified")
 }
 
-tensor_simplify <- function(x) {
+tensor_simplify <- function(x, force = FALSE) {
   if (!tensor_is_simplified(x)) {
+    a <- asimplify(x, force)
+
     new_tensor(
-      asimplify(x),
+      a,
       tensor_index_names(x),
       tensor_index_positions(x),
       tensor_is_reduced(x),
-      simplified = TRUE
+      simplified = attr(a, "simplified")
     )
   } else {
     x
   }
 }
 
-# Simplify symbolic expressions
-#
-# TODO: requires package, etc.
-#
-# simplify <- function(x) {
-#   tensor_simplify(x)
-# }
+#' Simplify symbolic expressions
+#'
+#' Attempts to simplify expressions in an array or tensor.
+#' Non-array objects are coerced to arrays with [as.array()].
+#'
+#' @details
+#' Instead of using an explicit call to `simplify()` you also have the option
+#' to enable automatic simplification via `option(ricci.auto_simplify = TRUE)`.
+#' Note however that this comes at a significant performance cost.
+#'
+#' This operation requires the [Ryacas](https://r-cas.github.io/ryacas/)
+#' package.
+#'
+#' @param x
+#'  A character [array()] or [tensor()] consisting of mathematical expressions.
+#' @return A character [array()] or [tensor()] of the same form, potentially
+#'  with simplified expressions.
+#'
+#' @examples
+#' simplify("x + y - x")
+#' @export
+#' @concept eval
+simplify <- function(x) {
+  if (inherits(x, "tensor")) {
+    tensor_simplify(x, force = TRUE)
+  } else {
+    asimplify(as.array(x), force = TRUE)
+  }
+}
 
 # picks out "diagonal" indices of an array
 # and creates a new array, whose elements
@@ -268,11 +292,15 @@ adiag <- function(x, dims_diag) {
     )
 }
 
-asimplify <- function(a) {
-  if (isTRUE(getOption("ricci.simplify")) && !rlang::is_installed("Ryacas")) {
+asimplify <- function(a, force = FALSE) {
+  if (force && !rlang::is_installed("Ryacas")) {
+    rlang::check_installed("Ryacas")
+  }
+
+  if (isTRUE(getOption("ricci.auto_simplify")) && !rlang::is_installed("Ryacas")) {
     cli::cli_warn(
       c(
-        "Option \"ricci.simplify\" is set to `TRUE`, but {{Ryacas}} is not installed.",
+        "Option \"ricci.auto_simplify\" is set to `TRUE`, but {{Ryacas}} is not installed.",
         i = "Install {{Ryacas}} to get simplification support, e.g. via
             {.run install.packages(\"Ryacas\")}."
       ),
@@ -282,18 +310,22 @@ asimplify <- function(a) {
   }
 
   if (is.character(a) && rlang::is_installed("Ryacas") &&
-    isTRUE(getOption("ricci.simplify"))) {
-    array(
-      Ryacas::as_y(a) |>
-        # gsub("sqrt", "Sqrt", x = _) |>
-        Ryacas::y_fn("Simplify") |>
-        Ryacas::yac_str() |>
-        Ryacas::as_r(),
-      # gsub("Sqrt", "sqrt", x = _),
-      dim(a)
+    (force || isTRUE(getOption("ricci.auto_simplify")))) {
+    structure(
+      array(
+        Ryacas::as_y(a) |>
+          Ryacas::y_fn("Simplify") |>
+          Ryacas::yac_str() |>
+          Ryacas::as_r(),
+        dim(a)
+      ),
+      simplified = TRUE
     )
   } else {
-    a
+    structure(
+      a,
+      simplified = FALSE
+    )
   }
 }
 
