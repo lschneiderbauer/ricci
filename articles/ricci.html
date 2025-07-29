@@ -71,7 +71,7 @@
     
     
 <p>{ricci} uses nonstandard evaluation to specify tensor indices (see
-<code><a href="../reference/dot-.html">.()</a></code>). The main purpose of using nonstandard evaluation is
+<code><a href="../reference/dot.html">.()</a></code>). The main purpose of using nonstandard evaluation is
 to safe a lot of quotation marks which otherwise would clutter the code
 (<code>i</code> instead of <code>"i"</code>). Using nonstandard
 evaluation also allows to specify some operations in more direct way
@@ -118,7 +118,7 @@ objects.</p></li>
 a_{ijk}
 </span></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span></code></pre></div>
 <p>By default, indices are assumed to be lower indices. We can use a “+”
 prefix to create an upper index label.</p>
@@ -126,7 +126,7 @@ prefix to create an upper index label.</p>
 a_{ij}^{\;\;k}
 </span></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, +k)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -145,7 +145,7 @@ contracted.</p>
 b_k=a_{i\;k}^{\;i}
 </span></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">b</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2] .(-k)</span></span>
 <span><span class="co">#&gt; [1]  5 13</span></span></code></pre></div>
@@ -159,7 +159,7 @@ diagonal subsetting.</p>
 c_{ik}=a_{iik}
 </span></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">c</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">c</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">c</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2] .(-i, -k)</span></span>
 <span><span class="co">#&gt;      [,1] [,2]</span></span>
@@ -174,7 +174,7 @@ c_{ik}=a_{iik}
 d_{ijklmn}=a_{ijk}a_{lmn}
 </span></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span></span>
 <span><span class="va">d</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2x2x2x2] .(-i, -j, -k, -l, -m, -n)</span></span></code></pre></div>
 </div>
@@ -185,7 +185,7 @@ d_{ijklmn}=a_{ijk}a_{lmn}
 e=a_{ijk}a^{ijk}
 </span></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="op">+</span><span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">e</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
 <span><span class="co">#&gt; [1] 204</span></span></code></pre></div>
@@ -198,7 +198,7 @@ subsetting<a class="anchor" aria-label="anchor" href="#mixed-product-tensor-mult
 f_j=a_{ijk}a^{i\;k}_{\;j}
 </span></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="op">+</span><span class="va">i</span>, <span class="va">j</span>, <span class="op">+</span><span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">f</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2] .(-j)</span></span>
 <span><span class="co">#&gt; [1]  66 138</span></span></code></pre></div>
@@ -210,7 +210,7 @@ f_j=a_{ijk}a^{i\;k}_{\;j}
 g_{ijk}=a_{ijk}a_{ijk}
 </span></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">g</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span></code></pre></div>
 </div>
@@ -223,8 +223,8 @@ by combining multiple index labels into one. The associated dimension to
 the new label is then simply the product of the dimensions associated to
 the old index labels respectively.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/kron.html">kron</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">l</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">r</span>, <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">m</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">p</span>, <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="va">n</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">q</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">*</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">l</span>, <span class="va">m</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/kron.html">kron</a></span><span class="op">(</span><span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">l</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">r</span>, <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">m</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">p</span>, <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="va">n</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">q</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [4x4x4] .(-q, -p, -r)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -237,7 +237,7 @@ matter.</p>
 h_{ijk} = a_{ijk} + a_{jik}
 </span></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">+</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">+</span> <span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">j</span>, <span class="va">i</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="va">h</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span></code></pre></div>
 </div>
@@ -247,14 +247,14 @@ h_{ijk} = a_{ijk} + a_{jik}
 <p>Taking the symmetric or antisymmetric part w.r.t. certain indices is
 a standard tool in Ricci calculus.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sym.html">sym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sym.html">sym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span>
-<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sym.html">sym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/sym.html">sym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span>
 <span></span>
-<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/asym.html">asym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span>
+<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/asym.html">asym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span>
-<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/asym.html">asym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">a</span> <span class="op"><a href="../reference/create-tensor.html">%_%</a></span> <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/asym.html">asym</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Labeled Array&gt; [2x2x2] .(-i, -j, -k)</span></span></code></pre></div>
 </div>
 </div>
@@ -281,9 +281,9 @@ stripping labels of a tensor one has to specify an index order.</p>
 <span><span class="co">#&gt; [2,]   36   64</span></span></code></pre></div>
 <p>The same works with the standard generic <code><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array()</a></code>.
 However, to avoid nonstandard evaluation in its S3 method, we wrap
-indices using <code><a href="../reference/dot-.html">.()</a></code>.</p>
+indices using <code><a href="../reference/dot.html">.()</a></code>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="va">g</span>, <span class="fu"><a href="../reference/dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="va">g</span>, <span class="fu"><a href="../reference/dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;      [,1] [,2]</span></span>

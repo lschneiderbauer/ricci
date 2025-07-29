@@ -67,7 +67,7 @@ needs to be provided so that the array's <code><a href="https://rdrr.io/r/base/d
 
 
 <dt id="arg-index-order">index_order<a class="anchor" aria-label="anchor" href="#arg-index-order"></a></dt>
-<dd><p>An index specification created with <code><a href="dot-.html">.()</a></code>.
+<dd><p>An index specification created with <code><a href="dot.html">.()</a></code>.
 The specification needs to match all the labels occurring in <code>x</code>.
 The label order determines the dimension
 order of the resulting array.</p></dd>
@@ -84,7 +84,7 @@ order of the resulting array.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot-.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="fu"><a href="dot-.html">.</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="op">+</span><span class="va">i</span>, <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">k</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  5 13</span>
 </code></pre></div>
     </div>
