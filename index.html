@@ -133,8 +133,8 @@
 <span>  <span class="fu"><a href="reference/simplify.html">simplify</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Scalar&gt;</span></span>
 <span><span class="co">#&gt; [1] "(2*cos(r)-r*sin(r))/r"</span></span></code></pre></div>
-<p>The covariant derivative can not only be taken from scalars, but general indexed tensors, as the following example shows.</p>
-<p><span class="math display">\left(\nabla \times a\right)^i = \epsilon^{i}_{\;jk} \nabla^j a^k</span></p>
+<p>The covariant derivative can not only be taken from scalars, but general indexed tensors, as the following example, involving the curl of <span class="math inline">a</span>, shows.</p>
+<p><span class="math display">\left(\nabla \times a\right)^i = \varepsilon^{i}_{\;jk} \nabla^j a^k</span></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/g_eucl.html">g_eucl_sph</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
