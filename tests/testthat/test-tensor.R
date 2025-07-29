@@ -160,6 +160,11 @@ test_that("convert tensor to array works", {
     arr %_% .(i, j) |> as.array(),
     arr
   )
+
+  expect_snapshot(
+    arr %_% .(i, j) |> as.array("i"),
+    error = TRUE
+  )
 })
 
 test_that("convert tensor to array errs if index does not fit", {

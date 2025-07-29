@@ -74,6 +74,7 @@
 #' .(i, +j)
 #' @export
 #' @concept tensor_create
+#' @rdname dot
 . <- function(...) {
   exprs <- rlang::enexprs(...)
 

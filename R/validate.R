@@ -9,7 +9,7 @@ tensor_validate_index_matching <-
       cli_abort(
         c(
           "Argument {.arg {arg}} is not specified correctly.",
-          i = "Use {.fun .} to specify an index set."
+          i = "Use {.fun ricci::.} to specify an index set."
         ),
         call = call
       )

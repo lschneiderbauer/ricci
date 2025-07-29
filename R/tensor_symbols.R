@@ -46,7 +46,7 @@ d <- function(n) {
       info = "The generalized Kronecker delta requires the first half of
             indices to be lowered, and the second half to be raised.
             If other index structures are required, lower/raise them explicitely
-            using a metric tensor, e.g. via {.help ricci::r}, or {.help ricci::l}.",
+            using a metric tensor, e.g. via {.fun ricci::r}, or {.fun ricci::l}.",
       call = call
     )
 
@@ -86,7 +86,7 @@ e <- function(...) {
     arg = "...",
     info = "The Levi-Civita epsilon can only have lower indices.
             If raised indices are required, raise them explicitely
-            using a metric tensor, e.g. via {.help ricci::r}."
+            using a metric tensor, e.g. via {.fun ricci::r}."
   )
 
   tensor(

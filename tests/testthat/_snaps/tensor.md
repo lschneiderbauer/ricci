@@ -8,6 +8,15 @@
       x Index `i` is associated to dimension 2 and 3.
       i Only assign identical index labels to slots with the equal dimension.
 
+# convert tensor to array works
+
+    Code
+      as.array(arr %_% .(i, j), "i")
+    Condition
+      Error:
+      ! Argument `index_order` is not specified correctly.
+      i Use `ricci::.()` to specify an index set.
+
 # convert tensor to array errs if index does not fit
 
     Code
