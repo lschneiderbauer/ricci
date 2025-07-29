@@ -231,7 +231,7 @@ tensor_simplify <- function(x, force = FALSE) {
 #' @return A character [array()] or [tensor()] of the same form, potentially
 #'  with simplified expressions.
 #'
-#' @examples
+#' @examplesIf requireNamespace("Ryacas", quietly = TRUE)
 #' simplify("x + y - x")
 #' @export
 #' @concept eval

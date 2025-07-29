@@ -26,6 +26,8 @@ This operation requires the \href{https://r-cas.github.io/ryacas/}{Ryacas}
 package.
 }
 \examples{
+\dontshow{if (requireNamespace("Ryacas", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 simplify("x + y - x")
+\dontshow{\}) # examplesIf}
 }
 \concept{eval}
