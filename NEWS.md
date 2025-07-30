@@ -1,3 +1,3 @@
-# ricci (development version)
+# ricci 0.1.0
 
 * Initial CRAN submission.
