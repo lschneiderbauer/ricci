@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   ricci: ricci.html
   tensor_fields: tensor_fields.html
-last_built: 2025-07-30T17:14Z
+last_built: 2025-07-30T18:25Z
 urls:
   reference: https://lschneiderbauer.github.io/ricci/reference
   article: https://lschneiderbauer.github.io/ricci/articles
