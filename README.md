@@ -29,7 +29,7 @@ Kronecker delta, Levi Civita epsilon, certain metric tensors, the
 Christoffel symbols, the Riemann as well as Ricci tensors are provided.
 The **covariant derivative** of tensor fields with respect to any metric
 tensor can be evaluated. An effort was made to provide the user with
-meaningful error messages.
+useful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and provides

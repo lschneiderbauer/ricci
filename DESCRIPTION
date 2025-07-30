@@ -13,12 +13,12 @@ Description: Provides a compact 'R' interface for performing tensor calculations
     Explicit tensor operations, such as addition, subtraction and
     multiplication of tensors via the standard operators, raising and lowering
     indices, taking symmetric or antisymmetric tensor parts, as well as the
-    Kronecker product are available. Common tensors like the Kronecker delta
+    Kronecker product are available. Common tensors like the Kronecker delta,
     Levi Civita epsilon, certain metric tensors, the Christoffel symbols,
     the Riemann as well as Ricci tensors are provided.
     The covariant derivative of tensor fields with respect to any metric
     tensor can be evaluated. An effort was made to provide the user with
-    meaningful error messages.
+    useful error messages.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
