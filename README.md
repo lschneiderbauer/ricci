@@ -33,10 +33,10 @@ useful error messages.
 
 {ricci} uses the [calculus](https://calculus.eguidotti.com/) package
 (Guidotti 2022) behind the scenes to perform calculations and provides
-an alternative interface to a subset of its functionality. Notably,
-{[calculus](https://calculus.eguidotti.com/)} also supports symbolic
-calculations which also enables {ricci} to do the same. Symbolic
-expressions are optionally simplified when the
+an alternative interface to a subset of its functionality.
+{[calculus](https://calculus.eguidotti.com/)} supports symbolic
+calculations, allowing {ricci} to support it as well. Symbolic
+expressions are optionally simplified if the
 [Ryacas](https://r-cas.github.io/ryacas/) package is installed.
 
 ## Installation
