@@ -10,3 +10,4 @@ references.bib
 ^codecov\.yml$
 ^data-raw$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
