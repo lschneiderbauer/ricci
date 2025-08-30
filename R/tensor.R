@@ -418,6 +418,9 @@ print.tensor <- function(x, ...) {
 #'  order of the resulting array.
 #' @param ... Not used.
 #' @param arg,call Used for error handling. Can be ignored by the user.
+#' @return
+#'  The tensor components as usual [array()] object without any index labels
+#'  attached.
 #' @examples
 #' array(1:8, dim = c(2, 2, 2)) %_% .(i, +i, k) |> as.array(.(k))
 #' @export

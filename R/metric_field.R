@@ -29,8 +29,12 @@ new_metric_field <- function(metric, coords, metric_inv) {
 #'
 #' @param coords
 #'  A character vector of `n` coordinate names that are used in the component
-#'  expressions. This information is essential
-#'  for forming symbolic derivatives.
+#'  expressions. This information is essential for forming symbolic derivatives.
+#'
+#' @return
+#'  An object of class `c("metric_field", "array")` that represents the
+#'  components of a metric tensor on a (Pseudo-) Riemannian manifold in a
+#'  certain coordinate system specified by `coords`.
 #'
 #' @seealso Wikipedia: [Metric tensor](https://en.wikipedia.org/wiki/Metric_tensor)
 #' @concept metric_tensors

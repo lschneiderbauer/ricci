@@ -15,8 +15,12 @@ coordinates, since numeric values can only represent constant tensor fields.}
 i.e. the inverse matrix of the covariant metric tensor component matrix.}
 
 \item{coords}{A character vector of \code{n} coordinate names that are used in the component
-expressions. This information is essential
-for forming symbolic derivatives.}
+expressions. This information is essential for forming symbolic derivatives.}
+}
+\value{
+An object of class \code{c("metric_field", "array")} that represents the
+components of a metric tensor on a (Pseudo-) Riemannian manifold in a
+certain coordinate system specified by \code{coords}.
 }
 \description{
 Metric tensors are an essential ingredient of (Pseudo-) Riemannian

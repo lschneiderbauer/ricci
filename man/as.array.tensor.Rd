@@ -24,6 +24,10 @@ order of the resulting array.}
 
 \item{arg, call}{Used for error handling. Can be ignored by the user.}
 }
+\value{
+The tensor components as usual \code{\link[=array]{array()}} object without any index labels
+attached.
+}
 \description{
 Converts a \code{\link[=tensor]{tensor()}} to an \code{\link[=array]{array()}} by stripping the index labels.
 An index label order
