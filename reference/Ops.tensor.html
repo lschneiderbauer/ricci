@@ -9,7 +9,7 @@ can be carried out with the usual +, -, *, /, and == symbols."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">ricci</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,10 +136,12 @@ and only if the index structure agrees and all components are equal.</p>
 <span class="r-in"><span><span class="va">a</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span> <span class="op">==</span> <span class="va">b</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># this will err because index structure does not agree</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span> <span class="op">==</span> <span class="va">a</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="va">j</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">a</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">i</span>, <span class="va">j</span><span class="op">)</span> <span class="op">==</span> <span class="va">a</span> <span class="op"><a href="create-tensor.html">%_%</a></span> <span class="fu"><a href="dot.html">.</a></span><span class="op">(</span><span class="va">k</span>, <span class="va">j</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Error in `==`() : Tensor indices do not agree.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Tensor index `i` appears in `e1` but not in `e2`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Tensor index `k` appears in `e2` but not in `e1`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Operation can only be carried out with two tensors having identical indices.</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -17,7 +17,7 @@ correctly when using non-flat coordinates."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">ricci</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,10 +78,15 @@ i.e. the inverse matrix of the covariant metric tensor component matrix.</p></dd
 
 <dt id="arg-coords">coords<a class="anchor" aria-label="anchor" href="#arg-coords"></a></dt>
 <dd><p>A character vector of <code>n</code> coordinate names that are used in the component
-expressions. This information is essential
-for forming symbolic derivatives.</p></dd>
+expressions. This information is essential for forming symbolic derivatives.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>An object of class <code>c("metric_field", "array")</code> that represents the
+components of a metric tensor on a (Pseudo-) Riemannian manifold in a
+certain coordinate system specified by <code>coords</code>.</p>
+    </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Wikipedia: <a href="https://en.wikipedia.org/wiki/Metric_tensor" class="external-link">Metric tensor</a></p>
