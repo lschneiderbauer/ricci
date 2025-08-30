@@ -9,6 +9,36 @@ These are false positives: "Christoffel", "Civita", and "Ricci" are
 names, and "antisymmetric" is a common term in several branches of
 Mathematics.
 
+
+> Found the following (possibly) invalid URLs:
+>  URL: https://en.wikipedia.org/wiki/Riemann_curvature_tensor
+>    From: man/riemann.Rd
+>    Status: 429
+>    Message: Too Many Requests
+>  URL: https://en.wikipedia.org/wiki/Riemann_curvature_tensor#Ricci_curvature
+>    From: man/ricci.Rd
+>    Status: 429
+>    Message: Too Many Requests
+>  URL: https://en.wikipedia.org/wiki/Scalar_curvature
+>    From: man/ricci_sc.Rd
+>    Status: 429
+>    Message: Too Many Requests
+>  URL: https://en.wikipedia.org/wiki/Schwarzschild_metric
+>    From: man/g_ss.Rd
+>    Status: 429
+>    Message: Too Many Requests
+>  URL: https://en.wikipedia.org/wiki/Sphere
+>    From: man/g_sph.Rd
+>    Status: 429
+>    Message: Too Many Requests
+>  URL: https://en.wikipedia.org/wiki/Tensor_field
+>    From: inst/doc/tensor_fields.html
+>    Status: 429
+>    Message: Too Many Requests
+
+These are false positives.
+
+
 -   This is a resubmission
 
 ## Response
