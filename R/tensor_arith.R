@@ -53,10 +53,8 @@
 #' a %_% .(i, j) == a %_% .(j, i)
 #' a %_% .(i, j) == b %_% .(i, j)
 #'
-#' \dontrun{
 #' # this will err because index structure does not agree
-#' a %_% .(i, j) == a %_% .(k, j)
-#' }
+#' try(a %_% .(i, j) == a %_% .(k, j))
 #' @export
 #' @concept arith
 #' @family tensor operations
